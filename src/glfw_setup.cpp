@@ -1,6 +1,5 @@
-#include <GL/glew.h>
-#include "header/glfw_setup.hpp";
-#include "header/errorHandler.hpp";
+#include "../header/glfw_setup.hpp"
+#include "../header/errorHandler.hpp"
 
 GLFWwindow* glfw_setup(){
 
@@ -17,7 +16,7 @@ GLFWwindow* glfw_setup(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	
 	// create window
-	GLFWwindow* tempWindow = glfwCreateWindow(1024, 768, "Chess-3D", nullptr, nullptr)
+	GLFWwindow* tempWindow = glfwCreateWindow(1024, 768, "Chess-3D", nullptr, nullptr);
 	
 	// set window as active
 	glfwMakeContextCurrent(tempWindow);
@@ -25,7 +24,6 @@ GLFWwindow* glfw_setup(){
 	glewExperimental = GL_TRUE;
     // Initialize GLEW QUESTION: should this be moved to other file?
     if (glewInit() != GLEW_OK) {
-        getchar();
         glfwTerminate();
     }
 
