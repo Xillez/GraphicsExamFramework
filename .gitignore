@@ -2,7 +2,7 @@
 
 # User defined ignores
 
-vscode/
+.vscode/
 
 # Created by https://www.gitignore.io/api/git,c++,linux,cmake,windows,sublimetext,visualstudio,visualstudiocode
 
