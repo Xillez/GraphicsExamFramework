@@ -1,4 +1,4 @@
-#include "header/errorHandling.hpp";
+#include "../header/errorHandler.hpp"
 
 void glfw_errorCallback(int error, const char* description){
 
