@@ -26,6 +26,25 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 file(GLOB shaders ${PROJECT_SOURCE_DIR}/shader)
 file(COPY ${shaders} DESTINATION ${PROJECT_BINARY_DIR}/include)
 
+# Add all cpp files used in the Chess3D program
+add_executable("Chess3D" 
+	${PROJECT_SOURCE_DIR}/src/main.cpp 
+	${PROJECT_SOURCE_DIR}/src/glfw_setUp.cpp
+	${PROJECT_SOURCE_DIR}/src/errorHandler.cpp)
+
+# Find packages for linking
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(glfw3 REQUIRED)
+
+# Link the packages
+target_link_libraries("Chess3D"
+    PRIVATE ${OPENGL_LIBRARIES}
+    PRIVATE ${GLEW_LIBRARIES}
+    PRIVATE glfw
+)
+
+
 ## Use doc folder for doxygen files
 #find_package(doxygen)
 #if(DOXYGEN_FOUND)
