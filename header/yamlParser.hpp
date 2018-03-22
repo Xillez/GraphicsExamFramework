@@ -12,6 +12,11 @@ private:
     std::string data;
     int position = 0;
 public:
+    /**
+     * @brief Construct a new yaml Parser object
+     * 
+     * @param path 
+     */
     yamlParser(const std::string path) {
         std::ifstream file (path);
 		if (file) {
@@ -27,12 +32,22 @@ public:
 			std::cout << "Cannot open the file in path " + path;
 		}
     };
+	/**
+	 * @brief 
+	 * 
+	 * @return std::string 
+	 */
     auto nextLine() -> std::string {
         std::string temp = "";  
         int count = position;   
         while(data.at(count) != '\n') {
-            temp += data.at(count);
-            count++;
+			if (data.at(count) == ' ') {
+				data.erase(data.begin() + count);
+			}
+			else {
+				temp += data.at(count);
+				count++;
+			}
         }
         position = ++count;		// counting 1 up for '\n'
 		if (temp.find("-") != std::string::npos) {
@@ -40,6 +55,11 @@ public:
 		}
         return temp;
     };
+    /**
+     * @brief 
+     * 
+     * @return std::pair<std::string, std::string> 
+     */
     auto nextStringString() -> std::pair<std::string, std::string> {
         std::string buffer = nextLine();    // Get the next line.
         int position = buffer.find(":");    // find where the tag ends.
@@ -48,7 +68,11 @@ public:
         std::pair<std::string, std::string> stringString (tag, value);	// Make a pair of string and string.
         return stringString;
     }
-
+    /**
+     * @brief 
+     * 
+     * @return std::pair<std::string, int> 
+     */
     auto nextStringInt() -> std::pair<std::string, int> {
         std::string buffer = nextLine(); // Get the next line.
         int position = buffer.find(":");    // Find where the tag ends

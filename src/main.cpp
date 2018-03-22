@@ -26,6 +26,12 @@ void getMoves() {
 		moves.insert(std::pair<std::string, std::vector<std::string>>(pieceName.second, temp));
 		temp.clear();
 	}
+
+	for (auto v : moves) {
+		for (auto m : v.second) {
+			std::cout << v.first << ": " << m << '\n';
+		}
+	}
 }
 
 
@@ -39,10 +45,11 @@ int main(int argc, char const *argv[])
 
 	// load stuff
 	getMoves();
-
+	Piece p = Piece("null", "Pawn");
 	// start game
 
 
 	system("Pause");
 	return 0;
 }
+ 

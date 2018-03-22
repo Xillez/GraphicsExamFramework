@@ -2,9 +2,9 @@ pieceCount: 6
 pieces:
 - piece: Pawn
   moveCount: 1
-  moves: 
+  moves:
   - F
-- piece: Rook
+ - piece: Rook
   moveCount: 4
   moves:
   - F*
@@ -17,7 +17,7 @@ pieces:
   - (FR)*
   - (FL)*
   - (BR)*
-  - (BL)* 
+  - (BL)*
 - piece: Horse
   moveCount: 8
   moves:
@@ -31,7 +31,7 @@ pieces:
   - RRB
 - piece: Queen
   moveCount: 8
-  moves: 
+  moves:
   - F*
   - B*
   - L*
