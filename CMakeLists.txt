@@ -24,35 +24,58 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 # Copy all shaders into include directory.
 file(GLOB shaders ${PROJECT_SOURCE_DIR}/shader)
-file(COPY ${shaders} DESTINATION ${PROJECT_BINARY_DIR}/include)
+file(COPY ${shaders} DESTINATION ${CMAKE_BINARY_DIR}/include)
 
 # Add all cpp files used in the Chess3D program
 add_executable("Chess3D" 
 	${PROJECT_SOURCE_DIR}/src/main.cpp 
-	${PROJECT_SOURCE_DIR}/src/glfw_setUp.cpp
-	${PROJECT_SOURCE_DIR}/src/errorHandler.cpp)
+	${PROJECT_SOURCE_DIR}/src/glfw_setup.cpp
+	${PROJECT_SOURCE_DIR}/src/errorHandler.cpp
+
+	${PROJECT_SOURCE_DIR}/class/shader.cpp
+	${PROJECT_SOURCE_DIR}/class/model.cpp
+	${PROJECT_SOURCE_DIR}/class/Mesh.cpp
+	${PROJECT_SOURCE_DIR}/class/Texture.cpp)
 
 # Find packages for linking
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(assimp REQUIRED)
+
+MESSAGE( STATUS "OPENGL_LIBRARIES:	"	${OPENGL_LIBRARIES})
+MESSAGE( STATUS "GLEW_LIBRARIES:	"	${GLEW_LIBRARIES})
+MESSAGE( STATUS "glfw:				"	glfw)
+MESSAGE( STATUS "assimp:			"	assimp)
+MESSAGE( STATUS "SOIL:				"	${SOIL})
+
+find_library(SOIL SOIL /usr/include/SOIL)
 
 # Link the packages
 target_link_libraries("Chess3D"
     PRIVATE ${OPENGL_LIBRARIES}
     PRIVATE ${GLEW_LIBRARIES}
     PRIVATE glfw
+    PRIVATE assimp
+   	PRIVATE ${SOIL}
 )
 
 
-## Use doc folder for doxygen files
-#find_package(doxygen)
+# Use doc folder for doxygen files
+#find_package(Doxygen)
 #if(DOXYGEN_FOUND)
 #
 #	message("Setting up doxygen")
-#	set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile.in)
-#	set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/doc)
+#	set(DOXYGEN_IN ${PROJECT_BINARY_DIR}/CMakeDoxyfile.in)
+#	set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/Doxyfile)
 #
+#	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+#
+#	add_custom_target( doc_doxygen ALL
+#        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+#        COMMENT "Generating API documentation with Doxygen"
+#        VERBATIM )
 #else()
 #
 #	message("Could not find doxygen")
