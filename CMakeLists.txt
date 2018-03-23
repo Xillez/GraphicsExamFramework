@@ -9,22 +9,12 @@ project("Chess Project" VERSION 0.1.0 LANGUAGES CXX)
 #Set the output to the bin folder where cmake was executed
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-# Get all cpp files for linking
-#file( GLOB cppFiles ${PROJECT_SOURCE_DIR}/src/*cpp)
-## Link each file
-#foreach(file ${cppFiles})
-#
-#	#NAME_WE gets the file name without directory prefix
-#	get_filename_component(fileName ${file} NAME_WE)
-#
-#	#Links the file
-#	add_executable($fileName)
-#	
-#endforeach(file)
-
 # Copy all shaders into include directory.
 file(GLOB shaders ${PROJECT_SOURCE_DIR}/shader)
 file(COPY ${shaders} DESTINATION ${CMAKE_BINARY_DIR}/include)
+
+# Copy moveset file to build directory
+#file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_BINARY_DIR}/resources/moves/move.yaml)
 
 # Add all cpp files used in the Chess3D program
 add_executable("Chess3D" 
@@ -43,11 +33,11 @@ find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(assimp REQUIRED)
 
-MESSAGE( STATUS "OPENGL_LIBRARIES:	"	${OPENGL_LIBRARIES})
-MESSAGE( STATUS "GLEW_LIBRARIES:	"	${GLEW_LIBRARIES})
-MESSAGE( STATUS "glfw:				"	glfw)
-MESSAGE( STATUS "assimp:			"	assimp)
-MESSAGE( STATUS "SOIL:				"	${SOIL})
+#MESSAGE( STATUS "OPENGL_LIBRARIES:	"	${OPENGL_LIBRARIES})
+#MESSAGE( STATUS "GLEW_LIBRARIES:	"	${GLEW_LIBRARIES})
+#MESSAGE( STATUS "glfw:				"	glfw)
+#MESSAGE( STATUS "assimp:			"	assimp)
+#MESSAGE( STATUS "SOIL:				"	${SOIL})
 
 find_library(SOIL SOIL /usr/include/SOIL)
 
@@ -61,23 +51,27 @@ target_link_libraries("Chess3D"
 )
 
 
-# Use doc folder for doxygen files
-#find_package(Doxygen)
-#if(DOXYGEN_FOUND)
-#
-#	message("Setting up doxygen")
-#	set(DOXYGEN_IN ${PROJECT_BINARY_DIR}/CMakeDoxyfile.in)
-#	set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/Doxyfile)
-#
-#	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-#
-#	add_custom_target( doc_doxygen ALL
-#        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
-#        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-#        COMMENT "Generating API documentation with Doxygen"
-#        VERBATIM )
-#else()
-#
-#	message("Could not find doxygen")
-#
-#endif(DOXYGEN_FOUND)
+find_package(Doxygen)
+#Set up doxygen if it is installed
+if(DOXYGEN_FOUND)
+
+	message("Setting up doxygen")
+	set(DOXYGEN_IN ${PROJECT_BINARY_DIR}/CMakeDoxyfile.in)
+	set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/Doxyfile)
+
+	# Setting folders to generate documentation for
+	set(DOXYGEN_INPUT "${PROJECT_SOURCE_DIR}/class ${PROJECT_SOURCE_DIR}/header")
+	set(DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/doc)
+
+	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+	add_custom_target( doc_doxygen ALL
+        COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT} 
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM )
+else()
+
+	message("Could not find doxygen")
+
+endif(DOXYGEN_FOUND)
