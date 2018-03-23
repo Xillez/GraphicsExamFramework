@@ -84,9 +84,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glm;C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glew-2.1.0\lib\Release\Win32;C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glm\glm\gtx;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -110,17 +112,18 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glm;C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glew-2.1.0\lib\Release\Win32;C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glfw-3.2.1.bin.WIN32\lib-vc2015;C:\Users\Zohaib Butt\Documents\NTNU\Graphics programming\imt2531_3dchess\dependencies\glm\glm\gtx;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="header\chess.hpp" />
     <ClInclude Include="header\glfw_eventHandler.hpp" />
+    <ClInclude Include="header\glfw_setup.hpp" />
     <ClInclude Include="header\globalVar.hpp" />
     <ClInclude Include="header\gl_model.hpp" />
     <ClInclude Include="header\gl_setup.hpp" />

@@ -48,6 +48,9 @@
     <ClInclude Include="header\yamlParser.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="header\glfw_setup.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">

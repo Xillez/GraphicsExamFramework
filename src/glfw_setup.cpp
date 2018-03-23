@@ -1,4 +1,4 @@
-/*#include "../header/glfw_setup.hpp"
+#include "../header/glfw_setup.hpp"
 #include "../header/errorHandler.hpp"
 
 GLFWwindow* glfw_setup(){
@@ -28,4 +28,4 @@ GLFWwindow* glfw_setup(){
     }
 
 	return tempWindow;
-}*/
+}
