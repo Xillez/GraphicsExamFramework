@@ -9,7 +9,7 @@
 class Shader {
 
       public:
-            GLuint shaderProgram;               //! identifier for the shader program
+            GLuint shaderProgram;               //!< identifier for the shader program
             
             /**
             * @brief getter for shderProgram.

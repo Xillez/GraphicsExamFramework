@@ -16,10 +16,10 @@
 class Model 
 {
     public:
-        std::vector<TextureA> textures_loaded;	//! Stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
-        std::vector<Mesh> meshes;               //! The meshes the Model compose of.
-        std::string directory;                  //! Directory path containing the loaded model.
-        bool gammaCorrection;                   //! Indicates that gamma has been corrected for computer monitors. NOTE: not used yet.
+        std::vector<TextureA> textures_loaded;	//!< Stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+        std::vector<Mesh> meshes;               //!< The meshes the Model compose of.
+        std::string directory;                  //!< Directory path containing the loaded model.
+        bool gammaCorrection;                   //!< Indicates that gamma has been corrected for computer monitors. NOTE: not used yet.
 
         /**
          * @brief Loads the model from the given path.

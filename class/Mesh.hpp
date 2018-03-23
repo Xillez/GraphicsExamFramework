@@ -11,10 +11,10 @@
 class Mesh {
 
 	public:
-		std::vector<Vertex> vertices;		//! Collection of position data and optional attributes.
-		std::vector<unsigned int> indices; 	//! Relative connection of vertices to define a face/surface.
-		std::vector<TextureA> textures;		//! Texture information for mapping to vertices.
-		unsigned int VAO;					//!	Vertex array object associated with the mesh. NOTE: VAO  should be associate with multiple meshes.
+		std::vector<Vertex> vertices;		//!< Collection of position data and optional attributes.
+		std::vector<unsigned int> indices; 	//!< Relative connection of vertices to define a face/surface.
+		std::vector<TextureA> textures;		//!< Texture information for mapping to vertices.
+		unsigned int VAO;					//!<	Vertex array object associated with the mesh. NOTE: VAO  should be associate with multiple meshes.
 
 		/**
 		 * @brief gets the vertex, indeci and texture data. Generates a VAO.
@@ -31,8 +31,8 @@ class Mesh {
 		void Draw(Shader shader);
 
 	private:
-		unsigned int VBO; //! Vertex buffer object for drawing 
-		unsigned int EBO; //! Vertex element buffer for drawing
+		unsigned int VBO; //!< Vertex buffer object for drawing 
+		unsigned int EBO; //!< Vertex element buffer for drawing
 
 		/**
 		 * @brief Creates VAO, VBO and EBO for the given mesh.

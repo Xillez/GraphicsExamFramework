@@ -25,6 +25,7 @@ glm::mat4 view;
 GLuint MatrixID;
 GLuint TexMatrixID; // For use with texture shader
 };
+
 struct Vertex {
 	// position
 	glm::vec3 Position;

@@ -60,7 +60,7 @@ if(DOXYGEN_FOUND)
 	set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/Doxyfile)
 
 	# Setting folders to generate documentation for
-	set(DOXYGEN_INPUT "${PROJECT_SOURCE_DIR}/class ${PROJECT_SOURCE_DIR}/header")
+	set(DOXYGEN_INPUT "${PROJECT_SOURCE_DIR}/class ${PROJECT_SOURCE_DIR}/header ${PROJECT_SOURCE_DIR}/src")
 	set(DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/doc)
 
 	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
@@ -70,6 +70,12 @@ if(DOXYGEN_FOUND)
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
         COMMENT "Generating API documentation with Doxygen"
         VERBATIM )
+
+	#set_target_properties(doc_doxygen
+	#	PROPERTIES
+	#	DOXYGEN_INPUT ""
+	#	DOXYGEN_OUTPUT_DIRECTORY
+	#)
 else()
 
 	message("Could not find doxygen")
