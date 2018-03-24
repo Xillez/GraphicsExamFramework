@@ -11,10 +11,7 @@
 
 
 int main(int argc, char const *argv[])
-{
-	
-	// setup gl
-	
+{	
 	window = glfw_setup();
 
 	// load stuff

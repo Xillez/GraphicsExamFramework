@@ -6,7 +6,8 @@ GLFWwindow* glfw_setup(){
 	//tries to initialize glfw. NOTE: should be changed to cause fatal error.
 	if (!glfwInit())
 	{
-	    return nullptr;
+		glfw_errorCallback(0, "Could not initialize glfw");
+		return nullptr;
 	}
 
 	glfwSetErrorCallback(glfw_errorCallback);
@@ -16,16 +17,15 @@ GLFWwindow* glfw_setup(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	
 	// create window
-	GLFWwindow* tempWindow = glfwCreateWindow(1024, 768, "Chess-3D", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(1024, 768, "Chess-3D", nullptr, nullptr);
 	
 	// set window as active
-	glfwMakeContextCurrent(tempWindow);
+	glfwMakeContextCurrent(window);
 
 	glewExperimental = GL_TRUE;
     // Initialize GLEW QUESTION: should this be moved to other file?
     if (glewInit() != GLEW_OK) {
         glfwTerminate();
     }
-
-	return tempWindow;
+    return window;
 }
