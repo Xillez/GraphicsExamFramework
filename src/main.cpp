@@ -1,26 +1,25 @@
-#include "../header/gl_setup.hpp"
-#include "../header/piece.hpp"
-#include "../header/glfw_setup.hpp"
-#include "../header/errorHandler.hpp"
 #include "../header/global_function.hpp"
+#include "../header/glfw_setup.hpp"
+//#include "../header/gl_setup.hpp"
+#include "../header/piece.hpp"
 
 
 
-// Global Function
 
 
 
 int main(int argc, char const *argv[])
 {	
-	window = glfw_setup();
+	// OpenGL setup
+	GLFWwindow* window = glfw_setup();
 
 	// load stuff
 	getMoves();
 	Piece p = Piece("null", "Pawn");
+
 	// start game
 
 
-	system("Pause");
 	return 0;
 }
  

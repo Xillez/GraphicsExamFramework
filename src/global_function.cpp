@@ -1,6 +1,5 @@
-#include "../header/yaml_parser.hpp"
-#include "../header/globalVar.hpp"
 #include "../header/global_function.hpp"
+#include "../header/yaml_parser.hpp"
 
 
 
@@ -28,3 +27,11 @@ void getMoves() {
 		}
 	}
 };
+
+///////////////////////////////////////////////////////////
+///														///	
+///														///
+///		Only global function use global var?			///
+///														///
+///														///
+///////////////////////////////////////////////////////////

@@ -1,4 +1,5 @@
 #include "../header/yaml_parser.hpp"
+#include <algorithm>
 
 YamlParser::YamlParser(const std::string path) {
     std::ifstream file (path);

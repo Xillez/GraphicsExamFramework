@@ -1,10 +1,9 @@
+#pragma once
 #include "gl_model.hpp"
-#include <iostream>
-#include <fstream>
+#include "globalVar.hpp"  	//!< NOTE: Cause multiple definition problems with global_function.cpp file
+
 #include <vector>
 #include <string>
-
-#include "globalVar.hpp"
 
 /**
  * @brief Piece class represent a individual piece in the board
@@ -20,7 +19,7 @@ public:
 	 * @brief Construct a new Piece object
 	 * 
 	 */
-	Piece() {};
+	Piece();
 	
 	/**
 	 * @brief Construct a new Piece object
@@ -28,22 +27,11 @@ public:
 	 * @param path is .obj file 
 	 * @param pieceName is the name of the piece
 	 */
-	Piece(std::string const &path, std::string const &pieceName){
-		std::unordered_map<std::string, std::vector<std::string>>::iterator found = moves.find(pieceName);
-
-		if(found == moves.end()){
-			std::cout << "There are no moves for a piece called " << pieceName << '\n';
-		}
-		else {
-			for(auto v : found->second){
-				move.push_back(v);
-			}
-		}
-	};
+	Piece(std::string const &path, std::string const &pieceName);
 
 	/**
 	 * @brief 
 	 * 
 	 */
-	void draw() {};
+	void draw();
 };
