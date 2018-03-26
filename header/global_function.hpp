@@ -1,5 +1,4 @@
 #pragma once
-#include "globalVar.hpp" 			//!< NOTE: Cause multiple definition problems with piece.cpp file
 
 #include <string>
 #include <vector>

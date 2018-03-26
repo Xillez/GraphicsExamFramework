@@ -1,13 +1,13 @@
 #include "../header/yaml_parser.hpp"
 #include <algorithm>
+#include <fstream>
 
 YamlParser::YamlParser(const std::string path) {
-    std::ifstream file (path);
+    std::ifstream file(path);
 	if (file) {
-
 		std::string buffer;
 		while (!file.eof()) {
-			std::getline(file, buffer);
+			std::getline(file, buffer);				//!< this line is not executed as expected.
 			data.append(buffer + '\n');
 		}
 		file.close();

@@ -1,6 +1,5 @@
 #pragma once
 #include "gl_model.hpp"
-#include "globalVar.hpp"  	//!< NOTE: Cause multiple definition problems with global_function.cpp file
 
 #include <vector>
 #include <string>

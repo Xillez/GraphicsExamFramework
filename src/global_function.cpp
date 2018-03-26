@@ -1,6 +1,8 @@
 #include "../header/global_function.hpp"
 #include "../header/yaml_parser.hpp"
+#include "../header/globalVar.hpp" 			//!< NOTE: Cause multiple definition problems with piece.cpp file
 
+std::unordered_map<std::string, std::vector<std::string>> moves; 
 
 
 void getMoves() {
@@ -27,11 +29,3 @@ void getMoves() {
 		}
 	}
 };
-
-///////////////////////////////////////////////////////////
-///														///	
-///														///
-///		Only global function use global var?			///
-///														///
-///														///
-///////////////////////////////////////////////////////////

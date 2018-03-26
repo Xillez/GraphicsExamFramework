@@ -1,4 +1,5 @@
 #include "../header/piece.hpp"
+#include "../header/globalVar.hpp"  	//!< NOTE: Cause multiple definition problems with global_function.cpp file
 #include <iostream>
 
 
