@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <glm/glm.hpp>
 #include <GL/glew.h> 
+#include <glm/glm.hpp>
 
 struct VAO {
 	GLuint VertexArrayID;

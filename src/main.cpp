@@ -1,3 +1,4 @@
+#include "../class/model.hpp"
 #include "../header/glfw_setup.hpp"
 #include "../header/global_function.hpp"
 #include "../header/gl_setup.hpp"
@@ -5,21 +6,17 @@
 
 
 
-#include "../header/errorHandler.hpp"
-#include "../class/model.hpp"
-#include "../header/globalVar.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
 
+
 int main(int argc, char const *argv[])
 {	
-	// load stuff
 	getMoves();
-	Piece p = Piece("null", "Pawn");
 
 	// OpenGL setup
-	window = glfw_setup();
+	GLFWwindow* window = glfw_setup();
 
 	Model* chessBoard = new Model (("../asset/modell_chessBoard.obj"));
 	
