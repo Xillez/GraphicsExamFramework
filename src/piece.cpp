@@ -5,7 +5,7 @@
 
 
 
-Piece::Piece(std::string const &path, std::string const &pieceName){
+Piece::Piece(std::string const &path, std::string const &pieceName) : Model() {
 	std::unordered_map<std::string, std::vector<std::string>>::iterator found = moves.find(pieceName);
 
 	if(found == moves.end()){
@@ -16,6 +16,7 @@ Piece::Piece(std::string const &path, std::string const &pieceName){
 			move.push_back(v);
 		}
 	}
+	x = y = 0;
 }
 
 

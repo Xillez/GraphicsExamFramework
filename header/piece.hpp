@@ -1,5 +1,5 @@
 #pragma once
-#include "gl_model.hpp"
+#include "../class/model.hpp"
 
 #include <vector>
 #include <string>
