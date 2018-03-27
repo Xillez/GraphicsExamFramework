@@ -1,5 +1,6 @@
 #include "../header/yaml_parser.hpp"
 #include <algorithm>
+#include <iostream>
 #include <fstream>
 
 YamlParser::YamlParser(const std::string path) {
@@ -7,7 +8,7 @@ YamlParser::YamlParser(const std::string path) {
 	if (file) {
 		std::string buffer;
 		while (!file.eof()) {
-			std::getline(file, buffer);				//!< this line is not executed as expected.
+			std::getline(file, buffer);	
 			data.append(buffer + '\n');
 		}
 		file.close();

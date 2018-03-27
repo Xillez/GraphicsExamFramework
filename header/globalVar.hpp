@@ -3,10 +3,10 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include <GLFW/glfw3.h>
 #include "../class/model.hpp"
+#include <GLFW/glfw3.h>
 
-GLFWwindow* window;			//!< Default window to draw on
+extern GLFWwindow* window;			//!< Default window to draw on
 
 extern Shader* shaderProgram;
 

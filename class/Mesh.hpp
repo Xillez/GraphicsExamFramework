@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../header/struct.hpp"
 #include "shader.hpp"
 #include <vector>
-#include <GL/glew.h>
+#include "../header/struct.hpp"
 
 
 /**
