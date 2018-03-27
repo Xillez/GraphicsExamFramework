@@ -5,6 +5,7 @@
 #include <vector>
 #include <GL/glew.h>
 
+
 /**
  * @brief Collection of vertices, geometry and topology for part a model.
  */

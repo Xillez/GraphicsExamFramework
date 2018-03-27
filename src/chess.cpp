@@ -1,30 +1,12 @@
-#include "../header/glfw_setup.hpp"
-#include "../header/global_function.hpp"
-#include "../header/gl_setup.hpp"
-#include "../header/piece.hpp"
-
-
-
 #include "../header/errorHandler.hpp"
-#include "../class/model.hpp"
 #include "../header/globalVar.hpp"
+#include "../header/chess.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
 
-int main(int argc, char const *argv[])
-{	
-	// load stuff
-	getMoves();
-	Piece p = Piece("null", "Pawn");
+void gameLoop(){
 
-	// OpenGL setup
-	window = glfw_setup();
-
-	Model* chessBoard = new Model (("../asset/modell_chessBoard.obj"));
-	
-	Shader* shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
-	
 	while(!glfwWindowShouldClose(window)) {
 
 		glClearColor(0.0,0.0,0.0,1);
@@ -56,11 +38,6 @@ int main(int argc, char const *argv[])
 		 //printf("hello\t");
 
 		glfwSwapBuffers(window);    //<-- SWAP BUFFERS
-        glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
+	    glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
 	}
-	glfwDestroyWindow(window);
-
-
-	return 0;
 }
- 
