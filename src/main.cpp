@@ -17,7 +17,7 @@ int main(int argc, char const *argv[])
 
 	// load stuff
 	getMoves();
-	//Piece p = Piece("null", "Pawn");
+	Piece p = Piece("null", "Pawn");
 
 	// start game
 
