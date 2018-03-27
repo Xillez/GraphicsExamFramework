@@ -14,7 +14,7 @@ file(GLOB shaders ${PROJECT_SOURCE_DIR}/shader)
 file(COPY ${shaders} DESTINATION ${CMAKE_BINARY_DIR}/include)
 
 # Copy moveset file to build directory
-file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_BINARY_DIR}/resources/moves/move.yaml)
+file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_BINARY_DIR}/resources/moves)
 
 # Add all cpp files used in the Chess3D program
 add_executable("Chess3D" 

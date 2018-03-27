@@ -1,13 +1,18 @@
-#include "../header/glfw_setup.hpp"
+#include "../header/globalVar.hpp"
+#include "../header/gl_setup.hpp"
 #include "../header/errorHandler.hpp"
 #include "../class/model.hpp"
-#include "../header/globalVar.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
+#include "../header/global_function.hpp"
+#include "../header/piece.hpp"
 
 int main(int argc, char const *argv[])
 {	
+	// load stuff
+	getMoves();
+	Piece p = Piece("null", "Pawn");
 
 	window = glfw_setup();
 
