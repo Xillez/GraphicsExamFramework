@@ -1,21 +1,12 @@
-#include "../header/gl_setup.hpp"
-#include "../header/glfw_setup.hpp"
 #include "../header/errorHandler.hpp"
-#include "../class/model.hpp"
 #include "../header/globalVar.hpp"
+#include "../header/chess.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
 
-int main(int argc, char const *argv[])
-{	
+void gameLoop(){
 
-	window = glfw_setup();
-
-	Model* chessBoard = new Model (("../asset/modell_chessBoard.obj"));
-	
-	Shader* shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
-	
 	while(!glfwWindowShouldClose(window)) {
 
 		glClearColor(0.0,0.0,0.0,1);
@@ -47,9 +38,6 @@ int main(int argc, char const *argv[])
 		 //printf("hello\t");
 
 		glfwSwapBuffers(window);    //<-- SWAP BUFFERS
-        glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
+	    glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
 	}
-	glfwDestroyWindow(window);
-
-	return 0;
 }
