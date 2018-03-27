@@ -1,27 +1,36 @@
+#pragma once
 #include "gl_model.hpp"
-#include <iostream>
-#include <fstream>
+
 #include <vector>
 #include <string>
 
-
+/**
+ * @brief Piece class represent a individual piece in the board
+ * 
+ */
 class Piece : Model {
 private:
 	std::vector<std::string> move;
 	int x, y;
 
 public:
-	Piece() {};
-	Piece(std::string const &path, std::string const &movePattern, std::string const &pieceName){
-		std::ifstream inputFile(movePattern);
-		std::string name;
-		if (inputFile.is_open()) {
-			std::getline(inputFile, name);
-			if (name == pieceName) {
+	/**
+	 * @brief Construct a new Piece object
+	 * 
+	 */
+	Piece();
+	
+	/**
+	 * @brief Construct a new Piece object
+	 * 
+	 * @param path is .obj file 
+	 * @param pieceName is the name of the piece
+	 */
+	Piece(std::string const &path, std::string const &pieceName);
 
-
-			}
-		}
-	};
-	void draw() {};
+	/**
+	 * @brief 
+	 * 
+	 */
+	void draw();
 };

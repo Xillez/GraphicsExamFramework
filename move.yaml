@@ -1,0 +1,54 @@
+pieceCount: 6
+pieces:
+- piece: Pawn
+  moveCount: 1
+  moves:
+  - "F"
+- piece: Rook
+  moveCount: 4
+  moves:
+  - "F*"
+  - "B*"
+  - "L*"
+  - "R*"
+- piece: Bishop
+  moveCount: 4
+  moves:
+  - "(FR)*"
+  - "(FL)*"
+  - "(BR)*"
+  - "(BL)*"
+- piece: Horse
+  moveCount: 8
+  moves:
+  - "FFR"
+  - "FFL"
+  - "BBR"
+  - "BBL"
+  - "LLF"
+  - "LLB"
+  - "RRF"
+  - "RRB"
+- piece: Queen
+  moveCount: 8
+  moves:
+  - "F*"
+  - "B*"
+  - "L*"
+  - "R*"
+  - "(FR)*"
+  - "(FL)*"
+  - "(BR)*"
+  - "(BL)*"
+- piece: King
+  moveCount: 8
+  moves:
+  - "F"
+  - "B"
+  - "L"
+  - "R"
+  - "(FR)"
+  - "(FL)"
+  - "(BL)"
+  - "(BR)"
+  

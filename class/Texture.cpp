@@ -47,7 +47,7 @@ Texture::Texture(const char* filename)
 	}
 	else {
 
-		printf("SOIL cannot load image \n%s\n");
+		printf("SOIL cannot load image \n%s\n", filename);
 
 	}
 }

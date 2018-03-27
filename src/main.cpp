@@ -1,4 +1,3 @@
-#include "../header/gl_setup.hpp"
 #include "../header/glfw_setup.hpp"
 #include "../header/errorHandler.hpp"
 #include "../class/model.hpp"
@@ -51,5 +50,7 @@ int main(int argc, char const *argv[])
 	}
 	glfwDestroyWindow(window);
 
+
 	return 0;
 }
+ 
