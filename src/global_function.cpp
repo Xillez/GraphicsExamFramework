@@ -23,9 +23,4 @@ void getMoves() {
 		temp.clear();
 	}
 
-	for (auto v : moves) {
-		for (auto m : v.second) {
-			std::cout << v.first << ": " << m << '\n';
-		}
-	}
 };
