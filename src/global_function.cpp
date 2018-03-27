@@ -1,6 +1,6 @@
 #include "../header/global_function.hpp"
 #include "../header/yaml_parser.hpp"
-#include "../header/globalVar.hpp" 			//!< NOTE: Cause multiple definition problems with piece.cpp file
+#include "../header/globalVar.hpp" 		
 
 std::unordered_map<std::string, std::vector<std::string>> moves; 
 
