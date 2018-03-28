@@ -1,10 +1,8 @@
 #pragma once
 
-#include <GL/glew.h>
 #include "../header/struct.hpp"
 #include "shader.hpp"
 #include <vector>
-
 
 /**
  * @brief Collection of vertices, geometry and topology for part a model.

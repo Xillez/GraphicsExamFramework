@@ -1,7 +1,7 @@
 #include "../header/global_function.hpp"
 #include "../header/yaml_parser.hpp"
 #include "../header/globalVar.hpp" 		
-
+#include <iostream>
 std::unordered_map<std::string, std::vector<std::string>> moves; 
 
 
@@ -23,4 +23,9 @@ void getMoves() {
 		temp.clear();
 	}
 
+	for(auto i : moves){
+		for(auto v : i.second){
+			std::cout << i.first << " " << v << '\n';
+		}
+	}
 };

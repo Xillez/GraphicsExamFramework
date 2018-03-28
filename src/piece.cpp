@@ -3,9 +3,8 @@
 #include <iostream>
 
 
+Piece::Piece(std::string const &path, std::string const &pieceName) : Model(path){
 
-
-Piece::Piece(std::string const &path, std::string const &pieceName) : Model() {
 	std::unordered_map<std::string, std::vector<std::string>>::iterator found = moves.find(pieceName);
 
 	if(found == moves.end()){

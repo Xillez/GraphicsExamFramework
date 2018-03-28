@@ -2,21 +2,21 @@
 #include "../header/gl_setup.hpp"
 #include "../header/errorHandler.hpp"
 #include "../class/model.hpp"
+#include "../header/global_function.hpp"
+#include "../header/piece.hpp"
+#include "../header/glfw_setup.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <stdio.h>
-#include "../header/global_function.hpp"
-#include "../header/piece.hpp"
 
 int main(int argc, char const *argv[])
 {	
-	// load stuff
 	getMoves();
-	Piece p = Piece("null", "Pawn");
 
-	window = glfw_setup();
+	// OpenGL setup
+	GLFWwindow* window = glfw_setup();
 
-	Model* chessBoard = new Model (("../asset/modell_chessBoard.obj"));
+	Model* chessBoard = new Model(("../asset/modell_chessBoard.obj"));
 	
 	Shader* shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
 	
@@ -54,7 +54,6 @@ int main(int argc, char const *argv[])
         glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
 	}
 	glfwDestroyWindow(window);
-
 
 	return 0;
 }
