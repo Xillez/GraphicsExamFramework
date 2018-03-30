@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <vector>
+#include <map>
 
 /**
  * @brief Represent a GL shader program
@@ -9,8 +10,9 @@
 class Shader {
 
       public:
-            GLuint shaderProgram;               //!< identifier for the shader program
+            GLuint shaderProgram;                                             //!< identifier for the shader program
             
+
             /**
             * @brief getter for shderProgram.
             * @return shaderProgram id.
@@ -53,4 +55,12 @@ class Shader {
              * @param buffer Where the file is stored.
              */
             void read_shader_src(const char *fname, std::vector<char> &buffer);
+
+            /**
+             * @brief gets the requested uniform values from the shader 
+             * 
+             * @param request map of names to return as and name of uniforms as named in shader.
+             * @return map of names specified in request and uniformloaction requested.
+             */
+            std::map<std::string, GLuint> getUniform(std::map<std::string, GLchar*> request);
 };

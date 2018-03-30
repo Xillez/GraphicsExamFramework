@@ -1,5 +1,6 @@
 #include "shader.hpp"
 #include "../header/errorHandler.hpp"
+
 #include <iostream>
 #include <fstream>
 
@@ -63,7 +64,7 @@ GLuint Shader::load_and_compile_shader(const char *fname, GLenum shaderType)
 
 		shader_errorCallback(0, "Could not compile shader program");
 	}
-return shader;
+	return shader;
 }
 
 void Shader::read_shader_src(const char *fname, std::vector<char> &buffer)
@@ -93,4 +94,16 @@ void Shader::read_shader_src(const char *fname, std::vector<char> &buffer)
 	//std::cerr << "Unable to open " << fname << " I'm out!" << std::endl;
 	exit(-1);
 	}
+}
+
+std::map<std::string, GLuint> Shader::getUniform(std::map<std::string, GLchar*> request){
+	
+	std::map<std::string, GLuint> result;
+	
+	for (auto it = request.begin(); it != request.end(); ++it)
+	{
+		result.insert(std::pair<std::string, GLuint>(it->first, glGetUniformLocation(shaderProgram, it->second)));
+	}
+
+	return result;
 }
