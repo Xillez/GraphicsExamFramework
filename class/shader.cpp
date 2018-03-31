@@ -1,6 +1,8 @@
 #include "shader.hpp"
 #include "../header/errorHandler.hpp"
 
+#include <algorithm>
+#include <string>
 #include <iostream>
 #include <fstream>
 
@@ -29,6 +31,35 @@ Shader::Shader(const char *path_vert_shader, const char *path_frag_shader){
 
 	// Link the different shaders that are bound to this program, this creates a final shader that 
 	// we can use to render geometry with.
+	glLinkProgram(shaderProgram);
+	glUseProgram(shaderProgram);
+}
+
+Shader::Shader(std::vector<std::pair<GLenum, std::string>> shaders){
+	// shaderTypes that can be attatched
+	std::vector<GLenum> available = {GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER};
+
+	shaderProgram = glCreateProgram();
+
+	// goes through the arguments and add each shader to the program.
+	// exits if not a shader or shader is earlier in the pipeline than previosuly read.
+	for (auto it = shaders.begin(); it != shaders.end(); ++it)
+	{
+		auto position = std::find(available.begin(), available.end(), it->first);
+
+		if (position != available.end())
+		{
+			available.erase(available.begin(), position);
+			GLuint programPart = load_and_compile_shader(it->second.c_str(), it->first);
+			glAttachShader(shaderProgram, programPart);
+			glDeleteShader(programPart);
+		}
+		else{
+			shader_errorCallback(0, "Given shader could not be placed here in the pipeline");
+			exit(-1);
+		}
+	}
+
 	glLinkProgram(shaderProgram);
 	glUseProgram(shaderProgram);
 }

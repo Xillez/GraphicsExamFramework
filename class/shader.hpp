@@ -26,6 +26,13 @@ class Shader {
              * @param path_frag_shader File path to the frag shader.
              */
             Shader(const char *path_vert_shader, const char *path_frag_shader);
+            /**
+             * @brief Create a shaderprogram based on pairs of shadertype and filepath 
+             * @details The shaders in the vector should be ordered like the glpipeline
+             * 
+             * @param shaders pair of GLenum shaderType and filepath string.
+             */
+            Shader(std::vector<std::pair<GLenum, std::string>> shaders);
             
             /**
              * @brief runs glUseProgram on the shader.

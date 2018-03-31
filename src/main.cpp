@@ -20,7 +20,10 @@ int main(int argc, char const *argv[])
 
 	Model* chessBoard = new Model(("../asset/modell_chessBoard.obj"));
 	
-	Shader* shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
+	Shader* shaderProgram = new Shader(std::vector<std::pair<GLenum, std::string>>{
+		{GL_VERTEX_SHADER, "../shader/vertex.vert"},
+		{GL_FRAGMENT_SHADER, "../shader/fragment.frag"}
+	});
 	
 	while(!glfwWindowShouldClose(window)) {
 
