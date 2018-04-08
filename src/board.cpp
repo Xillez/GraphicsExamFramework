@@ -4,18 +4,19 @@
 #include <iostream>
 
 Board::Board(std::string const &path) : Model(path){
-	tiles = new glm::vec3* [8];
+
+/*
+	tiles = new Piece* [8];
 	for(int i = 0; i < 8; i++){
-		tiles[i] = new glm::vec3[8];	
-		for (int j = 0; j < 8; ++j)
-		{
-			tiles[i][j] = glm::vec3(i * offset, 0 , j * offset);
-		}
+		tiles[i] = new Piece[8];	
 	}
+	*/
+
+	tiles[0][0] = new Piece("../asset/Pawn.obj", "Pawn");
 
 		// debug
-	/*
-
+	
+/*
 	for (int i = 0; i < 8; ++i)
 	{
 		for (int j = 0; j < 8; ++j)
@@ -37,8 +38,8 @@ Board::Board(std::string const &path) : Model(path){
 			if(j==7) std::cout << std::endl;
 		
 		}
-	}*/
-
+	}
+*/
 	shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
 	shaderProgram->bind();
 
@@ -68,5 +69,10 @@ void Board::draw(){
 	
 	Model::Draw(*shaderProgram); 
 	 //printf("hello\t");
+
+
+	// TODO: draw pieces
+	tiles[0][0]->drawPiece();
+
 
 }

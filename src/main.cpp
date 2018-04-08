@@ -1,8 +1,7 @@
-#include "../class/model.hpp"
+//#include "../class/model.hpp"
 #include "../header/glfw_setup.hpp"
 #include "../header/global_function.hpp"
 #include "../header/gl_setup.hpp"
-#include "../header/piece.hpp"
 #include "../header/globalVar.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>
@@ -25,7 +24,6 @@ int main(int argc, char const *argv[])
 
 		glClearColor(0.0,0.0,0.0,1);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
 
 		chessBoard->draw();
 

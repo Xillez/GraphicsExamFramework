@@ -1,5 +1,6 @@
 #pragma once
 #include "../class/model.hpp"
+#include <glm/glm.hpp>
 
 #include <vector>
 #include <string>
@@ -12,6 +13,7 @@ class Piece : Model {
 private:
 	std::vector<std::string> move;
 	int x, y;
+	Shader* shaderProgram;
 
 public:
 	/**
@@ -32,5 +34,5 @@ public:
 	 * @brief 
 	 * 
 	 */
-	void draw();
+	void drawPiece();
 };

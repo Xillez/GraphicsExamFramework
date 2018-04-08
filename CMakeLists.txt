@@ -22,6 +22,7 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/src/errorHandler.cpp
 	${PROJECT_SOURCE_DIR}/src/glfw_setup.cpp
 	${PROJECT_SOURCE_DIR}/src/global_function.cpp
+	${PROJECT_SOURCE_DIR}/src/piece.cpp
 	${PROJECT_SOURCE_DIR}/src/board.cpp
 	${PROJECT_SOURCE_DIR}/src/yaml_parser.cpp
 	
