@@ -1,10 +1,27 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
+#include <vector>
+#include <iostream>
+
+// TODO: Make eventhandler handler click and find correct piece and call 
 
 class EventHandler
 {
-    public:
+	public:
+		/**
+		 * @brief Constructor for EventHandler class. Takes in the window and some map stuff.
+		 */
+		EventHandler();
+
+		/**
+		 * @brief Function for setup of eventhandling callback functions.
+		 * 
+		 * @param window - GLFWwindow* - The pointer to the current window.
+		 */
+		void setup_eventHandler(GLFWwindow* window);
+
+    private:
 		/**
 		 * @brief Function to handle keyboard events sent to window.
 		 *
@@ -14,7 +31,7 @@ class EventHandler
 		 * @param
 		 * @param
 		 */
-        void onKeyboardInput();
+        //void onKeyboardInput();
 
         /**
          * @brief Function to handle mouse events to window.
@@ -25,7 +42,18 @@ class EventHandler
          * @param
          * @param
          */
-        void onMouseInput();
+        void onMouseMove(GLFWwindow* window, double xpos, double ypos);
+
+        /**
+		 * @brief Function to handle mouse events to window.
+		 *
+		 * @param
+		 * @param
+		 * @param
+		 * @param
+		 * @param
+		 */
+		void onMouseClick(GLFWwindow* window, int button, int action, int mods);
 
         /**
 		 * @brief Function to handle resume events (when game is paused and user presses ESC).
@@ -36,7 +64,7 @@ class EventHandler
 		 * @param
 		 * @param
 		 */
-        void onResume();
+        //void onResume();
 
         /**
 		 * @brief Function to handle pause events (when game is unpaused and user presses ESC).
@@ -47,7 +75,7 @@ class EventHandler
 		 * @param
 		 * @param
 		 */
-        void onPause();
+        //void onPause();
 
         /**
 		 * @brief Function to handle tick events (happens every frame).
@@ -58,9 +86,7 @@ class EventHandler
 		 * @param
 		 * @param
 		 */
-        void onTick();
-    protected:
-        //
-    private:
-        
+        //void onTick();
+
+		GLFWwindow* window;	//!< Local pointer to window
 };
