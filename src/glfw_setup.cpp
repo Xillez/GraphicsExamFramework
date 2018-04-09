@@ -10,7 +10,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
     }
 }
 
-GLFWwindow* glfw_setup(){
+GLFWwindow* glfw_setup() {
 
 	//tries to initialize glfw. NOTE: should be changed to cause fatal error.
 	if (!glfwInit())

@@ -5,8 +5,8 @@
 #include "../header/globalVar.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>
-#include <stdio.h>
 
+#include <stdio.h>
 
 int main(int argc, char const *argv[])
 {	
@@ -32,7 +32,6 @@ int main(int argc, char const *argv[])
         glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
 	}
 	glfwDestroyWindow(window);
-
 
 	return 0;
 }

@@ -12,7 +12,8 @@
 class Piece : Model {
 private:
 	std::vector<std::string> move;
-	int x, y;
+	float x, y, z;
+	bool isWhite;
 	Shader* shaderProgram;
 
 public:
@@ -28,11 +29,15 @@ public:
 	 * @param path is .obj file 
 	 * @param pieceName is the name of the piece
 	 */
-	Piece(std::string const &path, std::string const &pieceName);
+	Piece(std::string const &path, std::string const &pieceName, bool isWhite);
 
 	/**
 	 * @brief 
 	 * 
 	 */
-	void drawPiece();
+
+	void draw();
+
+
+	void place(float x, float y, float z);
 };
