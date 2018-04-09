@@ -9,7 +9,7 @@
  GLuint Shader::id() const {
  	return shaderProgram; 
  }
-Shader::Shader(const char *path_vert_shader, const char *path_frag_shader){
+Shader::Shader(const std::string path_vert_shader, const char *path_frag_shader){
 
     /*-----------------------------------------------------------------------------
      *  CREATE THE SHADER
@@ -72,7 +72,7 @@ void Shader::unbind() {
 	glUseProgram(0); 
 }
 
-GLuint Shader::load_and_compile_shader(const char *fname, GLenum shaderType) 
+GLuint Shader::load_and_compile_shader(const std::string fname, GLenum shaderType) 
 {
 	// Load a shader from an external file
 	std::vector<char> buffer;
@@ -98,7 +98,7 @@ GLuint Shader::load_and_compile_shader(const char *fname, GLenum shaderType)
 	return shader;
 }
 
-void Shader::read_shader_src(const char *fname, std::vector<char> &buffer)
+void Shader::read_shader_src(const std::string fname, std::vector<char> &buffer)
 {
 	std::ifstream in;
 	in.open(fname, std::ios::binary);
