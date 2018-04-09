@@ -10,27 +10,27 @@
 
 int main(int argc, char const *argv[])
 {	
-
-
+	// Ready moves for pieces
 	getMoves();
 
 	// OpenGL setup
 	GLFWwindow* window = glfw_setup();
 
+	// Make chessboard
 	Board* chessBoard = new Board ("../asset/modell_chessBoard.obj");
 	
-	
-	while(!glfwWindowShouldClose(window)) {
-
+	// Run until close event is given to the window
+	while(!glfwWindowShouldClose(window))
+	{
 		glClearColor(0.0,0.0,0.0,1);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		chessBoard->draw();
 
-
 		glfwSwapBuffers(window);    //<-- SWAP BUFFERS
         glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
 	}
+
 	glfwDestroyWindow(window);
 
 	return 0;
