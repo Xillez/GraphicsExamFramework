@@ -10,5 +10,4 @@ public:
 private:
 	Piece* tiles[8][8];
 	Shader* shaderProgram;
-	float offset = 10.0f;
 };
