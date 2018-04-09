@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <vector>
+#include <map>
 
 /**
  * @brief Represent a GL shader program
@@ -9,8 +10,9 @@
 class Shader {
 
       public:
-            GLuint shaderProgram;               //!< identifier for the shader program
+            GLuint shaderProgram;                                             //!< identifier for the shader program
             
+
             /**
             * @brief getter for shderProgram.
             * @return shaderProgram id.
@@ -23,7 +25,14 @@ class Shader {
              * @param path_vert_shader File path to the vertex shader.
              * @param path_frag_shader File path to the frag shader.
              */
-            Shader(const char *path_vert_shader, const char *path_frag_shader);
+            Shader(const std::string path_vert_shader, const char *path_frag_shader);
+            /**
+             * @brief Create a shaderprogram based on pairs of shadertype and filepath 
+             * @details The shaders in the vector should be ordered like the glpipeline
+             * 
+             * @param shaders pair of GLenum shaderType and filepath string.
+             */
+            Shader(std::vector<std::pair<GLenum, std::string>> shaders);
             
             /**
              * @brief runs glUseProgram on the shader.
@@ -43,7 +52,7 @@ class Shader {
              * 
              * @return identifier for the shader.
              */
-            GLuint load_and_compile_shader(const char *fname, GLenum shaderType);
+            GLuint load_and_compile_shader(const  std::string fname, GLenum shaderType);
             
             
             /**
@@ -52,5 +61,13 @@ class Shader {
              * @param fname filepath of the shader.
              * @param buffer Where the file is stored.
              */
-            void read_shader_src(const char *fname, std::vector<char> &buffer);
+            void read_shader_src(const  std::string fname, std::vector<char> &buffer);
+
+            /**
+             * @brief gets the requested uniform values from the shader 
+             * 
+             * @param request map of names to return as and name of uniforms as named in shader.
+             * @return map of names specified in request and uniformloaction requested.
+             */
+            std::map<std::string, GLuint> getUniform(std::map<std::string, GLchar*> request);
 };

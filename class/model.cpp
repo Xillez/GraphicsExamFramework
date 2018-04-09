@@ -1,5 +1,6 @@
 #include "model.hpp"
 #include "Texture.hpp"
+#include <stdio.h>
 
 Model::Model(std::string const &path, bool gamma)
 {
@@ -43,18 +44,36 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 	{
 		Vertex vertex;
 		glm::vec3 tempVertex; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
-						  // positions
-		tempVertex.x = mesh->mVertices[i].x;
-		tempVertex.y = mesh->mVertices[i].y;
-		tempVertex.z = mesh->mVertices[i].z;
+						  
+		// positions
+		if (mesh->HasPositions())
+		{
+			tempVertex.x = mesh->mVertices[i].x;
+			tempVertex.y = mesh->mVertices[i].y;
+			tempVertex.z = mesh->mVertices[i].z;
+		}
+		else{
+			printf("Warning: Found no Vertex\n");
+			tempVertex = glm::vec3(0.0f, 0.0f, 0.0f);
+		}
+
 		vertex.Position = tempVertex;
+
 		// normals
-		tempVertex.x = mesh->mNormals[i].x;
-		tempVertex.y = mesh->mNormals[i].y;
-		tempVertex.z = mesh->mNormals[i].z;
+		if (mesh->HasNormals())
+		{
+			tempVertex.x = mesh->mNormals[i].x;
+			tempVertex.y = mesh->mNormals[i].y;
+			tempVertex.z = mesh->mNormals[i].z;
+		}
+		else{
+			printf("Warning: Found no Normals\n");
+			tempVertex = glm::vec3(0.0f, 0.0f, 0.0f);
+		}
+
 		vertex.Normal = tempVertex;
 		// texture coordinates
-		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+		if (mesh->HasTextureCoords(0)) // does the mesh contain texture coordinates?
 		{
 			glm::vec2 vec;
 			// a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
@@ -63,18 +82,33 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 			vec.y = mesh->mTextureCoords[0][i].y;
 			vertex.TexCoords = vec;
 		}
-		else
+		else{
+
+			printf("Warning: Found no textureCoords\n");
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-		// tangent
-		tempVertex.x = mesh->mTangents[i].x;
-		tempVertex.y = mesh->mTangents[i].y;
-		tempVertex.z = mesh->mTangents[i].z;
-		vertex.Tangent = tempVertex;
-		// bitangent
-		tempVertex.x = mesh->mBitangents[i].x;
-		tempVertex.y = mesh->mBitangents[i].y;
-		tempVertex.z = mesh->mBitangents[i].z;
-		vertex.Bitangent = tempVertex;
+		}
+		// tangent and bitangent
+		if (mesh->HasTangentsAndBitangents())
+		{
+			tempVertex.x = mesh->mTangents[i].x;
+			tempVertex.y = mesh->mTangents[i].y;
+			tempVertex.z = mesh->mTangents[i].z;
+			vertex.Tangent = tempVertex;
+			
+			// bitangent
+			tempVertex.x = mesh->mBitangents[i].x;
+			tempVertex.y = mesh->mBitangents[i].y;
+			tempVertex.z = mesh->mBitangents[i].z;
+			vertex.Bitangent = tempVertex;
+
+		}
+		else{
+			printf("Warning: Found no tangent or bitangent\n");
+			
+			vertex.Tangent = glm::vec3(0.0f, 0.0f, 0.0f);
+			vertex.Bitangent = glm::vec3(0.0f, 0.0f, 0.0f);
+		}
+
 		vertices.push_back(vertex);
 	}
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
