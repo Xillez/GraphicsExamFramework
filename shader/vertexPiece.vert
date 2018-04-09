@@ -7,6 +7,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat3 normalMatrix; 
+
 out float diffuse;        
 out vec2 TexCoords;
 
