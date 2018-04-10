@@ -3,6 +3,7 @@
 #include "../header/global_function.hpp"
 #include "../header/gl_setup.hpp"
 #include "../header/globalVar.hpp"
+#include "../header/glfw_eventHandler.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>
 
@@ -17,22 +18,23 @@ int main(int argc, char const *argv[])
 	GLFWwindow* window = glfw_setup();
 
 	// Make chessboard
-	Board* chessBoard = new Board ("../asset/modell_chessBoard.obj");
-	
+	Board* chessBoard = new Board("../asset/modell_chessBoard.obj");
+
+	EventHandler handler;
+	handler.setup_eventHandler(window);
+
 	// Run until close event is given to the window
-	while(!glfwWindowShouldClose(window))
-	{
-		glClearColor(0.0,0.0,0.0,1);
-		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	while (!glfwWindowShouldClose(window)) {
+          glClearColor(0.0, 0.0, 0.0, 1);
+          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		chessBoard->draw();
+          chessBoard->draw();
 
-		glfwSwapBuffers(window);    //<-- SWAP BUFFERS
-        glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
+          glfwSwapBuffers(window); //<-- SWAP BUFFERS
+          glfwPollEvents();        //<-- LISTEN FOR WINDOW EVENTS
 	}
 
 	glfwDestroyWindow(window);
 
 	return 0;
 }
- 
