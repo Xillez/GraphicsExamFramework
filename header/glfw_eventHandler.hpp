@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <vector>
 #include <iostream>
+//#include "../header/globalVar.hpp"
 
 // TODO: Make eventhandler handler click and find correct piece and call 
 
@@ -21,7 +22,6 @@ class EventHandler
 		 */
 		void setup_eventHandler(GLFWwindow* window);
 
-    private:
 		/**
 		 * @brief Function to handle keyboard events sent to window.
 		 *
@@ -42,7 +42,7 @@ class EventHandler
          * @param
          * @param
          */
-        void onMouseMove(GLFWwindow* window, double xpos, double ypos);
+        //void onMouseMove(GLFWwindow* window, double xpos, double ypos);
 
         /**
 		 * @brief Function to handle mouse events to window.
@@ -53,7 +53,7 @@ class EventHandler
 		 * @param
 		 * @param
 		 */
-		void onMouseClick(GLFWwindow* window, int button, int action, int mods);
+		//void onMouseClick(GLFWwindow* window, int button, int action, int mods);
 
         /**
 		 * @brief Function to handle resume events (when game is paused and user presses ESC).
@@ -88,5 +88,6 @@ class EventHandler
 		 */
         //void onTick();
 
+	private:
 		GLFWwindow* window;	//!< Local pointer to window
 };
