@@ -5,13 +5,6 @@
 
 Board::Board(std::string const &path) : Model(path){
 
-/*
-	tiles = new Piece* [8];
-	for(int i = 0; i < 8; i++){
-		tiles[i] = new Piece[8];	
-	}
-	*/
-
 	for(int z = 0; z  < 8; z++){
 		for (int y = 0; y < 8; y++){
 			tiles[z][y] = nullptr;
@@ -41,16 +34,10 @@ Board::Board(std::string const &path) : Model(path){
 	tiles[7][5] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", false);
 	tiles[7][6] = new Piece("../asset/chessTemp/Knight.obj", "Horse", false);
 	tiles[7][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook", false);
-	
-//	tiles[1][0] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop");
-
-//	tiles[0][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook");
 
 	float offset = 3.14 / 10;
 	
 	float x, y, z;
-	//tiles[0][0]->place(-1.1f, -1.15f, 0.0f);
-	//tiles[0][1]->place(-0.79f, -1.15f, 0.0f);
 	for(int i = 0; i < 8; i++){
 		for(int j = 0; j < 8; j++){
 			if(tiles[i][j] != nullptr){
@@ -68,32 +55,7 @@ Board::Board(std::string const &path) : Model(path){
 			}
 		}
 	}
-		// debug
-	
-/*
-	for (int i = 0; i < 8; ++i)
-	{
-		for (int j = 0; j < 8; ++j)
-		{
 
-			std:: cout << i << " " << j << ", ";
-			if(j==7) std::cout << std::endl;
-		
-		}
-	}
-
-
-	for (int i = 0; i < 8; ++i)
-	{
-		for (int j = 0; j < 8; ++j)
-		{
-
-			std:: cout << tiles[i][j].x << " " << tiles[i][j].y << " " << tiles[i][j].z << ", ";
-			if(j==7) std::cout << std::endl;
-		
-		}
-	}
-*/
 	shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
 	shaderProgram->bind();
 
@@ -139,6 +101,4 @@ void Board::draw(){
 		}
 	}
 	
-	//tiles[0][0]->draw();
-	//tiles[0][1]->draw();
 }
