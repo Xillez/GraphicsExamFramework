@@ -3,25 +3,23 @@
 #include "../header/global_function.hpp"
 #include "../header/gl_setup.hpp"
 #include "../header/globalVar.hpp"
-#include "../header/glfw_eventHandler.hpp"
 //#include <glm/gtc/matrix_transform.hpp>
 //#include <glm/gtc/type_ptr.hpp>
 
 #include <stdio.h>
-
+GLFWwindow* window;
 int main(int argc, char const *argv[])
 {	
 	// Ready moves for pieces
 	getMoves();
 
 	// OpenGL setup
-	GLFWwindow* window = glfw_setup();
+	window = glfw_setup();
 
 	// Make chessboard
 	Board* chessBoard = new Board("../asset/modell_chessBoard.obj");
 
-	EventHandler handler;
-	handler.setup_eventHandler(window);
+	setup_EventHandling();
 
 	// Run until close event is given to the window
 	while (!glfwWindowShouldClose(window)) {
