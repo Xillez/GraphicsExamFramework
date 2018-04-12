@@ -44,23 +44,21 @@ void setup_EventHandling()
 
 void OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 {
-	std::cout << xpos << ":" << ypos << "\n";
-    GLint viewport[4];
+	//std::cout << xpos << ":" << ypos << "\n";
     GLfloat winY, z;
-    glGetIntegerv(GL_VIEWPORT, viewport);
 
-    winY = viewport[3] - ypos;
+    winY = (GLfloat)768 - ypos;
 
     glReadPixels(xpos, winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
     glm::vec3 screen = glm::vec3(xpos, winY, z);
 
     glm::mat4 viewMatrix = glm::lookAt(
-		glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0));
     glm::mat4 ProjectionMatrix = glm::perspective(
-        45.0f, (GLfloat)viewport[2] / (GLfloat)viewport[3], 0.1f, 500.0f);
+        45.0f, (GLfloat)1024 / (GLfloat)768, 0.1f, 10.0f);
 	glm::vec3 pos3D;
     pos3D = glm::unProject(screen, viewMatrix, ProjectionMatrix,
-		glm::vec4(viewport[0], viewport[1], viewport[2], viewport[3]));
+		glm::vec4(0, 0, (GLfloat)1024, (GLfloat)768));
 
 	printf("%f : %f : %f\n", pos3D.x, pos3D.y, pos3D.z);
 }
