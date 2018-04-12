@@ -1,5 +1,6 @@
 #include "../header/board.hpp"
 #include "../header/camera.hpp"
+#include "../class/ShaderManager.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> 
@@ -69,7 +70,11 @@ Board::Board(std::string const &path) : Model(path){
 		}
 	}
 
-	shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
+	extern ShaderManager* shaderManager;
+	shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
+		{GL_VERTEX_SHADER, "../shader/vertex.vert"},
+		{GL_FRAGMENT_SHADER, "../shader/fragment.frag"},
+	});
 
 };
 
