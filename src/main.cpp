@@ -1,14 +1,12 @@
-//#include "../class/model.hpp"
 #include "../header/glfw_setup.hpp"
 #include "../header/global_function.hpp"
 #include "../header/gl_setup.hpp"
 #include "../header/board.hpp"
 #include "../header/camera.hpp"
-#include <GLFW/glfw3.h>
-//#include "../header/globalVar.hpp"
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+#include "../header/globalVar.hpp"
+#include "../header/glfw_eventHandler.hpp"
 
+#include <GLFW/glfw3.h>
 #include <stdio.h>
 
 Camera* camera;
@@ -29,6 +27,11 @@ int main(int argc, char const *argv[])
 
 	// Make chessboard
 	Board* chessBoard = new Board ("../asset/modell_chessBoard.obj");
+
+
+	EventHandler handler;
+	handler.setup_eventHandler(window);
+
 	bool eh = false;
 	float time = 0.0f;
 	// Run until close event is given to the window
@@ -37,7 +40,7 @@ int main(int argc, char const *argv[])
 		glClearColor(0.4, 0.8, 0.8, 1);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		chessBoard->draw();
+        chessBoard->draw();
 
 		if(eh){
 			chessBoard->movePiece(1, 1, 2, 2);
@@ -51,10 +54,10 @@ int main(int argc, char const *argv[])
 
 		glfwSwapBuffers(window);    //<-- SWAP BUFFERS
         glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
+
 	}
 
 	glfwDestroyWindow(window);
 
 	return 0;
 }
- 
