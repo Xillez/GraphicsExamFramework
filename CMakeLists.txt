@@ -24,8 +24,9 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/src/global_function.cpp
 	${PROJECT_SOURCE_DIR}/src/piece.cpp
 	${PROJECT_SOURCE_DIR}/src/board.cpp
-	${PROJECT_SOURCE_DIR}/src/yaml_parser.cpp	
-
+	${PROJECT_SOURCE_DIR}/src/camera.cpp
+	${PROJECT_SOURCE_DIR}/src/yaml_parser.cpp
+	
 	${PROJECT_SOURCE_DIR}/class/shader.cpp
 	${PROJECT_SOURCE_DIR}/class/model.cpp
 	${PROJECT_SOURCE_DIR}/class/Mesh.cpp

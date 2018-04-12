@@ -1,9 +1,13 @@
 #include "../header/piece.hpp"
 #include "../header/globalVar.hpp"
+#include "../header/camera.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+
+extern Camera* camera;
+extern std::unordered_map<std::string, std::vector<std::string>> moves;
 
 
 Piece::Piece(std::string const &path, std::string const &pieceName, bool isWhite) : Model(path){
@@ -21,16 +25,17 @@ Piece::Piece(std::string const &path, std::string const &pieceName, bool isWhite
 	}
 	this->isWhite = isWhite;
 	this->shaderProgram = new Shader("../shader/vertexPiece.vert", "../shader/fragmentPiece.frag");
-	this->shaderProgram->bind();
 }
 
 
 void Piece::draw(){
+	this->shaderProgram->bind();
+
 	static float time = 0.0;
 	time += .01;
 	//glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::mat4 projection = glm::perspective(3.14f / 3.0f, (GLfloat)1024 / (GLfloat)768, 0.1f, -10.0f);
+	glm::mat4 view = camera->getViewMatrix();//glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 projection = camera->getPerspectiveMatrix();//glm::perspective(3.14f / 3.0f, (GLfloat)1024 / (GLfloat)768, 0.1f, -10.0f);
 	std::map<std::string, GLuint> uniforms = shaderProgram->getUniform(	std::map<std::string, GLchar*>({
 		{"viewID", "view"},
 		{"projectionID", "projection"},
@@ -51,14 +56,20 @@ void Piece::draw(){
 	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*modelm)));
 	glUniformMatrix3fv(uniforms["normalMatrixID"], 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-/*
+
+	//std::cout << sizeof(glm::vec3) << '\n';
+		
 	if(isWhite){
-		glUniform3f(uniforms["colorID"], 1.0f, 1.0f, 1.0f);
+		glm::vec3 color(1.0f, 1.0f, 1.0f);
+		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));
 	} else {
-		glUniform3f(uniforms["colorID"], 0.0f, 0.0f, 0.0f);
+		glm::vec3 color(0.4f, 0.4f, 0.4f);
+		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));
 	}
-	*/
+	
+
 	Model::Draw(*shaderProgram); 
+	this->shaderProgram->unbind();
 }
 
 void Piece::place(float xPos, float yPos, float zPos){
