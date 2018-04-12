@@ -31,6 +31,7 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/class/model.cpp
 	${PROJECT_SOURCE_DIR}/class/Mesh.cpp
 	${PROJECT_SOURCE_DIR}/class/Texture.cpp
+	${PROJECT_SOURCE_DIR}/class/ShaderManager.cpp
 )
 
 # Find packages for linking

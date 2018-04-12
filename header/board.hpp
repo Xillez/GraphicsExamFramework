@@ -1,5 +1,7 @@
 #pragma once
 #include "piece.hpp"
+#include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
 #include "camera.hpp"
 #include <string>
 
@@ -30,9 +32,20 @@ public:
 
 	void draw();
 private:
-	Piece* tiles[8][8];							//!< 8x8 board
+
+	Piece* tiles[8][8];
 	glm::vec2 tileSize;							//!< tile size
 	glm::vec3 pos;								//!< center of board
-	Shader* shaderProgram;						//!< 
-	glm::vec2 edge;					//!< board edges
+
+	Shader* shaderProgram;
+
+	float attenuationA = 1.0f;
+	float attenuationB = 0.2f;
+	float attenuationC = 0.0f;
+
+	glm::vec3 lightSourcePosition = glm::vec3(1.0f, 1.0f, 1.0f);
+	glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+
+	glm::vec2 edge;								//!< board edges
+
 };

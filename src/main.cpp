@@ -4,20 +4,28 @@
 #include "../header/board.hpp"
 #include "../header/camera.hpp"
 #include "../header/globalVar.hpp"
+#include "../class/ShaderManager.hpp"
+
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 
 Camera* camera;
 GLFWwindow* window;			//!< Default window to draw on
 Board* chessBoard;
+ShaderManager* shaderManager;
 
 int main(int argc, char const *argv[])
 {	
 	// Ready moves for pieces
 	getMoves();
+
+	// Create camera
 	camera = new Camera(glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 	//camera = new Camera(glm::vec3(1, 1, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	//camera = new Camera(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
+
+	// Create common interface for shaders
+	shaderManager = new ShaderManager();
 
 	// OpenGL setup
 	window = glfw_setup();
