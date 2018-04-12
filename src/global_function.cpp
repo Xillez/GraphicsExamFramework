@@ -8,6 +8,14 @@ std::unordered_map<std::string, std::vector<std::string>> moves;
 extern GLFWwindow* window;
 extern Camera* camera;
 
+glm::vec2 windowSize(){
+	
+	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+	return {videoMode->width * (relativeWindowSize.x / 100.0f),
+		videoMode->height * (relativeWindowSize.y / 100.0f)};
+}
+
 void getMoves()
 {
 	YamlParser file("./resources/moves/move.yaml");
@@ -47,15 +55,14 @@ void setup_EventHandling()
 void OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 {
 	//std::cout << xpos << ":" << ypos << "\n";
+
+	glm::vec2 wSize = windowSize();
+
     GLfloat winY, z;
 
-	GLint viewport[4];
+	//printf("%d : %d : %d : %d\n", viewport[0], viewport[1], viewport[2], viewport[3]);	
 
-	glGetIntegerv(GL_VIEWPORT, viewport);
-
-	printf("%d : %d : %d : %d\n", viewport[0], viewport[1], viewport[2], viewport[3]);	
-
-    winY = windowHeight - ypos;
+    winY = wSize.y - ypos;
 
     glReadPixels(xpos, winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
     glm::vec3 screen = glm::vec3(xpos, winY, z);
@@ -64,7 +71,7 @@ void OnMouseMove(GLFWwindow *window, double xpos, double ypos)
     glm::mat4 ProjectionMatrix = camera->getPerspectiveMatrix();
 	glm::vec3 pos3D;
     pos3D = glm::unProject(screen, viewMatrix, ProjectionMatrix,
-		glm::vec4(viewport[0], viewport[1], viewport[2], viewport[3]));
+		glm::vec4(0.0f, 0.0f, wSize.x, wSize.y));
 
 	//printf("%f : %f : %f\n", pos3D.x, pos3D.y, pos3D.z);
 }

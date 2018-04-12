@@ -22,6 +22,9 @@ int main(int argc, char const *argv[])
 	// OpenGL setup
 	window = glfw_setup();
 
+	glm::vec2 size = windowSize();
+	printf("Window size: (%d, %d)", size.x, size.y);
+	
 	// Make chessboard
 	Board* chessBoard = new Board ("../asset/modell_chessBoard.obj");
 

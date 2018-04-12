@@ -8,6 +8,11 @@
 #include <GLFW/glfw3.h>
 
 /**
+ * @brief Function for getting screen size
+ */  
+glm::vec2 windowSize();
+
+/**
  * @brief Process the file data and fetch the moves set for every piece.
  * @details The function follows the file structure to fetch the data.
  */

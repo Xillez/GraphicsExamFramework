@@ -7,8 +7,8 @@
 
 
 
-const int windowWidth = 1024;
-const int windowHeight = 768;
+const glm::vec2 relativeWindowSize = glm::vec2(60, 60);     //!< percentage size of width and hight relative to monitor. 
+
 const float PI = 3.14f;
 
 
