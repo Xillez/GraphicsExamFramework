@@ -34,3 +34,7 @@ glm::vec3 Camera::getUp(){
 glm::mat4 Camera::getViewMatrix(){
 	return glm::lookAt(this->pos, this->dir, this->up);
 }
+
+glm::mat4 Camera::getPerspectiveMatrix(){
+	return glm::perspective(PI / 3.0f, (GLfloat)windowHeight / (GLfloat)windowWidth, 0.1f, -10.0f);	
+}
