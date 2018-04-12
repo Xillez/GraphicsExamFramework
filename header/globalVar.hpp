@@ -4,13 +4,16 @@
 #include <string>
 #include <unordered_map>
 #include "../class/model.hpp"
-#include "../header/board.hpp"
-#include <GLFW/glfw3.h>
 
-extern GLFWwindow* window;			//!< Default window to draw on
+
+
+const int windowHeight = 1024;
+const int windowWidth = 768;
+const float PI = 3.14f;
+
 
 //extern Shader* shaderProgram;
 
-extern Board* chessBoard;
 
-extern std::unordered_map<std::string, std::vector<std::string>> moves; 	//!< move set for all the pieces
+
+//Camera* camera = new Camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
