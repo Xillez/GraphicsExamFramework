@@ -1,0 +1,12 @@
+TODO 
+	- Colors for pieces --- DONE!
+	- Camera	--- DONE!
+	- Window class 	--- *Merged with camera* DONE!
+	Movement
+		- Piece movement from move attribute in Piece class
+		- Piece Validation from Board
+		- Bezier curves
+		- Move piece from board
+	Remove
+		- deleting the pointer to the piece
+		- set the new piece at that pointer

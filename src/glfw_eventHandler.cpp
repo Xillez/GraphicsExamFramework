@@ -8,8 +8,21 @@ EventHandler::EventHandler()
 void EventHandler::setup_eventHandler(GLFWwindow* window)
 {
 	this->window = window;
-	glfwSetCursorPosCallback(this->window, this->onMouseMove);
-	glfwSetMouseButtonCallback(this->window, this->onMouseClick);
+	glfwSetCursorPosCallback(this->window, 
+							 [](GLFWwindow *window, 
+								double xpos, 
+								double ypos) 
+									{
+										std::cout << xpos << ":" << ypos << "\n";
+									});
+	glfwSetMouseButtonCallback(this->window, 
+							   [](GLFWwindow* window, 
+								  int button, 
+								  int action, 
+								  int mods)
+									{
+										std::cout << button << ":" << action << ":" << mods << "\n";
+									});
 }
 
 /*void EventHandler::onKeyboardInput()
@@ -17,15 +30,15 @@ void EventHandler::setup_eventHandler(GLFWwindow* window)
 
 }*/
 
-void EventHandler::onMouseMove(GLFWwindow* window, double xpos, double ypos)
+/*void EventHandler::onMouseMove(GLFWwindow* window, double xpos, double ypos)
 {
 	std::cout << xpos << ":" << ypos << "\n";
-}
+}*/
 
-void EventHandler::onMouseClick(GLFWwindow* window, int button, int action, int mods)
+/*void EventHandler::onMouseClick(GLFWwindow* window, int button, int action, int mods)
 {
 	std::cout << button << ":" << action << ":" << mods << "\n";
-}
+}*/
 
 /*void EventHandler::onResume()
 {

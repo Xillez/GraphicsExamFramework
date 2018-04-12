@@ -1,62 +1,63 @@
 #include "../header/board.hpp"
-#include <glm/gtc/type_ptr.hpp>
+#include "../header/camera.hpp"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp> 
 #include <iostream>
 
+extern Camera* camera;
+
 Board::Board(std::string const &path) : Model(path){
+	// board position;
+	pos.x = 0.0f;
+	pos.y = 0.0f; //-1.75f; 
+	pos.z = 0.0f; //-1.0f;
 
-/*
-	tiles = new Piece* [8];
-	for(int i = 0; i < 8; i++){
-		tiles[i] = new Piece[8];	
-	}
-	*/
+	// tile size;
+	tileSize.x = 0.50f;
+	tileSize.y = 0.50f;
+	edge.x = 0.25f;
+	edge.y = 0.25f;
 
-	for(int z = 0; z  < 8; z++){
+	for(int k = 0; k  < 8; k++){
 		for (int y = 0; y < 8; y++){
-			tiles[z][y] = nullptr;
+			tiles[k][y] = nullptr;
 		}
 	}
+
 	for (int i = 0; i < 8; ++i){
-		tiles[1][i] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
-		tiles[6][i] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", false);
-		
+		tiles[i][1] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
+		tiles[i][6] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", false);	
 	}
 
 	tiles[0][0] = new Piece("../asset/chessTemp/Rook.obj", "Rook", true);
-	tiles[0][1] = new Piece("../asset/chessTemp/Knight.obj", "Horse", true);
-	tiles[0][2] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
-	tiles[0][3] = new Piece("../asset/chessTemp/Queen.obj", "Queen", true);
-	tiles[0][4] = new Piece("../asset/chessTemp/King.obj", "King", true);
-	tiles[0][5] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
-	tiles[0][6] = new Piece("../asset/chessTemp/Knight.obj", "Horse", true);
-	tiles[0][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook", true);
+	tiles[1][0] = new Piece("../asset/chessTemp/Knight.obj", "Horse", true);
+	tiles[2][0] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
+	tiles[3][0] = new Piece("../asset/chessTemp/Queen.obj", "Queen", true);
+	tiles[4][0] = new Piece("../asset/chessTemp/King.obj", "King", true);
+	tiles[5][0] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
+	tiles[6][0] = new Piece("../asset/chessTemp/Knight.obj", "Horse", true);
+	tiles[7][0] = new Piece("../asset/chessTemp/Rook.obj", "Rook", true);
 	
 
-	tiles[7][0] = new Piece("../asset/chessTemp/Rook.obj", "Rook", false);
-	tiles[7][1] = new Piece("../asset/chessTemp/Knight.obj", "Horse", false);
-	tiles[7][2] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", false);
-	tiles[7][3] = new Piece("../asset/chessTemp/King.obj", "King", false);
-	tiles[7][4] = new Piece("../asset/chessTemp/Queen.obj", "Queen", false);
-	tiles[7][5] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", false);
-	tiles[7][6] = new Piece("../asset/chessTemp/Knight.obj", "Horse", false);
+	tiles[0][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook", false);
+	tiles[1][7] = new Piece("../asset/chessTemp/Knight.obj", "Horse", false);
+	tiles[2][7] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", false);
+	tiles[3][7] = new Piece("../asset/chessTemp/King.obj", "King", false);
+	tiles[4][7] = new Piece("../asset/chessTemp/Queen.obj", "Queen", false);
+	tiles[5][7] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", false);
+	tiles[6][7] = new Piece("../asset/chessTemp/Knight.obj", "Horse", false);
 	tiles[7][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook", false);
-	
-//	tiles[1][0] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop");
 
-//	tiles[0][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook");
-
-	float offset = 3.14 / 10;
+	float offset = 1.15f;//3.14f / 6.0f;
 	
 	float x, y, z;
-	//tiles[0][0]->place(-1.1f, -1.15f, 0.0f);
-	//tiles[0][1]->place(-0.79f, -1.15f, 0.0f);
 	for(int i = 0; i < 8; i++){
 		for(int j = 0; j < 8; j++){
 			if(tiles[i][j] != nullptr){
-				x = (-4 * offset) + (j * offset + (offset / 2));
-				y = -1.15f ;
-				z = 0.0f + (i * offset);
-
+				x = pos.x + (-tileSize.x*4 + edge.x + (tileSize.x * i));//+ (-4 * offset); // + (j * offset + (offset / 2));
+				y = 0.0f + pos.y;//-1.15f;
+				z = pos.y + (-tileSize.y*4 + edge.y + (tileSize.y * j));//+ (-3 * offset);//+ (i * offset);
 
 				std::cout << "i:" << i << ", j:" << j << '\n';
 				std::cout << "x: " << x << ", y:" << y << ", z:" << z << '\n'; 
@@ -67,53 +68,33 @@ Board::Board(std::string const &path) : Model(path){
 			}
 		}
 	}
-		// debug
-	
-/*
-	for (int i = 0; i < 8; ++i)
-	{
-		for (int j = 0; j < 8; ++j)
-		{
 
-			std:: cout << i << " " << j << ", ";
-			if(j==7) std::cout << std::endl;
-		
-		}
-	}
-
-
-	for (int i = 0; i < 8; ++i)
-	{
-		for (int j = 0; j < 8; ++j)
-		{
-
-			std:: cout << tiles[i][j].x << " " << tiles[i][j].y << " " << tiles[i][j].z << ", ";
-			if(j==7) std::cout << std::endl;
-		
-		}
-	}
-*/
 	shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
-	//shaderProgram->bind();
 
 };
 
+void Board::movePiece(int indexI, int indexJ, float destinationI, float destinationJ){
+	tiles[indexI][indexJ]->place(
+							(-4 * (3.14 / 10)) + (destinationJ * (3.14 / 10)) + ((3.14 / 10) / 2),
+							 pos.y, 
+							 0.0f + (destinationI * (3.14 / 10)));
+}
 
 void Board::draw(){
 	shaderProgram->bind();
 
-	float attenuationA = 1.0f;
-	float attenuationB = 0.2f;
-	float attenuationC = 0.0f;
-
 	static float time = 0.0;
 	time += .01;
 
+	//glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	glm::mat4 view = camera->getViewMatrix(); //glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//glm::mat4 view = glm::lookAt(glm::vec3(0, 5, 0), glm::vec3(0, 4, 0), glm::vec3(0, 0, -1));
+	glm::mat4 projection = camera->getPerspectiveMatrix();//glm::perspective(3.14f / 3.0f, (GLfloat)1024 / (GLfloat)768, 0.1f, -10.0f);
+
+	// Rotate light for effect
 	lightSourcePosition.x = sin(glfwGetTime()) * 3.0f;
 	lightSourcePosition.z = cos(glfwGetTime()) * 2.0f;
 	lightSourcePosition.y = 5.0 + cos(glfwGetTime()) * 1.0f;
-	//glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
 
 	std::map<std::string, GLuint> uniforms = shaderProgram->getUniform(	std::map<std::string, GLchar*>({
 		{"viewID", "view"},
@@ -140,7 +121,7 @@ void Board::draw(){
 	glUniformMatrix4fv(uniforms["viewID"], 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(uniforms["projectionID"], 1, GL_FALSE, glm::value_ptr(projection));
 	glm::mat4 modelm;
-	modelm = glm::translate(modelm, glm::vec3(0.0f, -1.75f, -1.0f)); // translate it down so it's at the center of the scene
+	modelm = glm::translate(modelm, pos); // translate it down so it's at the center of the scene
 	//modelm = glm::translate(modelm, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
 	modelm = glm::scale(modelm, glm::vec3(0.4f, 0.4f, 0.4f));	// it's a bit too big for our scene, so scale it down
 	//modelm = glm::rotate(modelm, time, glm::vec3(0, 1, 0));	
@@ -150,8 +131,9 @@ void Board::draw(){
 	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*modelm)));
 	glUniformMatrix3fv(uniforms["normalMatrixID"], 1, GL_FALSE, glm::value_ptr(normalMatrix));
 	
-	Model::Draw(*shaderProgram);
-	//printf("hello\t");
+	Model::Draw(*shaderProgram); 
+	 //printf("hello\t");
+
 	shaderProgram->unbind();
 
 	// TODO: draw pieces
@@ -163,6 +145,5 @@ void Board::draw(){
 			}
 		}
 	}
-	//tiles[0][0]->draw();
-	//tiles[0][1]->draw();
+
 }
