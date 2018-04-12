@@ -1,3 +1,4 @@
+#include "../header/globalVar.hpp"
 #include "../header/glfw_setup.hpp"
 #include "../header/errorHandler.hpp"
 #include <stdio.h>
@@ -34,7 +35,7 @@ GLFWwindow* glfw_setup() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	// create window
-	GLFWwindow* window = glfwCreateWindow(1024, 768, "Chess-3D", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(windowWidth, windowHeight, "Chess-3D", nullptr, nullptr);
 	glfwSetKeyCallback(window, key_callback);	
 	// set window as active
 	glfwMakeContextCurrent(window);

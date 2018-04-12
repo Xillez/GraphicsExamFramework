@@ -26,9 +26,7 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/src/board.cpp
 	${PROJECT_SOURCE_DIR}/src/camera.cpp
 	${PROJECT_SOURCE_DIR}/src/yaml_parser.cpp
-	${PROJECT_SOURCE_DIR}/src/glfw_eventHandler.cpp
 	
-
 	${PROJECT_SOURCE_DIR}/class/shader.cpp
 	${PROJECT_SOURCE_DIR}/class/model.cpp
 	${PROJECT_SOURCE_DIR}/class/Mesh.cpp

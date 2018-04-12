@@ -36,5 +36,5 @@ glm::mat4 Camera::getViewMatrix(){
 }
 
 glm::mat4 Camera::getPerspectiveMatrix(){
-	return glm::perspective(PI / 3.0f, (GLfloat)windowHeight / (GLfloat)windowWidth, 0.1f, -10.0f);	
+	return glm::perspective(PI / 3.0f, (GLfloat)windowWidth / (GLfloat)windowHeight, 0.1f, -10.0f);	
 }

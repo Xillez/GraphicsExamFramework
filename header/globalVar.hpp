@@ -7,8 +7,8 @@
 
 
 
-const int windowHeight = 1024;
-const int windowWidth = 768;
+const int windowWidth = 1024;
+const int windowHeight = 768;
 const float PI = 3.14f;
 
 
