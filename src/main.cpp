@@ -4,7 +4,6 @@
 #include "../header/board.hpp"
 #include "../header/camera.hpp"
 #include "../header/globalVar.hpp"
-#include "../header/glfw_eventHandler.hpp"
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 
@@ -16,7 +15,7 @@ int main(int argc, char const *argv[])
 {	
 	// Ready moves for pieces
 	getMoves();
-	camera = new Camera(glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0));
+	camera = new Camera(glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 	//camera = new Camera(glm::vec3(1, 1, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	//camera = new Camera(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
