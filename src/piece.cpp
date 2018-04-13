@@ -79,3 +79,12 @@ void Piece::place(float xPos, float yPos, float zPos){
 	//modelm = glm::translate(modelm, glm::vec3(x, y, z)); // translate it down so it's at the center of the scene
 	// 0.6f, -0.9f, 2.85f 
 }
+
+
+auto Piece::getMoves() -> std::vector<std::string>{
+	return move;
+}
+
+bool Piece::pieceColor(){
+	return isWhite;
+}
