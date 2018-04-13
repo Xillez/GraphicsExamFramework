@@ -18,8 +18,8 @@ int main(int argc, char const *argv[])
 {	
 	// Ready moves for pieces
 	getMoves();
-	camera = new Camera(glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0));
-	//camera = new Camera(glm::vec3(1, 1, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	//camera = new Camera(glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(1, 0, 0));
+	camera = new Camera(glm::vec3(3, 4, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	//camera = new Camera(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
 	// OpenGL setup
@@ -43,7 +43,10 @@ int main(int argc, char const *argv[])
         chessBoard->draw();
 
 		if(eh){
-			chessBoard->movePiece(1, 1, 2, 2);
+			chessBoard->movePiece(1, 1, 1, 2);
+			chessBoard->movePiece(1, 6, 1, 5);
+			chessBoard->movePiece(0, 0, 0, 4);
+			chessBoard->movePiece(2, 0, 0, 2);
 			eh = false;
 		}else {
 			time += 0.1f;
