@@ -5,30 +5,39 @@
 
 /**
  * @brief 8x8 board represents pieces on each tile 
- * @details [long description]
- * 
  */
 class Board : Model{
 public:
+	
 	/**
 	 * @brief Board constructor
 	 */
 	Board(std::string const &path);
+	
 	/**
 	 * @brief move piece to the desired destination on the board
-	 * @details [long description]
-	 * 
+	 *
 	 * @param indexI first index of the tiles/piece on the board
 	 * @param indexJ second index of the tiles/piece on the board
 	 * @param destinationI first index of tiles on the board
 	 * @param destinationJ second index of tiles on the board
 	 */
-	void movePiece(int indexI, int indexJ, float destinationI, float destinationJ);
+	void movePiece(int indexI, int indexJ, int destinationI, int destinationJ);
 	
 	/**
 	 * @brief draw the board and every piece found
 	 */
 	void draw();
+
+	/**
+	 * @brief Convert piece moves to indecies for tiles[][]
+	 * 
+	 * @param indexI is the x location of the piece
+	 * @param indexJ is the y location of the piece
+	 * 
+	 * @return returns a vector of new indecies that a piece can move to
+	 */
+	auto moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, int>>;
 
 	glm::vec2 getTileSize();
 	glm::vec3 getPosition();

@@ -35,9 +35,11 @@ public:
 	 * @brief 
 	 * 
 	 */
-
 	void draw();
-
-
+	
 	void place(float x, float y, float z);
+
+	auto getMoves() -> std::vector<std::string>;
+
+	bool pieceColor();
 };
