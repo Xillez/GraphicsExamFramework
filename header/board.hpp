@@ -1,8 +1,6 @@
 #pragma once
 #include "piece.hpp"
-#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include "camera.hpp"
 #include <string>
 
 /**
@@ -26,11 +24,15 @@ public:
 	 * @param destinationJ second index of tiles on the board
 	 */
 	void movePiece(int indexI, int indexJ, float destinationI, float destinationJ);
+	
 	/**
 	 * @brief draw the board and every piece found
 	 */
-
 	void draw();
+
+	glm::vec2 getTileSize();
+	glm::vec3 getPosition();
+	glm::vec2 getEdge();
 private:
 
 	Piece* tiles[8][8];

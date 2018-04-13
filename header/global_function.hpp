@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../header/globalVar.hpp"
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
@@ -52,7 +51,7 @@ void OnMouseMove(GLFWwindow *window, double xpos, double ypos);
  * @param
  * @param
  */
-// void onMouseClick(GLFWwindow* window, int button, int action, int mods);
+void OnMouseClick(GLFWwindow* window, int button, int action, int mods);
 
 /**
  * @brief Function to handle resume events (when game is paused and user
@@ -88,3 +87,12 @@ void OnMouseMove(GLFWwindow *window, double xpos, double ypos);
  * @param
  */
 // void onTick();
+
+
+/**
+ * @brief Function to convert window mouse position to OpenGl world position
+ * 
+ * @param "xpos" - float - X position of mouse
+ * @param "ypos" - float - Y position of mouse
+ */
+glm::vec3 convertMousePosToWorld(double xpos, double ypos);

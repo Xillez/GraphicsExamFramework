@@ -2,6 +2,7 @@
 #include "../header/camera.hpp"
 #include "../class/ShaderManager.hpp"
 
+#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> 
 #include <iostream>
@@ -150,5 +151,19 @@ void Board::draw(){
 			}
 		}
 	}
+}
 
+glm::vec2 Board::getTileSize()
+{
+	return this->tileSize;
+}
+
+glm::vec3 Board::getPosition()
+{
+	return this->pos;
+}
+
+glm::vec2 Board::getEdge()
+{
+	return this->edge;
 }

@@ -3,7 +3,7 @@
 #include "../header/gl_setup.hpp"
 #include "../header/board.hpp"
 #include "../header/camera.hpp"
-#include "../header/globalVar.hpp"
+//#include "../header/globalVar.hpp"
 #include "../class/ShaderManager.hpp"
 
 #include <GLFW/glfw3.h>
@@ -23,19 +23,16 @@ int main(int argc, char const *argv[])
 	camera = new Camera(glm::vec3(0, 5, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 1));
 	//camera = new Camera(glm::vec3(1, 1, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	//camera = new Camera(glm::vec3(0,0,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
+	//camera = new Camera(glm::vec3(0,2,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
 
 	// Create common interface for shaders
 	shaderManager = new ShaderManager();
 
 	// OpenGL setup
 	window = glfw_setup();
-
-	glm::vec2 size = windowSize();
-	printf("Window size: (%d, %d)", size.x, size.y);
 	
 	// Make chessboard
-	Board* chessBoard = new Board ("../asset/modell_chessBoard.obj");
-
+	chessBoard = new Board ("../asset/modell_chessBoard.obj");
 
 	setup_EventHandling();
 
