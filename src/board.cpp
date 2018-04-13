@@ -305,7 +305,7 @@ auto Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, in
 			}
 		}	
 	} else {
-		std::cout << "Piece " << indexI << ", " << indexJ << " doesnt exist\n";	
+		//std::cout << "Piece " << indexI << ", " << indexJ << " doesnt exist\n";	
 	} 
 	return allAvailableMoves;
 }
