@@ -8,7 +8,6 @@
 
 #include <GLFW/glfw3.h>
 #include <stdio.h>
-
 Camera* camera;
 GLFWwindow* window;			//!< Default window to draw on
 Board* chessBoard;
@@ -33,20 +32,27 @@ int main(int argc, char const *argv[])
 	handler.setup_eventHandler(window);
 
 	bool eh = false;
-	float time = 0.0f;
+	float time = 0.0f, time2 = 0.0f;
 	// Run until close event is given to the window
 	while(!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.4, 0.8, 0.8, 1);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        chessBoard->draw();
+        //chessBoard->draw();
 
 		if(eh){
-			chessBoard->movePiece(1, 1, 1, 2);
-			chessBoard->movePiece(1, 6, 1, 5);
-			chessBoard->movePiece(0, 0, 0, 4);
+			//chessBoard->movePiece(1, 1, 1, 2);
+			//chessBoard->movePiece(1, 6, 1, 5);
+			//chessBoard->movePiece(0, 0, 0, 4);
 			chessBoard->movePiece(2, 0, 0, 2);
+        	chessBoard->draw();
+			if(time2 > 8){
+				chessBoard->movePiece(0, 2, 3, 5);
+        		chessBoard->draw();
+			} else {
+				time2 += 0.1f;
+			}
 			eh = false;
 		}else {
 			time += 0.1f;
