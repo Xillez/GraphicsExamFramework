@@ -25,9 +25,13 @@ Board::Board(std::string const &path) : Model(path){
 		}
 	}
 
+	Piece pawn = Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
+	
 	for (int i = 0; i < 8; ++i){
-		tiles[i][1] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
-		tiles[i][6] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", false);	
+		pawn.setColor(true);
+		tiles[i][1] = new Piece(pawn);
+		pawn.setColor(false);
+		tiles[i][6] = new Piece(pawn);	
 	}
 
 	tiles[0][0] = new Piece("../asset/chessTemp/Rook.obj", "Rook", true);

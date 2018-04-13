@@ -88,3 +88,7 @@ auto Piece::getMoves() -> std::vector<std::string>{
 bool Piece::pieceColor(){
 	return isWhite;
 }
+
+void Piece::setColor(bool color){
+	isWhite = color;
+}

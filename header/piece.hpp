@@ -42,4 +42,6 @@ public:
 	auto getMoves() -> std::vector<std::string>;
 
 	bool pieceColor();
+
+	void setColor(bool color);
 };
