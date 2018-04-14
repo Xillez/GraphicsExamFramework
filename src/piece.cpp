@@ -86,7 +86,6 @@ void Piece::place(float xPos, float yPos, float zPos){
 	// 0.6f, -0.9f, 2.85f 
 }
 
-
 auto Piece::getMoves() -> std::vector<std::string>{
 	return move;
 }

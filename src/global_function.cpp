@@ -60,22 +60,47 @@ void setup_EventHandling()
 void OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 {
 	//std::cout << xpos << ":" << ypos << "\n";
+	glm::vec3 pointerPos = convertMousePosToWorld(xpos, ypos);
+
+	std::pair<int, int> indecies(
+		(int) ((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x),
+		(int) ((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y));
+
+	std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
+			<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
 }
 
 void OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 {
-	if (button == GLFW_MOUSE_BUTTON_1)
+	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
 	{
-		double posx, posy;
-		glfwGetCursorPos(window, &posx, &posy);
-		glm::vec3 pointerPos = convertMousePosToWorld(posx, posy);
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		glm::vec3 pointerPos = convertMousePosToWorld(xpos, ypos);
 
 		std::pair<int, int> indecies(
 			(int) ((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x),
 			(int) ((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y));
 
-		std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
-				<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
+		// If we are outside, ignore click!
+		if ((indecies.first < 0 || indecies.first > 7) && (indecies.second < 0 || indecies.second > 7))
+			return;
+
+		if (chessBoard->hasPieceAt(indecies.first, indecies.second) && !chessBoard->hasSelection())
+		{
+			chessBoard->setSelection(indecies);
+		}
+		else if (chessBoard->hasSelection())
+		{
+			chessBoard->movePiece(
+				chessBoard->getSelected().first, chessBoard->getSelected().second, 
+				indecies.first, indecies.second
+			);
+			chessBoard->clearSelection();
+		}
+
+		//std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
+		//	<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
 	}
 }
 

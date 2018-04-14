@@ -77,6 +77,8 @@ Board::Board(std::string const &path) : Model(path){
 		{GL_FRAGMENT_SHADER, "../shader/fragment.frag"},
 	});
 
+	// Select no-one!
+	this->selected = std::pair<int, int>(-1, -1);
 };
 
 
@@ -101,7 +103,13 @@ void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ
 	
 	}
 	else {
-		std::cout << "piece " << indexI << ", " << indexJ << " cant move to desired destination " << destinationI << ", " << destinationJ << "\n";
+		std::cout << "piece " << indexI 
+bool Board::hasPieceAt(int x, int y)
+{
+	if((x < 0 || x > 7) && (y < 0 || y > 7))
+		return false;
+
+	return (this->tiles[x][y] != nullptr);<< ", " << indexJ << " cant move to desired destination " << destinationI << ", " << destinationJ << "\n";
 	}*/
 }
 
@@ -378,6 +386,22 @@ void Board::draw(){
 	}
 }
 
+bool Board::hasPieceAt(int x, int y)
+{
+	if((x < 0 || x > 7) && (y < 0 || y > 7))
+		return false;
+
+	return (this->tiles[x][y] != nullptr);
+}
+
+bool Board::hasWhitePieceAt(int x, int y)
+{
+	if((x < 0 || x > 7) && (y < 0 || y > 7) && this->tiles[x][y] != nullptr)
+		return false;
+
+	return this->tiles[x][y]->pieceColor();
+}
+
 glm::vec2 Board::getTileSize()
 {
 	return this->tileSize;
@@ -391,4 +415,24 @@ glm::vec3 Board::getPosition()
 glm::vec2 Board::getEdge()
 {
 	return this->edge;
+}
+
+bool Board::hasSelection()
+{
+	return (this->selected.first != -1 && this->selected.second != -1);
+}
+
+std::pair<int, int> Board::getSelected()
+{
+	return this->selected;
+}
+
+void Board::setSelection(std::pair<int, int> selection)
+{
+	this->selected = selection;
+}
+
+void Board::clearSelection()
+{
+	this->selected = std::pair<int, int>(-1, -1);
 }
