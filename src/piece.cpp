@@ -25,6 +25,7 @@ Piece::Piece(std::string const &path, std::string const &pieceName, bool isWhite
 		this->move = found->second;
 	}
 	this->isWhite = isWhite;
+	this->name = pieceName;
 
 	extern ShaderManager* shaderManager;
 	this->shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
@@ -54,7 +55,7 @@ void Piece::draw(){
 	glUniformMatrix4fv(uniforms["projectionID"], 1, GL_FALSE, glm::value_ptr(projection));
 	glm::mat4 modelm;
 
-	modelm = glm::translate(modelm, glm::vec3(x, y, z)); // translate it down so it's at the center of the scene
+	modelm = glm::translate(modelm, pos); // translate it down so it's at the center of the scene
 	modelm = glm::scale(modelm, glm::vec3(0.015f, 0.015f, 0.015f));	// it's a bit too big for our scene, so scale it down
 															//glm::mat4 model = glm::rotate(glm::mat4(), time, glm::vec3(0, 1, 0));
 	//modelm = glm::rotate(modelm, time, glm::vec3(0, 1, 0));														//ourShader.setMat4("model", model);
@@ -78,17 +79,22 @@ void Piece::draw(){
 	this->shaderProgram->unbind();
 }
 
-void Piece::place(float xPos, float yPos, float zPos){
-	x = xPos;
-	y = yPos;
-	z = zPos;
+void Piece::place(glm::vec3 position){
+	this->pos = position;
 	//modelm = glm::translate(modelm, glm::vec3(x, y, z)); // translate it down so it's at the center of the scene
 	// 0.6f, -0.9f, 2.85f 
 }
 
-
 auto Piece::getMoves() -> std::vector<std::string>{
 	return move;
+}
+
+auto Piece::getName() -> std::string {
+	return name;
+}
+
+auto Piece::getPosition() -> glm::vec3 {
+	return pos;
 }
 
 bool Piece::pieceColor(){

@@ -10,3 +10,9 @@ TODO
 	Remove
 		- deleting the pointer to the piece
 		- set the new piece at that pointer
+
+
+
+LEAST PRIORITY
+	
+	- Redo movement valiadation as a regex validation
