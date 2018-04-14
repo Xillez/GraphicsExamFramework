@@ -43,6 +43,8 @@ glm::mat4 Camera::getPerspectiveMatrix(){
 
 void Camera::rotateBy(float angle, glm::vec3 axis){
 	glm::mat4 rotatationMatrix = glm::rotate(glm::mat4(), angle, axis);
-	
+	rotatationMatrix = glm::translate(rotatationMatrix, this->pos);
+
 	this->pos = (glm::vec3) (rotatationMatrix * glm::vec4(pos, 0));
+	this->up = (glm::vec3) (rotatationMatrix * glm::vec4(pos, 0));
 }
