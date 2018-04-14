@@ -1,9 +1,9 @@
 #pragma once
+#include "Mesh.hpp"
+#include "../header/errorHandler.hpp"
 
 #include <string>
 #include <vector>
-#include "Mesh.hpp"
-#include "../header/errorHandler.hpp"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>

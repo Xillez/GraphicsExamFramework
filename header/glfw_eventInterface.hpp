@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include <GLFW/glfw3.h>
 #include <vector>
@@ -9,7 +9,7 @@ class EventInterface
 	public:
 		/**
 		 * @brief Constructor for EventInterface class.
-		 */
+		 *
 		EventInterface();
 
     private:
@@ -21,7 +21,7 @@ class EventInterface
 		 * @param
 		 * @param
 		 * @param
-		 */
+		 *
         //void onKeyboardInput();
 
         /**
@@ -32,7 +32,7 @@ class EventInterface
          * @param
          * @param
          * @param
-         */
+         *
         virtual void onMouseMove(GLFWwindow* window, double xpos, double ypos) = 0;
 
         /**
@@ -43,7 +43,7 @@ class EventInterface
 		 * @param
 		 * @param
 		 * @param
-		 */
+		 *
 		virtual void onMouseClick(GLFWwindow* window, int button, int action, int mods) = 0;
 
         /**
@@ -54,7 +54,7 @@ class EventInterface
 		 * @param
 		 * @param
 		 * @param
-		 */
+		 *
         //void onResume();
 
         /**
@@ -65,7 +65,7 @@ class EventInterface
 		 * @param
 		 * @param
 		 * @param
-		 */
+		 *
         //void onPause();
 
         /**
@@ -76,7 +76,7 @@ class EventInterface
 		 * @param
 		 * @param
 		 * @param
-		 */
+		 *
         //void onTick();
 
 		GLFWwindow* window;	//!< Local pointer to window

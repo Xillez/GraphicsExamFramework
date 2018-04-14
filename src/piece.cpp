@@ -1,6 +1,7 @@
 #include "../header/piece.hpp"
 #include "../header/globalVar.hpp"
 #include "../header/camera.hpp"
+#include "../class/ShaderManager.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -24,7 +25,12 @@ Piece::Piece(std::string const &path, std::string const &pieceName, bool isWhite
 		this->move = found->second;
 	}
 	this->isWhite = isWhite;
-	this->shaderProgram = new Shader("../shader/vertexPiece.vert", "../shader/fragmentPiece.frag");
+
+	extern ShaderManager* shaderManager;
+	this->shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
+		{GL_VERTEX_SHADER, "../shader/vertexPiece.vert"},
+		{GL_FRAGMENT_SHADER, "../shader/fragmentPiece.frag"},
+	});
 }
 
 

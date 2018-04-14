@@ -1,8 +1,6 @@
 #pragma once
 #include "piece.hpp"
-#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include "camera.hpp"
 #include <string>
 
 /**
@@ -41,6 +39,9 @@ public:
 	 */
 	auto moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, int>>;
 
+	glm::vec2 getTileSize();
+	glm::vec3 getPosition();
+	glm::vec2 getEdge();
 private:
 
 	Piece* tiles[8][8];

@@ -1,6 +1,8 @@
 #include "../header/board.hpp"
 #include "../header/camera.hpp"
+#include "../class/ShaderManager.hpp"
 
+#include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> 
 #include <iostream>
@@ -73,7 +75,11 @@ Board::Board(std::string const &path) : Model(path){
 		}
 	}
 
-	shaderProgram = new Shader("../shader/vertex.vert", "../shader/fragment.frag");
+	extern ShaderManager* shaderManager;
+	shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
+		{GL_VERTEX_SHADER, "../shader/vertex.vert"},
+		{GL_FRAGMENT_SHADER, "../shader/fragment.frag"},
+	});
 
 };
 
@@ -303,7 +309,7 @@ auto Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, in
 			}
 		}	
 	} else {
-		std::cout << "Piece " << indexI << ", " << indexJ << " doesnt exist\n";	
+		//std::cout << "Piece " << indexI << ", " << indexJ << " doesnt exist\n";	
 	} 
 	return allAvailableMoves;
 }
@@ -374,5 +380,19 @@ void Board::draw(){
 			}
 		}
 	}
+}
 
+glm::vec2 Board::getTileSize()
+{
+	return this->tileSize;
+}
+
+glm::vec3 Board::getPosition()
+{
+	return this->pos;
+}
+
+glm::vec2 Board::getEdge()
+{
+	return this->edge;
 }
