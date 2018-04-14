@@ -39,8 +39,6 @@ public:
 	 */
 	auto moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, int>>;
 
-	
-
 	glm::vec2 getTileSize();
 	glm::vec3 getPosition();
 	glm::vec2 getEdge();
