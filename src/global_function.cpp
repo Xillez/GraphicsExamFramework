@@ -66,8 +66,8 @@ void OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 		(int) ((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x),
 		(int) ((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y));
 
-	std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
-			<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
+	//std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
+	//		<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
 }
 
 void OnMouseClick(GLFWwindow* window, int button, int action, int mods)
@@ -83,19 +83,27 @@ void OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 			(int) ((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y));
 
 		// If we are outside, ignore click!
-		if ((indecies.first < 0 || indecies.first > 7) && (indecies.second < 0 || indecies.second > 7))
+		if ((indecies.first < 0 || indecies.first > 7) || (indecies.second < 0 || indecies.second > 7))
 			return;
 
-		if (chessBoard->hasPieceAt(indecies.first, indecies.second) && !chessBoard->hasSelection())
+		if (chessBoard->hasPieceAt(indecies.first, indecies.second) && 
+			!chessBoard->hasSelection())
 		{
 			chessBoard->setSelection(indecies);
+			printf("Selected: %d : %d\n", indecies.first, indecies.second);
 		}
 		else if (chessBoard->hasSelection())
 		{
-			chessBoard->movePiece(
-				chessBoard->getSelected().first, chessBoard->getSelected().second, 
-				indecies.first, indecies.second
-			);
+			if (chessBoard->getSelected().first != indecies.first || 
+				chessBoard->getSelected().second != indecies.second)
+			{
+				printf("Diff tile clicked, Piece moved to: %d : %d\n", indecies.first, indecies.second);
+				
+				chessBoard->movePiece(
+					chessBoard->getSelected().first, chessBoard->getSelected().second, 
+					indecies.first, indecies.second
+				);
+			}
 			chessBoard->clearSelection();
 		}
 
