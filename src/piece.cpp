@@ -24,8 +24,10 @@ Piece::Piece(std::string const &path, std::string const &pieceName, bool isWhite
 		}*/
 		this->move = found->second;
 	}
+	this->selected = false;
 	this->isWhite = isWhite;
 	this->name = pieceName;
+	this->firstMove = true;
 
 	extern ShaderManager* shaderManager;
 	this->shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
@@ -65,13 +67,12 @@ void Piece::draw(){
 
 
 	//std::cout << sizeof(glm::vec3) << '\n';
-		
-	if(isWhite){
-		glm::vec3 color(1.0f, 1.0f, 1.0f);
+	if(selected){
+		glm::vec3 color(0.0f, 1.0f, 0.0f);
 		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));
 	} else {
-		glm::vec3 color(0.4f, 0.4f, 0.4f);
-		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));
+		glm::vec3 color(((isWhite) ? (1.0f, 1.0f, 1.0f) : (0.4f, 0.4f, 0.4f)));
+		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));	
 	}
 	
 
@@ -81,6 +82,7 @@ void Piece::draw(){
 
 void Piece::place(glm::vec3 position){
 	this->pos = position;
+	this->firstMove = false;
 	//modelm = glm::translate(modelm, glm::vec3(x, y, z)); // translate it down so it's at the center of the scene
 	// 0.6f, -0.9f, 2.85f 
 }
@@ -97,10 +99,22 @@ auto Piece::getPosition() -> glm::vec3 {
 	return pos;
 }
 
+bool Piece::isFirstMove(){
+	return firstMove;
+}
+
 bool Piece::pieceColor(){
 	return isWhite;
 }
 
 void Piece::setColor(bool color){
 	isWhite = color;
+}
+
+void Piece::setSelected(bool select){
+	this->selected = select;
+}
+
+void Piece::setFirstMove(bool fm){
+	this->firstMove = fm;
 }

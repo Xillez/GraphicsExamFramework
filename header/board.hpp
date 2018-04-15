@@ -22,7 +22,7 @@ public:
 	 * @param destinationI first index of tiles on the board
 	 * @param destinationJ second index of tiles on the board
 	 */
-	void movePiece(int indexI, int indexJ, int destinationI, int destinationJ, float dt);
+	void movePiece(int indexI, int indexJ, int destinationI, int destinationJ);
 	
 	/**
 	 * @brief Draw the board and every piece found.
@@ -86,6 +86,11 @@ public:
 
 	void setSelection(std::pair<int, int> selection);
 	void clearSelection();
+	void setAnimationTime(float animationTime);
+	
+	bool insideBoard(int i, int j);
+	bool diffColor(int currentI, int currentJ, int targetI, int targetJ);
+
 private:
 
 	Piece* tiles[8][8];
@@ -104,4 +109,5 @@ private:
 	glm::vec2 edge;								//!< board edges
 
 	std::pair<int, int> selected;	
+	float animationTime;
 };

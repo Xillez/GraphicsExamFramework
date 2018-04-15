@@ -15,7 +15,9 @@ private:
 	//float x, y, z;
 	glm::vec3 pos;
 	bool isWhite;
+	bool selected;
 	std::string name;
+	bool firstMove;
 	Shader* shaderProgram;
 
 public:
@@ -47,7 +49,13 @@ public:
 
 	auto getPosition() -> glm::vec3;
 	
+	bool isFirstMove();
+
 	bool pieceColor();
 
 	void setColor(bool color);
+
+	void setSelected(bool select);
+
+	void setFirstMove(bool fm);
 };
