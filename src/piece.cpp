@@ -24,6 +24,7 @@ Piece::Piece(std::string const &path, std::string const &pieceName, bool isWhite
 		}*/
 		this->move = found->second;
 	}
+	this->selected = false;
 	this->isWhite = isWhite;
 	this->name = pieceName;
 
@@ -65,13 +66,12 @@ void Piece::draw(){
 
 
 	//std::cout << sizeof(glm::vec3) << '\n';
-		
-	if(isWhite){
-		glm::vec3 color(1.0f, 1.0f, 1.0f);
+	if(selected){
+		glm::vec3 color(0.0f, 1.0f, 0.0f);
 		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));
 	} else {
-		glm::vec3 color(0.4f, 0.4f, 0.4f);
-		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));
+		glm::vec3 color(((isWhite) ? (1.0f, 1.0f, 1.0f) : (0.4f, 0.4f, 0.4f)));
+		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));	
 	}
 	
 
@@ -103,4 +103,8 @@ bool Piece::pieceColor(){
 
 void Piece::setColor(bool color){
 	isWhite = color;
+}
+
+void Piece::setSelected(bool select){
+	this->selected = select;
 }

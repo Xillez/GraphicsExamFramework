@@ -56,16 +56,15 @@ int main(int argc, char const *argv[])
 
         //chessBoard->draw();
 		if(animationTime > 1.0f) {
-			animationTime = 1.0f;
+			animationTime = 0.0f;
 		}
 		else {
 			animationTime += dt;
+			chessBoard->setAnimationTime(animationTime);
 		}
 
 		if (animationTime <= 1){
-			std::cout << animationTime << ", " << dt << '\n';
-			//chessBoard->movePiece(1, 0, 2, 2, animationTime);
-			chessBoard->movePiece(0, 7, 2, 7, animationTime);
+			//chessBoard->movePiece(0, 7, 2, 7);
 		}
 		chessBoard->draw();
 

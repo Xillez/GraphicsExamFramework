@@ -15,6 +15,7 @@ private:
 	//float x, y, z;
 	glm::vec3 pos;
 	bool isWhite;
+	bool selected;
 	std::string name;
 	Shader* shaderProgram;
 
@@ -50,4 +51,7 @@ public:
 	bool pieceColor();
 
 	void setColor(bool color);
+
+	void setSelected(bool select);
+
 };
