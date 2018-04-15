@@ -91,6 +91,7 @@ Board::Board(std::string const &path) : Model(path){
 				std::cout << "i:" << i << ", j:" << j << '\n';
 				std::cout << "x: " << x << ", y:" << y << ", z:" << z << '\n'; 
 				tiles[i][j]->place(glm::vec3(x, y, z));
+				tiles[i][j]->setFirstMove(true);
 				//	+x --- right, -x --- left
 				//	+y --- up,   -y --- down
 				//  +z ---- front, -z --- back
@@ -197,11 +198,35 @@ auto Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, in
 		for(auto move : movesList){
 			if(move == "F"){
 				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);
+				int j2 = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 2 : indexJ - 2);												
+				std::pair<int, int> attackLeft( 
+					((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1),
+					((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1)
+				);
+				std::pair<int, int> attackRight( 
+					((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1),
+					((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1)
+				);																				
 				// If inside board
 				if(insideBoard(indexI, j)){
 					// If pawn and if forward tile is empty
-					if(tiles[indexI][j] == nullptr && tiles[indexI][indexJ]->getName() == "Pawn"){ 
-						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+					if(tiles[indexI][indexJ]->getName() == "Pawn"){
+						if(tiles[indexI][j] == nullptr){ 
+							allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+							if(tiles[indexI][j2] == nullptr && tiles[indexI][indexJ]->isFirstMove()){
+								allAvailableMoves.push_back(std::pair<int, int>(indexI, j2));							
+							}
+						}
+						if(insideBoard(attackLeft.first, attackLeft.second) && tiles[attackLeft.first][attackLeft.second] != nullptr && 
+							diffColor(indexI, indexJ, attackLeft.first, attackLeft.second)){
+
+							allAvailableMoves.push_back(attackLeft);														
+						}
+						if(insideBoard(attackRight.first, attackRight.second) && tiles[attackRight.first][attackRight.second] != nullptr && 
+							diffColor(indexI, indexJ, attackRight.first, attackRight.second)){
+								
+							allAvailableMoves.push_back(attackRight);														
+						}
 					} 
 					// If king and forwards tile is empty						
 					else if(tiles[indexI][j] == nullptr && tiles[indexI][indexJ]->getName() == "King"){

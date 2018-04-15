@@ -27,6 +27,7 @@ Piece::Piece(std::string const &path, std::string const &pieceName, bool isWhite
 	this->selected = false;
 	this->isWhite = isWhite;
 	this->name = pieceName;
+	this->firstMove = true;
 
 	extern ShaderManager* shaderManager;
 	this->shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
@@ -81,6 +82,7 @@ void Piece::draw(){
 
 void Piece::place(glm::vec3 position){
 	this->pos = position;
+	this->firstMove = false;
 	//modelm = glm::translate(modelm, glm::vec3(x, y, z)); // translate it down so it's at the center of the scene
 	// 0.6f, -0.9f, 2.85f 
 }
@@ -97,6 +99,10 @@ auto Piece::getPosition() -> glm::vec3 {
 	return pos;
 }
 
+bool Piece::isFirstMove(){
+	return firstMove;
+}
+
 bool Piece::pieceColor(){
 	return isWhite;
 }
@@ -107,4 +113,8 @@ void Piece::setColor(bool color){
 
 void Piece::setSelected(bool select){
 	this->selected = select;
+}
+
+void Piece::setFirstMove(bool fm){
+	this->firstMove = fm;
 }
