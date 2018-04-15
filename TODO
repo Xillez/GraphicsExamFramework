@@ -3,10 +3,16 @@ TODO
 	- Camera	--- DONE!
 	- Window class 	--- *Merged with camera* DONE!
 	Movement
-		- Piece movement from move attribute in Piece class
-		- Piece Validation from Board
-		- Bezier curves
-		- Move piece from board
+		- Piece movement from move attribute in Piece class --- DONE!
+		- Piece Validation from Board	--- DONE!
+		- Bezier curves			--- Currently working on it!
+		- Move piece from board		--- DONE!
 	Remove
 		- deleting the pointer to the piece
 		- set the new piece at that pointer
+
+
+
+LEAST PRIORITY
+	
+	- Redo movement valiadation as a regex validation

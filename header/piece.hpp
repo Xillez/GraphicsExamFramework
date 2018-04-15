@@ -12,8 +12,10 @@
 class Piece : Model {
 private:
 	std::vector<std::string> move;
-	float x, y, z;
+	//float x, y, z;
+	glm::vec3 pos;
 	bool isWhite;
+	std::string name;
 	Shader* shaderProgram;
 
 public:
@@ -37,9 +39,15 @@ public:
 	 */
 	void draw();
 	
-	void place(float x, float y, float z);
+	void place(glm::vec3 position);
 
 	auto getMoves() -> std::vector<std::string>;
 
+	auto getName() -> std::string;
+
+	auto getPosition() -> glm::vec3;
+	
 	bool pieceColor();
+
+	void setColor(bool color);
 };

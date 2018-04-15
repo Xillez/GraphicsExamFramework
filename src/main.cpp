@@ -8,7 +8,7 @@
 
 #include <GLFW/glfw3.h>
 #include <stdio.h>
-
+#include <iostream>
 Camera* camera;
 GLFWwindow* window;			//!< Default window to draw on
 Board* chessBoard;
@@ -38,27 +38,56 @@ int main(int argc, char const *argv[])
 	setup_EventHandling();
 
 	bool eh = false;
-	float time = 0.0f;
+	float time = 0.0f, time2 = 0.0f, currentTime = 0.0f, lastTime = 0.0f, dt = 0.0f, animationTime = 0.0f;
+	
+	lastTime = glfwGetTime();
+	
 	// Run until close event is given to the window
 	while(!glfwWindowShouldClose(window))
 	{
 		glClearColor(0.4, 0.8, 0.8, 1);
 		glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        chessBoard->draw();
 
+		currentTime = glfwGetTime();
+		dt = currentTime - lastTime;
+
+		lastTime = currentTime;
+
+        //chessBoard->draw();
+		if(animationTime > 1.0f) {
+			animationTime = 1.0f;
+		}
+		else {
+			animationTime += dt;
+		}
+
+		if (animationTime <= 1){
+			std::cout << animationTime << ", " << dt << '\n';
+			//chessBoard->movePiece(1, 0, 2, 2, animationTime);
+			chessBoard->movePiece(0, 7, 2, 7, animationTime);
+		}
+		chessBoard->draw();
+
+/*
 		if(eh){
-			chessBoard->movePiece(1, 1, 1, 2);
-			chessBoard->movePiece(1, 6, 1, 5);
-			chessBoard->movePiece(0, 0, 0, 4);
-			chessBoard->movePiece(2, 0, 0, 2);
+			//chessBoard->movePiece(1, 1, 1, 2);
+			//chessBoard->movePiece(1, 6, 1, 5);
+			chessBoard->movePiece(2, 0, 0, 2, animationTime);
+        	chessBoard->draw();
+			if(time2 > 8){
+				chessBoard->movePiece(0, 2, 3, 5, animationTime);
+        		chessBoard->draw();
+			} else {
+				time2 += 0.1f;
+			}
 			eh = false;
 		}else {
 			time += 0.1f;
 		}
 		if(time >= 3)
 			eh = true;
-
+*/
 
 		glfwSwapBuffers(window);    //<-- SWAP BUFFERS
         glfwPollEvents();           //<-- LISTEN FOR WINDOW EVENTS
