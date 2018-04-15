@@ -7,13 +7,12 @@ class Camera {
 public:
 	/**
  	* @brief Camera constructor
- 	* @details [long description]
  	* 
  	* @param pos is the position of the camera
- 	* @param dir is the focus point
+ 	* @param target is the focus point
  	* @param up is the camera upward perpective
  	*/
-	Camera(glm::vec3 pos, glm::vec3 dir, glm::vec3 up);
+	Camera(glm::vec3 pos, glm::vec3 target, glm::vec3 up);
 	/**
  	* @brief set position of camera
  	* @param pos new positon of camera
@@ -21,9 +20,9 @@ public:
 	void setPos(glm::vec3 pos);
 	/**
  	* @brief set the focus point of camera
- 	* @param dir new direction/focus point of camera
+ 	* @param target new direction/focus point of camera
  	*/
-	void setDir(glm::vec3 dir);
+	void setDir(glm::vec3 target);
 	/**
  	* @brief set up vector of camera
  	* @param up new up vector of camera
@@ -56,9 +55,18 @@ public:
  	*/
 	glm::mat4 getPerspectiveMatrix();
 
+	/**
+	 * @brief rotates the camera around the target
+	 * 
+	 * @param angle value in degree to rotate camera
+	 * @param axis vector perpendicular to the rotation.
+	 */
+	void rotateBy(float angle, glm::vec3 axis);
+
 private:
 	glm::vec3 pos;
-	glm::vec3 dir;
+	glm::vec3 target;
+	float radius;
 	glm::vec3 up;
 
 };
