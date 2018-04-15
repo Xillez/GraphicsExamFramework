@@ -78,6 +78,14 @@ public:
 	glm::vec2 getTileSize();
 	glm::vec3 getPosition();
 	glm::vec2 getEdge();
+	std::pair<int, int> getSelected();
+	
+	bool hasPieceAt(int x, int y);
+	bool hasWhitePieceAt(int x, int y);
+	bool hasSelection();
+
+	void setSelection(std::pair<int, int> selection);
+	void clearSelection();
 private:
 
 	Piece* tiles[8][8];
@@ -95,4 +103,5 @@ private:
 
 	glm::vec2 edge;								//!< board edges
 
+	std::pair<int, int> selected;	
 };

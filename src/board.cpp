@@ -27,22 +27,22 @@ Board::Board(std::string const &path) : Model(path){
 		}
 	}
 
-	Piece pawn = Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
-	Piece rook = Piece("../asset/chessTemp/Rook.obj", "Rook", true);
-	Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
 
-	rook.setColor(true);
+/*	rook.setColor(true);
 	tiles[0][0] = new Piece(rook);
 	rook.setColor(false);
 	tiles[0][7] = new Piece(rook);
 	tiles[2][0] = new Piece(bishop);
 	pawn.setColor(false);
 	tiles[0][2] = new Piece(pawn);
-
-/*	Piece knight = Piece("../asset/chessTemp/Knight.obj", "Horse", true);
+*/
+	Piece pawn = Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
+	Piece rook = Piece("../asset/chessTemp/Rook.obj", "Rook", true);
+	Piece knight = Piece("../asset/chessTemp/Knight.obj", "Horse", true);
 	Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
 	Piece queen = Piece("../asset/chessTemp/Queen.obj", "Queen", true);
 	Piece king = Piece("../asset/chessTemp/King.obj", "King", true);
+	//Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
 
 	for (int i = 0; i < 8; ++i){
 		pawn.setColor(true);
@@ -74,7 +74,7 @@ Board::Board(std::string const &path) : Model(path){
 	tiles[5][7] = new Piece(bishop);
 	tiles[6][7] = new Piece(knight);
 	tiles[7][7] = new Piece(rook);
-	*/
+	
 	float offset = 1.15f;//3.14f / 6.0f;
 	
 	float x, y, z;
@@ -101,10 +101,12 @@ Board::Board(std::string const &path) : Model(path){
 		{GL_FRAGMENT_SHADER, "../shader/fragment.frag"},
 	});
 
+	// Select no-one!
+	this->selected = std::pair<int, int>(-1, -1);
 };
 
 
-void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ, float dt){	
+void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ){	
 	
 	std::vector<std::pair<int, int>> allAvailableMoves = moveToIndex(indexI, indexJ);
 	glm::vec3 newPosition, position;
@@ -128,13 +130,13 @@ void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ
 												);
 				glm::vec3 midpoint = glm::vec3((position.x + destination.x)/2, 1.0f, (position.z + destination.z)/2);
 
-				newPosition = jumpCurve(position, midpoint, destination, dt);
+				newPosition = jumpCurve(position, midpoint, destination, animationTime);
 
 				
 
 				tiles[indexI][indexJ]->place(newPosition);
 
-				if(dt == 1){
+				if(animationTime == 1){
 					tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
 					tiles[indexI][indexJ] = nullptr;
 				}
@@ -146,9 +148,9 @@ void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ
 										(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * indexJ)))
 										);
 
-				newPosition = lerp(position, destination, dt);
+				newPosition = lerp(position, destination, animationTime);
 				tiles[indexI][indexJ]->place(newPosition);
-				if(dt == 1){
+				if(animationTime == 1){
 					tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
 					tiles[indexI][indexJ] = nullptr;
 				}
@@ -166,7 +168,13 @@ void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ
 	
 	}
 	else {
-		std::cout << "piece " << indexI << ", " << indexJ << " cant move to desired destination " << destinationI << ", " << destinationJ << "\n";
+		std::cout << "piece " << indexI 
+bool Board::hasPieceAt(int x, int y)
+{
+	if((x < 0 || x > 7) && (y < 0 || y > 7))
+		return false;
+
+	return (this->tiles[x][y] != nullptr);<< ", " << indexJ << " cant move to desired destination " << destinationI << ", " << destinationJ << "\n";
 	}*/
 }
 
@@ -586,6 +594,23 @@ auto Board::jumpCurve(glm::vec3 a, glm::vec3 b, glm::vec3 c, float dt) -> glm::v
   	return result;
 }
 
+bool Board::hasPieceAt(int x, int y)
+{
+	if((x < 0 || x > 7) && (y < 0 || y > 7))
+		return false;
+
+	return (this->tiles[x][y] != nullptr);
+}
+
+bool Board::hasWhitePieceAt(int x, int y)
+{
+	if((x < 0 || x > 7) && (y < 0 || y > 7) && this->tiles[x][y] != nullptr)
+		return false;
+
+	return this->tiles[x][y]->pieceColor();
+
+}
+
 glm::vec2 Board::getTileSize()
 {
 	return this->tileSize;
@@ -599,4 +624,36 @@ glm::vec3 Board::getPosition()
 glm::vec2 Board::getEdge()
 {
 	return this->edge;
+}
+
+bool Board::hasSelection()
+{
+	return (this->selected.first != -1 && this->selected.second != -1);
+}
+
+std::pair<int, int> Board::getSelected()
+{
+	return this->selected;
+}
+
+void Board::setSelection(std::pair<int, int> selection)
+{
+	this->selected = selection;
+}
+
+void Board::clearSelection()
+{
+	this->selected = std::pair<int, int>(-1, -1);
+}
+
+void Board::setAnimationTime(float animationTime){
+	this->animationTime = animationTime;
+}
+
+bool Board::isAnimationDone(){
+	if(animationTime >= 1){
+		return true;
+	} else {
+		return false;
+	} 
 }
