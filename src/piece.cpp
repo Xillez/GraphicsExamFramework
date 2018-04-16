@@ -82,7 +82,7 @@ void Piece::draw(){
 
 void Piece::place(glm::vec3 position){
 	this->pos = position;
-	this->firstMove = false;
+	//this->firstMove = false;
 	//modelm = glm::translate(modelm, glm::vec3(x, y, z)); // translate it down so it's at the center of the scene
 	// 0.6f, -0.9f, 2.85f 
 }
