@@ -55,18 +55,8 @@ int main(int argc, char const *argv[])
 		lastTime = currentTime;
 
         //chessBoard->draw();
-		if(animationTime > 1.0f) {
-			animationTime = 0.0f;
-		}
-		else {
-			animationTime += dt;
-			chessBoard->setAnimationTime(animationTime);
-		}
-
-		if (animationTime <= 1){
-			//chessBoard->movePiece(0, 7, 2, 7);
-		}
-		chessBoard->draw();
+       
+		chessBoard->draw(dt);
 
 /*
 		if(eh){
@@ -81,7 +71,7 @@ int main(int argc, char const *argv[])
 				time2 += 0.1f;
 			}
 			eh = false;
-		}else {
+				}else {
 			time += 0.1f;
 		}
 		if(time >= 3)

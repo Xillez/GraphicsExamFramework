@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> 
 #include <iostream>
+#include <algorithm>
 
 extern Camera* camera;
 
@@ -27,25 +28,14 @@ Board::Board(std::string const &path) : Model(path){
 		}
 	}
 
+
 	Piece pawn = Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
 	Piece rook = Piece("../asset/chessTemp/Rook.obj", "Rook", true);
-//	Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
-/*
-	pawn.setColor(true);
-	tiles[0][1] = new Piece(pawn);
-	pawn.setColor(false);
-	tiles[0][2] = new Piece(pawn);
-
-	king.setColor(true);
-	tiles[1][1] = new Piece(king);	
-	king.setColor(false);
-	tiles[1][2] = new Piece(king);
-*/	
-
 	Piece knight = Piece("../asset/chessTemp/Knight.obj", "Horse", true);
 	Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
 	Piece queen = Piece("../asset/chessTemp/Queen.obj", "Queen", true);
 	Piece king = Piece("../asset/chessTemp/King.obj", "King", true);
+	//Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
 
 	for (int i = 0; i < 8; ++i){
 		pawn.setColor(true);
@@ -114,76 +104,55 @@ void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ
 	
 	std::vector<std::pair<int, int>> allAvailableMoves = moveToIndex(indexI, indexJ);
 	glm::vec3 newPosition, position;
-		//TODO JUMP CURVE
+	
 
 	for(auto v : allAvailableMoves){
 		if(v.first == destinationI && v.second == destinationJ){
-			
+			if(animationTile == nullptr){
+				animationTile = new std::pair<std::pair<int, int>,std::pair<int, int>>{
+					{indexI, indexJ},
+					{destinationI,destinationJ}
+				};
+			}
 			glm::vec3 destination = glm::vec3(
-												(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * destinationI))),
-												 pos.y, 
-												(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * destinationJ)))
-												);
+				(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * destinationI))),
+				 pos.y, 
+				(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * destinationJ)))
+			);
+
+			position = glm::vec3(
+				(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * indexI))),
+				 pos.y, 
+				(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * indexJ)))
+			);
+
 
 			if(tiles[indexI][indexJ]->getName() == "Horse"){
-				std::cout << "im here!\n";
-				position = glm::vec3(
-												(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * indexI))),
-												 pos.y, 
-												(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * indexJ)))
-												);
+				
 				glm::vec3 midpoint = glm::vec3((position.x + destination.x)/2, 1.0f, (position.z + destination.z)/2);
-
-				newPosition = jumpCurve(position, midpoint, destination, 1.0f);
-
 				
-
+				newPosition = jumpCurve(position, midpoint, destination, std::min(this->animationTime, 1.0f));
 				tiles[indexI][indexJ]->place(newPosition);
-				std::cout << animationTime << '\n';
 
-			//	if(animationTime == 1){
-					tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
-					//delete tiles[indexI][indexJ];
-					tiles[indexI][indexJ] = nullptr;
-			//	}
-			
 			} else {
-				position = glm::vec3(
-										(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * indexI))),
-										 pos.y, 
-										(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * indexJ)))
-										);
 
-				newPosition = lerp(position, destination, 1.0f);
+				newPosition = lerp(position, destination, std::min(this->animationTime, 1.0f));
 				tiles[indexI][indexJ]->place(newPosition);
-			//	if(animationTime == 1){
-					tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
-					//delete tiles[indexI][indexJ];
-					tiles[indexI][indexJ] = nullptr;
-			//	}
-			}
-				
+			}	
 		}
-		setSelection(std::pair<int, int>(destinationI, destinationJ));
+		setSelection(std::pair<int, int>(indexI, indexJ));
 	}
-/*	if(t == 1){
+
+
+	if(this->animationTime >= 1.0f){
+		clearSelection();
+		tiles[indexI][indexJ]->setFirstMove(false);
 		tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
-		tiles[indexI][indexJ] = nullptr;	
-	
-	}*/
-	/*if((indexJ+f) == destinationJ){
-
-	
+		//delete tiles[indexI][indexJ];
+		tiles[indexI][indexJ] = nullptr;
+		this->animationTime = 0.0;
+		animationTile = nullptr;
 	}
-	else {
-		std::cout << "piece " << indexI 
-bool Board::hasPieceAt(int x, int y)
-{
-	if((x < 0 || x > 7) && (y < 0 || y > 7))
-		return false;
-
-	return (this->tiles[x][y] != nullptr);<< ", " << indexJ << " cant move to desired destination " << destinationI << ", " << destinationJ << "\n";
-	}*/
 }
 
 
@@ -519,8 +488,15 @@ auto Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, in
 }
 
 
-void Board::draw(){
+void Board::draw(float dt){
 	shaderProgram->bind();
+
+	if(animationTile != nullptr){
+		this->animationTime += dt;
+		std::cout << "animationTime: " << this->animationTime << '\n';
+		movePiece(animationTile->first.first, animationTile->first.second, animationTile->second.first, animationTile->second.second);
+	}
+
 
 	static float time = 0.0;
 	time += .01;
@@ -672,8 +648,9 @@ void Board::clearSelection()
 	this->selected = std::pair<int, int>(-1, -1);
 }
 
+
 void Board::setAnimationTime(float animationTime) {
-	this->animationTime = animationTime;
+	this->animationTime += animationTime;
 }
 
 bool Board::insideBoard(int i, int j){

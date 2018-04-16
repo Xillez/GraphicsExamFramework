@@ -27,7 +27,7 @@ public:
 	/**
 	 * @brief Draw the board and every piece found.
 	 */
-	void draw();
+	void draw(float dt);
 
 	/**
 	 * @brief Convert piece moves to indecies for tiles[][].
@@ -91,6 +91,7 @@ public:
 	bool insideBoard(int i, int j);
 	bool diffColor(int currentI, int currentJ, int targetI, int targetJ);
 
+
 private:
 
 	Piece* tiles[8][8];
@@ -110,4 +111,5 @@ private:
 
 	std::pair<int, int> selected;	
 	float animationTime;
+	std::pair<std::pair<int, int>, std::pair<int, int>> *animationTile = nullptr;
 };
