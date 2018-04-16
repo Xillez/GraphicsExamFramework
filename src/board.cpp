@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp> 
 #include <iostream>
+#include <algorithm>
 
 extern Camera* camera;
 
@@ -27,30 +28,46 @@ Board::Board(std::string const &path) : Model(path){
 		}
 	}
 
+
+	Piece pawn = Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
+	Piece rook = Piece("../asset/chessTemp/Rook.obj", "Rook", true);
+	Piece knight = Piece("../asset/chessTemp/Knight.obj", "Horse", true);
+	Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
+	Piece queen = Piece("../asset/chessTemp/Queen.obj", "Queen", true);
+	Piece king = Piece("../asset/chessTemp/King.obj", "King", true);
+	//Piece bishop = Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
+
 	for (int i = 0; i < 8; ++i){
-		tiles[i][1] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
-		tiles[i][6] = new Piece("../asset/chessTemp/Pawn.obj", "Pawn", false);	
+		pawn.setColor(true);
+		tiles[i][1] = new Piece(pawn);
+		pawn.setColor(false);
+		tiles[i][6] = new Piece(pawn);	
 	}
 
-	tiles[0][0] = new Piece("../asset/chessTemp/Rook.obj", "Rook", true);
-	tiles[1][0] = new Piece("../asset/chessTemp/Knight.obj", "Horse", true);
-	tiles[2][0] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
-	tiles[3][0] = new Piece("../asset/chessTemp/Queen.obj", "Queen", true);
-	tiles[4][0] = new Piece("../asset/chessTemp/King.obj", "King", true);
-	tiles[5][0] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", true);
-	tiles[6][0] = new Piece("../asset/chessTemp/Knight.obj", "Horse", true);
-	tiles[7][0] = new Piece("../asset/chessTemp/Rook.obj", "Rook", true);
+	tiles[0][0] = new Piece(rook);
+	tiles[1][0] = new Piece(knight);
+	tiles[2][0] = new Piece(bishop);
+	tiles[3][0] = new Piece(queen);
+	tiles[4][0] = new Piece(king);
+	tiles[5][0] = new Piece(bishop);
+	tiles[6][0] = new Piece(knight);
+	tiles[7][0] = new Piece(rook);
 	
 
-	tiles[0][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook", false);
-	tiles[1][7] = new Piece("../asset/chessTemp/Knight.obj", "Horse", false);
-	tiles[2][7] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", false);
-	tiles[3][7] = new Piece("../asset/chessTemp/Queen.obj", "Queen", false);
-	tiles[4][7] = new Piece("../asset/chessTemp/King.obj", "King", false);
-	tiles[5][7] = new Piece("../asset/chessTemp/Bishop.obj", "Bishop", false);
-	tiles[6][7] = new Piece("../asset/chessTemp/Knight.obj", "Horse", false);
-	tiles[7][7] = new Piece("../asset/chessTemp/Rook.obj", "Rook", false);
-
+	rook.setColor(false);
+	knight.setColor(false);
+	bishop.setColor(false);
+	queen.setColor(false);
+	king.setColor(false);
+	tiles[0][7] = new Piece(rook);
+	tiles[1][7] = new Piece(knight);
+	tiles[2][7] = new Piece(bishop);
+	tiles[3][7] = new Piece(queen);
+	tiles[4][7] = new Piece(king);
+	tiles[5][7] = new Piece(bishop);
+	tiles[6][7] = new Piece(knight);
+	tiles[7][7] = new Piece(rook);
+	
 	float offset = 1.15f;//3.14f / 6.0f;
 	
 	float x, y, z;
@@ -59,11 +76,12 @@ Board::Board(std::string const &path) : Model(path){
 			if(tiles[i][j] != nullptr){
 				x = pos.x + (-tileSize.x*4 + edge.x + (tileSize.x * i));//+ (-4 * offset); // + (j * offset + (offset / 2));
 				y = 0.0f + pos.y;//-1.15f;
-				z = pos.y + (-tileSize.y*4 + edge.y + (tileSize.y * j));//+ (-3 * offset);//+ (i * offset);
+				z = pos.y + (-tileSize.y*4 + edge.y + (tileSize.y * j));//+ (-3 * offset);//+ (move * offset);
 
 				std::cout << "i:" << i << ", j:" << j << '\n';
 				std::cout << "x: " << x << ", y:" << y << ", z:" << z << '\n'; 
-				tiles[i][j]->place(x, y, z);
+				tiles[i][j]->place(glm::vec3(x, y, z));
+				tiles[i][j]->setFirstMove(true);
 				//	+x --- right, -x --- left
 				//	+y --- up,   -y --- down
 				//  +z ---- front, -z --- back
@@ -85,33 +103,58 @@ Board::Board(std::string const &path) : Model(path){
 void Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ){	
 	
 	std::vector<std::pair<int, int>> allAvailableMoves = moveToIndex(indexI, indexJ);
+	glm::vec3 newPosition, position;
+	
 
 	for(auto v : allAvailableMoves){
 		if(v.first == destinationI && v.second == destinationJ){
-			tiles[indexI][indexJ]->place(
-							(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * destinationI))),
-							 pos.y, 
-							(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * destinationJ)))
-							);
-			tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
-			tiles[indexI][indexJ] = nullptr;
+			if(animationTile == nullptr){
+				animationTile = new std::pair<std::pair<int, int>,std::pair<int, int>>{
+					{indexI, indexJ},
+					{destinationI,destinationJ}
+				};
+			}
+			glm::vec3 destination = glm::vec3(
+				(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * destinationI))),
+				 pos.y, 
+				(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * destinationJ)))
+			);
+
+			position = glm::vec3(
+				(pos.x + (-tileSize.x * 4 + edge.x + (tileSize.x * indexI))),
+				 pos.y, 
+				(pos.y + (-tileSize.y * 4 + edge.y + (tileSize.y * indexJ)))
+			);
+
+
+			if(tiles[indexI][indexJ]->getName() == "Horse"){
+				
+				glm::vec3 midpoint = glm::vec3((position.x + destination.x)/2, 1.0f, (position.z + destination.z)/2);
+				
+				newPosition = jumpCurve(position, midpoint, destination, std::min(this->animationTime, 1.0f));
+				tiles[indexI][indexJ]->place(newPosition);
+
+			} else {
+
+				newPosition = lerp(position, destination, std::min(this->animationTime, 1.0f));
+				tiles[indexI][indexJ]->place(newPosition);
+			}	
 		}
+		setSelection(std::pair<int, int>(indexI, indexJ));
 	}
 
-	/*if((indexJ+f) == destinationJ){
 
-	
+	if(this->animationTime >= 1.0f){
+		clearSelection();
+		tiles[indexI][indexJ]->setFirstMove(false);
+		tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
+		//delete tiles[indexI][indexJ];
+		tiles[indexI][indexJ] = nullptr;
+		this->animationTime = 0.0;
+		animationTile = nullptr;
 	}
-	else {
-		std::cout << "piece " << indexI 
-bool Board::hasPieceAt(int x, int y)
-{
-	if((x < 0 || x > 7) && (y < 0 || y > 7))
-		return false;
-
-	return (this->tiles[x][y] != nullptr);<< ", " << indexJ << " cant move to desired destination " << destinationI << ", " << destinationJ << "\n";
-	}*/
 }
+
 
 
 auto Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, int>> {
@@ -121,206 +164,339 @@ auto Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, in
 	if(tiles[indexI][indexJ]){
 		movesList = tiles[indexI][indexJ]->getMoves();
 	
-		for(auto i : movesList){
-			if(i == "F"){
-				if(tiles[indexI][indexJ]->pieceColor())  
-					allAvailableMoves.push_back(std::pair<int, int>(indexI, indexJ + 1));
-				else 
-					allAvailableMoves.push_back(std::pair<int, int>(indexI, indexJ - 1));
-			} else if (i == "B"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					allAvailableMoves.push_back(std::pair<int, int>(indexI, indexJ - 1));
-				else 
-					allAvailableMoves.push_back(std::pair<int, int>(indexI, indexJ + 1));
-			} else if (i == "L"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					allAvailableMoves.push_back(std::pair<int, int>(indexI + 1, indexJ));
-				else 
-					allAvailableMoves.push_back(std::pair<int, int>(indexI - 1, indexJ));	
-			} else if (i == "R"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					allAvailableMoves.push_back(std::pair<int, int>(indexI - 1, indexJ));
-				else 
-					allAvailableMoves.push_back(std::pair<int, int>(indexI + 1, indexJ));
-			} else if (i == "F*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int j = indexJ; j < 8; j++){
+		for(auto move : movesList){
+			if(move == "F"){
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);
+				int j2 = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 2 : indexJ - 2);												
+				std::pair<int, int> attackLeft( 
+					((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1),
+					((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1)
+				);
+				std::pair<int, int> attackRight( 
+					((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1),
+					((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1)
+				);																				
+				// If inside board
+				if(insideBoard(indexI, j)){
+					// If pawn and if forward tile is empty
+					if(tiles[indexI][indexJ]->getName() == "Pawn"){
+						if(tiles[indexI][j] == nullptr){ 
+							allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+							if(tiles[indexI][j2] == nullptr && tiles[indexI][indexJ]->isFirstMove()){
+								allAvailableMoves.push_back(std::pair<int, int>(indexI, j2));							
+							}
+						}
+						if(insideBoard(attackLeft.first, attackLeft.second) && tiles[attackLeft.first][attackLeft.second] != nullptr && 
+							diffColor(indexI, indexJ, attackLeft.first, attackLeft.second)){
+
+							allAvailableMoves.push_back(attackLeft);														
+						}
+						if(insideBoard(attackRight.first, attackRight.second) && tiles[attackRight.first][attackRight.second] != nullptr && 
+							diffColor(indexI, indexJ, attackRight.first, attackRight.second)){
+								
+							allAvailableMoves.push_back(attackRight);														
+						}
+					} 
+					// If king and forwards tile is empty						
+					else if(tiles[indexI][j] == nullptr && tiles[indexI][indexJ]->getName() == "King"){
 						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
 					}
-				else 
-					for(int j = indexJ; j >= 0; j--){
+					// If king and forwards tile is enemy piece 
+					else if (diffColor(indexI, indexJ, indexI, j) && tiles[indexI][indexJ]->getName() == "King"){
 						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
 					}
-			} else if (i == "B*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int j = indexJ; j >= 0; j--){
+				}
+			} else if (move == "B"){
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);
+				// If inside board
+				if(insideBoard(indexI, j)){
+					// If backwards tile is empty						
+					if(tiles[indexI][j] == nullptr){
 						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
 					}
-				else 
-					for(int j = indexJ; j < 8; j--){
+					// If backwards tile is enemy piece 
+					else if (diffColor(indexI, indexJ, indexI, j)){
 						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+					}
 				}
-			} else if (i == "L*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int i = indexI; i < 8; i++){
+			} else if (move == "L"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);	
+				// If inside board
+				if(insideBoard(i, indexJ)){
+					// If leftwards tile is empty						
+					if(tiles[i][indexJ] == nullptr){
 						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
 					}
-				else 
-					for(int i = indexI; i >= 0; i--){
-						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
-				}
-			} else if (i == "R*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int i = indexI; i >= 0; i--){
+					// If leftwards tile is enemy piece 
+					else if (diffColor(indexI, indexJ, i, indexJ)){
 						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
 					}
-				else 
-					for(int i = indexI; i < 8; i++){
+				}
+			} else if (move == "R"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);	
+				// If inside board
+				if(insideBoard(i, indexJ)){
+					// If leftwards tile is empty						
+					if(tiles[i][indexJ] == nullptr){
 						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
+					}
+					// If leftwards tile is enemy piece 
+					else if (diffColor(indexI, indexJ, i, indexJ)){
+						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
+					}
 				}
-			} else if (i == "(FR)*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int i = indexI, j = indexJ; i >= 0 || j > 8; i--, j++){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+			} else if (move == "F*"){
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);
+				for( ; 
+					((tiles[indexI][indexJ]->pieceColor()) ? j < 8 : j >= 0); 
+					((tiles[indexI][indexJ]->pieceColor()) ? j++ : j--)) {
+						
+					if(tiles[indexI][j] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+					} else if(diffColor(indexI, indexJ, indexI, j)){
+						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+						break;
+					} else if(!diffColor(indexI, indexJ, indexI, j)){
+						break;
 					}
-				else 
-					for(int i = indexI, j = indexJ; i < 8 || j >= 0; i++, j--){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
 				}
-			} else if (i == "(FL)*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int i = indexI, j = indexJ; i < 8 || j < 8; i++, j++){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+			}else if (move == "B*"){
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);	
+				for( ; 
+					((tiles[indexI][indexJ]->pieceColor()) ? j >= 0 : j < 8); 
+					((tiles[indexI][indexJ]->pieceColor()) ? j-- : j++)) {
+						
+					if(tiles[indexI][j] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+					} else if(diffColor(indexI, indexJ, indexI, j)){
+						allAvailableMoves.push_back(std::pair<int, int>(indexI, j));
+						break;
+					} else if(!diffColor(indexI, indexJ, indexI, j)){
+						break;
 					}
-				else 
-					for(int i = indexI, j = indexJ; i >= 0 || j >= 0; i--, j--){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
 				}
-			} else if (i == "(BR)*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int i = indexI, j = indexJ; i >= 0 || j >= 0; i--, j--){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+			} else if (move == "L*") {
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);	
+				for( ; 
+					((tiles[indexI][indexJ]->pieceColor()) ? i < 8 : i >= 0); 
+					((tiles[indexI][indexJ]->pieceColor()) ? i++ : i--)) {
+						
+					if(tiles[i][indexJ] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
+					} else if(diffColor(indexI, indexJ, i, indexJ)){
+						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
+						break;
+					} else if(!diffColor(indexI, indexJ, i, indexJ)){
+						break;
 					}
-				else 
-					for(int i = indexI, j = indexJ; i < 8 || j < 8; i++, j++){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
 				}
-			} else if (i == "(BL)*"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					for(int i = indexI, j = indexJ; i < 8 || j >= 0; i++, j--){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+			} else if (move == "R*"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);	
+				for( ; 
+					((tiles[indexI][indexJ]->pieceColor()) ? i >= 0 : i < 8); 
+					((tiles[indexI][indexJ]->pieceColor()) ? i-- : i++)) {
+						
+					if(tiles[i][indexJ] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
+					} else if(diffColor(indexI, indexJ, i, indexJ)){
+						allAvailableMoves.push_back(std::pair<int, int>(i, indexJ));
+						break;
+					} else if(!diffColor(indexI, indexJ, i, indexJ)){
+						break;
 					}
-				else 
-					for(int i = indexI, j = indexJ; i >= 0 || j > 8; i--, j++){
-						allAvailableMoves.push_back(std::pair<int, int>(i, j));
 				}
-			} else if (i == "FFR"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI - 1 >= 0 && indexJ + 2 < 8)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1, indexJ + 2));
-				else 
-					if (indexI + 1 < 8 && indexJ - 2 >= 0){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1 , indexJ - 2));
+			} else if (move == "(FR)*"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);	
+				for( ; 
+					insideBoard(i, j); 
+					((tiles[indexI][indexJ]->pieceColor()) ? i-- : i++), 
+						((tiles[indexI][indexJ]->pieceColor()) ? j++ : j--)){
+					
+					if(tiles[i][j] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+					} else if(diffColor(indexI, indexJ, i, j)){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+						break;
+					} else if(!diffColor(indexI, indexJ, i, j)){
+						break;
 					}
-			} else if (i == "FFL"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI + 1 < 8 && indexJ + 2 < 8)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1, indexJ + 2));
-				else 
-					if (indexI - 1 >= 0 && indexJ - 2 >= 0){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1 , indexJ - 2));
+				}
+			} else if (move == "(FL)*"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);	
+				for( ; 
+					insideBoard(i, j); 
+					((tiles[indexI][indexJ]->pieceColor()) ? i++ : i--), 
+						((tiles[indexI][indexJ]->pieceColor()) ? j++ : j--)){
+					
+					if(tiles[i][j] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+					} else if(diffColor(indexI, indexJ, i, j)){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+						break;
+					} else if(!diffColor(indexI, indexJ, i, j)){
+						break;
 					}
-			} else if (i == "BBR"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI - 1 >= 0 && indexJ - 2 >= 0)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1, indexJ - 2));
-				else 
-					if (indexI + 1 < 8 && indexJ + 2 < 8){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1 , indexJ + 2));
+				}
+			} else if (move == "(BR)*"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);	
+				for( ; 
+					insideBoard(i, j); 
+					((tiles[indexI][indexJ]->pieceColor()) ? i-- : i++), 
+						((tiles[indexI][indexJ]->pieceColor()) ? j-- : j++)){
+					
+					if(tiles[i][j] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+					} else if(diffColor(indexI, indexJ, i, j)){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+						break;
+					} else if(!diffColor(indexI, indexJ, i, j)){
+						break;
 					}
-			} else if (i == "BBL"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI + 1 < 8 && indexJ - 2 >= 0)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1, indexJ - 2));
-				else 
-					if (indexI - 1 >= 0 && indexJ + 2 < 8){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1 , indexJ + 2));
+				}
+			} else if (move == "(BL)*"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);	
+				for( ; 
+					insideBoard(i, j); 
+					((tiles[indexI][indexJ]->pieceColor()) ? i++ : i--), 
+						((tiles[indexI][indexJ]->pieceColor()) ? j-- : j++)){
+					
+					if(tiles[i][j] == nullptr){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+					} else if(diffColor(indexI, indexJ, i, j)){
+						allAvailableMoves.push_back(std::pair<int, int>(i, j));
+						break;
+					} else if(!diffColor(indexI, indexJ, i, j)){
+						break;
 					}
-			} else if (i == "LLF"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI + 2 < 8 && indexJ + 1 < 8)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 2, indexJ + 1));
-				else 
-					if (indexI - 2 >= 0 && indexJ + 1 < 8){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 2 , indexJ + 1));
-					}
-			} else if (i == "LLB"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI + 2 < 8 && indexJ - 1 >= 0)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 2, indexJ - 1));
-				else 
-					if (indexI - 2 >= 0 && indexJ + 1 < 8){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 2 , indexJ + 1));
-					}
-			} else if (i == "RRF"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI - 2 >= 0 && indexJ + 1 < 8)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 2, indexJ + 1));
-				else 
-					if (indexI + 2 < 8 && indexJ - 1 >= 0){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 2 , indexJ - 1));
-					}
-			} else if (i == "RRB"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI - 2 >= 0 && indexJ - 1 >= 0)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 2, indexJ - 1));
-				else 
-					if (indexI + 2 < 8 && indexJ + 1 < 8){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 2 , indexJ + 1));
-					}
-			} else if (i == "(FR)"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI - 1 >= 0 && indexJ + 1 < 8)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1, indexJ + 1));
-				else 
-					if (indexI + 1 < 8 && indexJ - 1 >= 0){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1 , indexJ - 1));
-					}
-			} else if (i == "(FL)"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI + 1 < 8 && indexJ + 1 < 8)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1, indexJ + 1));
-				else 
-					if (indexI - 1 >= 0 && indexJ - 1 >= 0){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1 , indexJ - 1));
-					}
-			} else if (i == "(BL)"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI + 1 < 8 && indexJ - 1 >= 0)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1, indexJ - 1));
-				else 
-					if (indexI - 1 >= 0 && indexJ + 1 < 8){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1 , indexJ + 1));
-					}
-			} else if (i == "(BR)"){
-				if(tiles[indexI][indexJ]->pieceColor())
-					if (indexI - 1 >= 0 && indexJ - 1 >= 0)
-						allAvailableMoves.push_back(std::pair<int, int>(indexI - 1, indexJ - 1));
-				else 
-					if (indexI + 1 < 8 && indexJ + 1 < 8){
-						allAvailableMoves.push_back(std::pair<int, int>(indexI + 1 , indexJ + 1));
-					}
+				}
+			} else if (move == "FFR"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 2 : indexJ - 2);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "FFL"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 2 : indexJ - 2);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "BBR"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 2 : indexJ + 2);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "BBL"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 2 : indexJ + 2);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "LLF"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 2 : indexI - 2);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "LLB"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 2 : indexI - 2);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "RRF"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 2 : indexI + 2);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "RRB"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 2 : indexI + 2);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "(FR)"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "(FL)"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ + 1 : indexJ - 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "(BL)"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI + 1 : indexI - 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
+			} else if (move == "(BR)"){
+				int i = ((tiles[indexI][indexJ]->pieceColor()) ? indexI - 1 : indexI + 1);
+				int j = ((tiles[indexI][indexJ]->pieceColor()) ? indexJ - 1 : indexJ + 1);					
+
+				if (insideBoard(i, j) && tiles[i][j] == nullptr) {
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));
+				} else if (insideBoard(i, j) && diffColor(indexI, indexJ, i, j)){
+					allAvailableMoves.push_back(std::pair<int, int>(i, j));						
+				}
 			}
 		}	
-	} else {
-		//std::cout << "Piece " << indexI << ", " << indexJ << " doesnt exist\n";	
-	} 
+	}
 	return allAvailableMoves;
 }
 
 
-void Board::draw(){
+void Board::draw(float dt){
 	shaderProgram->bind();
+
+	if(animationTile != nullptr){
+		this->animationTime += dt;
+		std::cout << "animationTime: " << this->animationTime << '\n';
+		movePiece(animationTile->first.first, animationTile->first.second, animationTile->second.first, animationTile->second.second);
+	}
+
 
 	static float time = 0.0;
 	time += .01;
@@ -386,20 +562,39 @@ void Board::draw(){
 	}
 }
 
-bool Board::hasPieceAt(int x, int y)
-{
-	if((x < 0 || x > 7) && (y < 0 || y > 7))
-		return false;
+auto Board::lerp(glm::vec3 a, glm::vec3 b, float dt) -> glm::vec3 {
+	glm::vec3 point;
 
-	return (this->tiles[x][y] != nullptr);
+	point.x = a.x * (1 - dt) + b.x * dt;
+	point.y = a.y * (1 - dt) + b.y * dt;
+	point.z = a.z * (1 - dt) + b.z * dt;
+
+	return point;
+
 }
 
-bool Board::hasWhitePieceAt(int x, int y)
-{
-	if((x < 0 || x > 7) && (y < 0 || y > 7) && this->tiles[x][y] != nullptr)
-		return false;
+auto Board::getPoint(float p0, float p1, float dt) -> float{
+	float diff = p1 - p0;
 
-	return this->tiles[x][y]->pieceColor();
+	return p0 + (diff * dt);
+}
+
+auto Board::jumpCurve(glm::vec3 a, glm::vec3 b, glm::vec3 c, float dt) -> glm::vec3 {
+	glm::vec3 point1, point2, result;
+
+	point1.x = getPoint(a.x, b.x, dt);
+	point1.y = getPoint(a.y, b.y, dt);
+	point1.z = getPoint(a.z, b.z, dt);
+
+	point2.x = getPoint(b.x, c.x, dt);
+	point2.y = getPoint(b.y, c.y, dt);
+	point2.z = getPoint(b.z, c.z, dt);
+
+	result.x = getPoint(point1.x, point2.x, dt);
+	result.y = getPoint(point1.y, point2.y, dt);
+	result.z = getPoint(point1.z, point2.z, dt);
+
+  	return result;
 }
 
 glm::vec2 Board::getTileSize()
@@ -417,22 +612,51 @@ glm::vec2 Board::getEdge()
 	return this->edge;
 }
 
-bool Board::hasSelection()
-{
-	return (this->selected.first != -1 && this->selected.second != -1);
-}
-
 std::pair<int, int> Board::getSelected()
 {
 	return this->selected;
 }
 
+bool Board::hasSelection()
+{	
+	return (this->selected.first != -1 && this->selected.second != -1);
+}
+
+bool Board::hasPieceAt(int x, int y)
+{
+	return (this->tiles[x][y] != nullptr);
+}
+
+bool Board::hasWhitePieceAt(int x, int y)
+{
+	return this->tiles[x][y]->pieceColor();
+}
+
 void Board::setSelection(std::pair<int, int> selection)
 {
 	this->selected = selection;
+	
+	if(tiles[this->selected.first][this->selected.second] != nullptr)
+		tiles[this->selected.first][this->selected.second]->setSelected(true);
 }
 
 void Board::clearSelection()
-{
+{	
+	if(tiles[this->selected.first][this->selected.second] != nullptr)
+		this->tiles[this->selected.first][this->selected.second]->setSelected(false);
+	
 	this->selected = std::pair<int, int>(-1, -1);
+}
+
+
+void Board::setAnimationTime(float animationTime) {
+	this->animationTime += animationTime;
+}
+
+bool Board::insideBoard(int i, int j){
+	return ((i >= 0 && i < 8) && (j >= 0 && j < 8));
+}
+
+bool Board::diffColor(int currentI, int currentJ, int targetI, int targetJ){
+	return tiles[currentI][currentJ]->pieceColor() != tiles[targetI][targetJ]->pieceColor();
 }
