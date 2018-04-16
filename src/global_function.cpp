@@ -11,6 +11,7 @@
 extern GLFWwindow* window;
 extern Camera* camera;
 extern Board* chessBoard;
+bool middleMousePressed = false;
 
 std::unordered_map<std::string, std::vector<std::string>> moves;
 glm::vec2 prevMousePos(0.0f, 0.0f);
@@ -61,12 +62,13 @@ void setup_EventHandling()
 
 void OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 {
-	//std::cout << xpos << ":" << ypos << "\n";
-
 	// Calculate 2d difference in 2d (window) mouse position
 	// and update last pos to be current
 	glm::vec2 deltaPos(xpos - prevMousePos.x, ypos - prevMousePos.y);
 	prevMousePos = {xpos,ypos};
+
+	if (!middleMousePressed)
+		return;
 
 	// Rotate camera around both rotational axes
 	camera->rotateBy(deltaPos.x / 100.0f, (deltaPos.y * -1) / 100.f);
@@ -111,6 +113,14 @@ void OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 
 		//std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
 		//	<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
+	}
+	else if (button == GLFW_MOUSE_BUTTON_3 && action == GLFW_PRESS)
+	{
+		middleMousePressed = true;
+	}
+	else if (button == GLFW_MOUSE_BUTTON_3 && action == GLFW_RELEASE)
+	{
+		middleMousePressed = false;
 	}
 }
 

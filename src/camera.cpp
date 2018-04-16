@@ -48,7 +48,7 @@ void Camera::rotateBy(float angleX, float angleY){
 	// Rotate camera's current position with rotation around horizontal rotation axis (0, 1, 0).
 	this->pos = (glm::vec3) (rotationHorMatrix * glm::vec4(pos, 0));
 
-	// Rotate vertical rotation with same rotation matrix axis to 
+	// Rotate vertical rotation axis with same rotation matrix to 
 	// accomodate for horizontal rotation (around (0, 1, 0)). 
 	this->vertRotAxis = (glm::vec3) (rotationHorMatrix * glm::vec4(vertRotAxis, 0));
 
@@ -60,4 +60,9 @@ void Camera::rotateBy(float angleX, float angleY){
 
 	// Update cameras up with all rotations
 	this->up = (glm::vec3) ((rotationHorMatrix * rotationVertMatrix) * glm::vec4(this->up, 0));
+
+	//TODO:
+	//  - Add rotation on "z"-axis dependent on horizontal rotation.
+	//  - Calculate cross("camera direction", "horizontal rotation axis") to get vertical z rotation axis
+	//  - Use above caluclation to calc cross("horizontal rotation axis", "vertical z rotation axis") to get vertical x rotation axis.
 }
