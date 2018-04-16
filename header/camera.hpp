@@ -56,17 +56,20 @@ public:
 	glm::mat4 getPerspectiveMatrix();
 
 	/**
-	 * @brief rotates the camera around the target
+	 * @brief rotates the camera around y-axis, "angle" amount of degrees
 	 * 
-	 * @param angle value in degree to rotate camera
-	 * @param axis vector perpendicular to the rotation.
+	 * @param "angleX" - float - value in degree to rotate camera around (0, 1, 0)
+	 * @param "angleY" - float - value in degree to rotate camera around "horizontally rotated vertical rotation axis"
 	 */
-	void rotateBy(float angle, glm::vec3 axis);
+	void rotateBy(float angleX, float angleY);
 
 private:
 	glm::vec3 pos;
 	glm::vec3 target;
 	float radius;
 	glm::vec3 up;
+
+	glm::vec3 horRotAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 vertRotAxis = glm::vec3(1.0f, 0.0f, 0.0f);
 
 };

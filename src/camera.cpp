@@ -41,10 +41,23 @@ glm::mat4 Camera::getPerspectiveMatrix(){
 	return glm::perspective(PI / 3.0f, windowSize().x / windowSize().y, 0.1f, -10.0f);	
 }
 
-void Camera::rotateBy(float angle, glm::vec3 axis){
-	glm::mat4 rotatationMatrix = glm::rotate(glm::mat4(), angle, axis);
-	rotatationMatrix = glm::translate(rotatationMatrix, this->pos);
+void Camera::rotateBy(float angleX, float angleY){
+	// Get rotation matrix for "angle" amount, around horizontal rotation axis (0, 1, 0).
+	glm::mat4 rotationHorMatrix = glm::rotate(glm::mat4(), angleX, horRotAxis);
 
-	this->pos = (glm::vec3) (rotatationMatrix * glm::vec4(pos, 0));
-	this->up = (glm::vec3) (rotatationMatrix * glm::vec4(pos, 0));
+	// Rotate camera's current position with rotation around horizontal rotation axis (0, 1, 0).
+	this->pos = (glm::vec3) (rotationHorMatrix * glm::vec4(pos, 0));
+
+	// Rotate vertical rotation with same rotation matrix axis to 
+	// accomodate for horizontal rotation (around (0, 1, 0)). 
+	this->vertRotAxis = (glm::vec3) (rotationHorMatrix * glm::vec4(vertRotAxis, 0));
+
+	// Get rotation matrix for "angle" amount, around vertical rotation axis ("vertRotAxis").
+	glm::mat4 rotationVertMatrix = glm::rotate(glm::mat4(), angleY, vertRotAxis);
+
+	// Rotate camera's current position with rotation around vertical rotation axis ("vertRotAxis").
+	this->pos = (glm::vec3) (rotationVertMatrix * glm::vec4(pos, 0));
+
+	// Update cameras up with all rotations
+	this->up = (glm::vec3) ((rotationHorMatrix * rotationVertMatrix) * glm::vec4(this->up, 0));
 }

@@ -8,10 +8,12 @@
 #include <iostream>
 #include <stdio.h>
 
-std::unordered_map<std::string, std::vector<std::string>> moves;
 extern GLFWwindow* window;
 extern Camera* camera;
 extern Board* chessBoard;
+
+std::unordered_map<std::string, std::vector<std::string>> moves;
+glm::vec2 prevMousePos(0.0f, 0.0f);
 
 glm::vec2 windowSize(){
 	
@@ -60,14 +62,14 @@ void setup_EventHandling()
 void OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 {
 	//std::cout << xpos << ":" << ypos << "\n";
-	glm::vec3 pointerPos = convertMousePosToWorld(xpos, ypos);
 
-	std::pair<int, int> indecies(
-		(int) ((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x),
-		(int) ((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y));
+	// Calculate 2d difference in 2d (window) mouse position
+	// and update last pos to be current
+	glm::vec2 deltaPos(xpos - prevMousePos.x, ypos - prevMousePos.y);
+	prevMousePos = {xpos,ypos};
 
-	//std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
-	//		<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
+	// Rotate camera around both rotational axes
+	camera->rotateBy(deltaPos.x / 100.0f, (deltaPos.y * -1) / 100.f);
 }
 
 void OnMouseClick(GLFWwindow* window, int button, int action, int mods)
