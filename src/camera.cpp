@@ -65,4 +65,5 @@ void Camera::rotateBy(float angleX, float angleY){
 	//  - Add rotation on "z"-axis dependent on horizontal rotation.
 	//  - Calculate cross("camera direction", "horizontal rotation axis") to get vertical z rotation axis
 	//  - Use above caluclation to calc cross("horizontal rotation axis", "vertical z rotation axis") to get vertical x rotation axis.
+	//  - Implement axis selection on which axis ot affect with mouse. Use dot product and most negative isn't affected.
 }
