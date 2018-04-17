@@ -2,6 +2,7 @@
 #include "../helpers/global_function.hpp"
 #include "../game/Board.hpp"
 #include "../environment/Camera.hpp"
+#include "../environment/LightSource.hpp"
 #include "../header/globalVar.hpp"
 #include "../modeler/ShaderManager.hpp"
 
@@ -10,6 +11,7 @@
 #include <iostream>
 
 environment::Camera* camera;
+environment::LightSource* lightSource;
 GLFWwindow* window;
 game::Board* chessBoard;
 modeler::ShaderManager* shaderManager;
@@ -17,12 +19,16 @@ modeler::ShaderManager* shaderManager;
 int main(int argc, char const *argv[])
 {	
 	// Ready moves for pieces
-	printf("%s: Getting moves\n",TAG_INFO.c_str());
+	printf("%s Getting moves\n",TAG_INFO.c_str());
 	helpers::getMoves();
 
 	// Create camera
-	printf("%s: Setting up camera\n",TAG_INFO.c_str());
+	printf("%s Setting up camera\n",TAG_INFO.c_str());
 	camera = new environment::Camera(glm::vec3(0, 4, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+
+	// Setting up light
+	printf("%s Setting up LightSource\n",TAG_INFO.c_str());
+	lightSource = new environment::LightSource();
 
 	// Create common interface for shaders
 	printf("%s Creating shadermanager\n", TAG_INFO.c_str());
@@ -57,7 +63,7 @@ int main(int argc, char const *argv[])
 		dt = currentTime - lastTime;
 		lastTime = currentTime;
        
-		chessBoard->draw(dt);
+		chessBoard->update(dt);
 
 		glfwSwapBuffers(window);    // SWAP BUFFERS
         glfwPollEvents();           // LISTEN FOR WINDOW EVENTS

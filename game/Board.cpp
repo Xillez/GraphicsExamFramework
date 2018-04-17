@@ -1,5 +1,6 @@
 #include "Board.hpp"
 #include "../environment/Camera.hpp"
+#include "../environment/LightSource.hpp"
 #include "../modeler/ShaderManager.hpp"
 
 #include <GLFW/glfw3.h>
@@ -10,16 +11,19 @@
 
 extern environment::Camera* camera;
 extern modeler::ShaderManager* shaderManager;
+extern environment::LightSource* lightSource;
 
 game::Board::Board(std::string const &path) : Model(path){
-	// board position;
+	// Board position
 	this->position.x = 0.0f;
 	this->position.y = 0.0f;
 	this->position.z = 0.0f; 
 
-	// tile size;
+	// Tile size
 	this->tileSize.x = 0.50f;
 	this->tileSize.y = 0.50f;
+
+	// Edge size
 	this->edge.x = 0.25f;
 	this->edge.y = 0.25f;
 
@@ -28,7 +32,6 @@ game::Board::Board(std::string const &path) : Model(path){
 			this->tiles[k][y] = nullptr;
 		}
 	}
-
 
 	Piece pawn = Piece("../asset/chessTemp/Pawn.obj", "Pawn", true);
 	Piece rook = Piece("../asset/chessTemp/Rook.obj", "Rook", true);
@@ -53,12 +56,12 @@ game::Board::Board(std::string const &path) : Model(path){
 	tiles[6][0] = new Piece(knight);
 	tiles[7][0] = new Piece(rook);
 	
-
 	rook.setTeam(false);
 	knight.setTeam(false);
 	bishop.setTeam(false);
 	queen.setTeam(false);
 	king.setTeam(false);
+
 	tiles[0][7] = new Piece(rook);
 	tiles[1][7] = new Piece(knight);
 	tiles[2][7] = new Piece(bishop);
@@ -68,7 +71,7 @@ game::Board::Board(std::string const &path) : Model(path){
 	tiles[6][7] = new Piece(knight);
 	tiles[7][7] = new Piece(rook);
 	
-	float offset = 1.15f;//3.14f / 6.0f;
+	float offset = 1.15f;
 	
 	float x, y, z;
 	for(int i = 0; i < 8; i++){
@@ -93,12 +96,10 @@ game::Board::Board(std::string const &path) : Model(path){
 	this->selected = std::pair<int, int>(-1, -1);
 };
 
-
 void game::Board::movePiece(int indexI, int indexJ, int destinationI, int destinationJ){	
 	
 	std::vector<std::pair<int, int>> allAvailableMoves = moveToIndex(indexI, indexJ);
 	glm::vec3 newPosition, position;
-	
 
 	for(auto v : allAvailableMoves){
 		if(v.first == destinationI && v.second == destinationJ){
@@ -120,7 +121,6 @@ void game::Board::movePiece(int indexI, int indexJ, int destinationI, int destin
 				(this->position.y + (-tileSize.y * 4 + edge.y + (tileSize.y * indexJ)))
 			);
 
-
 			if(tiles[indexI][indexJ]->getName() == "Horse"){
 				
 				glm::vec3 midpoint = glm::vec3((position.x + destination.x)/2, 1.0f, (position.z + destination.z)/2);
@@ -137,7 +137,6 @@ void game::Board::movePiece(int indexI, int indexJ, int destinationI, int destin
 		setSelection(std::pair<int, int>(indexI, indexJ));
 	}
 
-
 	if(this->animationTime >= 1.0f){
 		clearSelection();
 		tiles[indexI][indexJ]->setFirstMove(false);
@@ -148,8 +147,6 @@ void game::Board::movePiece(int indexI, int indexJ, int destinationI, int destin
 		animationTile = nullptr;
 	}
 }
-
-
 
 auto game::Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<int, int>> {
 	std::vector<std::pair<int, int>> allAvailableMoves;
@@ -481,28 +478,36 @@ auto game::Board::moveToIndex(int indexI, int indexJ) -> std::vector<std::pair<i
 	return allAvailableMoves;
 }
 
-
-void game::Board::draw(float dt){
-	shaderProgram->bind();
+void game::Board::update(float dt){
 
 	if(animationTile != nullptr){
 		this->animationTime += dt;
 		movePiece(animationTile->first.first, animationTile->first.second, animationTile->second.first, animationTile->second.second);
 	}
 
+	// Update all pieces
+	for(int i = 0; i < 8; i++){
+		for(int j = 0; j < 8; j++){
+			if(this->tiles[i][j] != nullptr){
+				this->tiles[i][j]->update(dt);
+			}
+		}
+	}
 
-	static float time = 0.0;
-	time += .01;
+	this->draw();
+}
 
-	
+void game::Board::draw(){
+
+	this->shaderProgram->bind();
+
 	glm::mat4 view = camera->getViewMatrix(); 
 	
 	glm::mat4 projection = camera->getPerspectiveMatrix();
 
-	// Rotate light for effect
-	lightSourcePosition.x = sin(glfwGetTime()) * 3.0f;
-	lightSourcePosition.z = cos(glfwGetTime()) * 2.0f;
-	lightSourcePosition.y = 5.0 + cos(glfwGetTime()) * 1.0f;
+	glm::vec3 lightPosition = lightSource->getPosition();
+	glm::vec3 attenuation = lightSource->getAttenuation(); 
+	glm::vec3 lightColor = lightSource->getColor();
 
 	std::map<std::string, GLuint> uniforms = shaderProgram->getUniform(	std::map<std::string, GLchar*>({
 		{"viewID", "view"},
@@ -516,37 +521,38 @@ void game::Board::draw(float dt){
 		{"attenuationCID", "attenuationC"},
 		{"lightColorID", "lightColor"}
 	}));
-	// TODO: get light information from camera / view.
+
 	glUniform1f(uniforms["attenuationAID"], attenuation.x);
 	glUniform1f(uniforms["attenuationBID"], attenuation.y);
 	glUniform1f(uniforms["attenuationCID"], attenuation.z);
 	glUniform3fv(uniforms["lightColorID"], 1, value_ptr(lightColor));
-	glUniform3fv(uniforms["lightSourcePositionID"], 1, value_ptr(lightSourcePosition));
-	glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+	glUniform3fv(uniforms["lightSourcePositionID"], 1, value_ptr(lightPosition));
 
-	glUniform3fv(uniforms["camPosID"], 1, value_ptr(position));												//glm::mat4 model = glm::rotate(glm::mat4(), time, glm::vec3(0, 1, 0));
+	glUniform3fv(uniforms["camPosID"], 1, value_ptr(camera->getPos()));												//glm::mat4 model = glm::rotate(glm::mat4(), time, glm::vec3(0, 1, 0));
 
 	glUniformMatrix4fv(uniforms["viewID"], 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(uniforms["projectionID"], 1, GL_FALSE, glm::value_ptr(projection));
+
 	glm::mat4 modelm;
-	modelm = glm::translate(modelm, this->position); // translate it down so it's at the center of the scene
-	//modelm = glm::translate(modelm, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-	modelm = glm::scale(modelm, glm::vec3(0.4f, 0.4f, 0.4f));	// it's a bit too big for our scene, so scale it down
-	//modelm = glm::rotate(modelm, time, glm::vec3(0, 1, 0));	
-													//ourShader.setMat4("model", model);
+
+	modelm = glm::translate(modelm, this->position); // Translate it down so it's at the center of the scene.
+	modelm = glm::scale(modelm, glm::vec3(0.4f, 0.4f, 0.4f));	
+
 	glUniformMatrix4fv(uniforms["modelID"], 1, GL_FALSE, glm::value_ptr(modelm));
 	
 	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*modelm)));
+
 	glUniformMatrix3fv(uniforms["normalMatrixID"], 1, GL_FALSE, glm::value_ptr(normalMatrix));
 	
 	Model::Draw(*shaderProgram); 
 
 	shaderProgram->unbind();
 
+	// Draw each piece. 
 	for(int i = 0; i < 8; i++){
 		for(int j = 0; j < 8; j++){
-			if(tiles[i][j] != nullptr){
-				tiles[i][j]->draw();
+			if(this->tiles[i][j] != nullptr){
+				this->tiles[i][j]->draw();
 			}
 		}
 	}
@@ -560,7 +566,6 @@ auto game::Board::lerp(glm::vec3 a, glm::vec3 b, float dt) -> glm::vec3 {
 	point.z = a.z * (1 - dt) + b.z * dt;
 
 	return point;
-
 }
 
 auto game::Board::getPoint(float p0, float p1, float dt) -> float{
@@ -569,7 +574,7 @@ auto game::Board::getPoint(float p0, float p1, float dt) -> float{
 	return p0 + (diff * dt);
 }
 
-auto game::Board::jumpCurve(glm::vec3 a, glm::vec3 b, glm::vec3 c, float dt) -> glm::vec3 {
+auto game::Board::jumpCurve(glm::vec3 a, glm::vec3 b, glm::vec3 c, float dt) -> glm::vec3{
 	glm::vec3 point1, point2, result;
 
 	point1.x = getPoint(a.x, b.x, dt);

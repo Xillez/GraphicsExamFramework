@@ -21,6 +21,7 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/src/main.cpp 
 
 	${PROJECT_SOURCE_DIR}/environment/Camera.cpp
+	${PROJECT_SOURCE_DIR}/environment/LightSource.cpp
 
 	${PROJECT_SOURCE_DIR}/game/Board.cpp
 	${PROJECT_SOURCE_DIR}/game/Piece.cpp

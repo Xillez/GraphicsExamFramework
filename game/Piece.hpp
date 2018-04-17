@@ -30,7 +30,14 @@ namespace game{
 		Piece(std::string const &path, std::string const &pieceName, bool isWhite);
 	
 		/**
-		 * @brief Draw the piece to screen
+		 * @brief Updates pice on every frame.
+		 * 
+		 * @param dt Deltatime between frames.
+		 */
+		void update(float dt);
+		
+		/**
+		 * @brief Draw the piece to screen.
 		 */
 		void draw();
 		

@@ -30,7 +30,9 @@ void helpers::gl_errorCallback( GLenum source,
                       const GLchar* message,
                       const void* userParam )
 {
-  printf( "%s From openGL source = 0x%x type = 0x%x, severity = 0x%x, message = %s\n",
+  printf( "%s From openGL: \n\t"
+    "source = 0x%x type = 0x%x, severity = 0x%x,\n\t"
+    "message = %s\n",
     TAG_INFO.c_str(), source, type, severity, message 
   );
 }

@@ -14,9 +14,8 @@ namespace modeler{
       class Shader {
       
             public:
-                  GLuint shaderProgram;                                             //!< identifier for the shader program
-                  
-      
+                  GLuint shaderProgram;               //!< identifier for the shader program
+
                   /**
                   * @brief getter for shderProgram.
                   * @return shaderProgram id.
@@ -26,15 +25,15 @@ namespace modeler{
                   /** \deprecated
                    * @brief constructs a shader out of a vertex shader and fragment shader.
                    * 
-                   * @param path_vert_shader File path to the vertex shader.
-                   * @param path_frag_shader File path to the frag shader.
+                   * @param path_vert_shader - File path to the vertex shader.
+                   * @param path_frag_shader - File path to the frag shader.
                    */
                   Shader(const std::string path_vert_shader, const char *path_frag_shader);
                   /**
                    * @brief Create a shaderprogram based on pairs of shadertype and filepath 
                    * @details The shaders in the vector should be ordered like the glpipeline
                    * 
-                   * @param shaders pair of GLenum shaderType and filepath string.
+                   * @param shaders - Pair of GLenum shaderType and filepath string.
                    */
                   Shader(std::vector<std::pair<GLenum, std::string>> shaders);
                   

@@ -29,9 +29,16 @@ namespace game{
 		void movePiece(int indexI, int indexJ, int destinationI, int destinationJ);
 		
 		/**
+		 * @brief updates state for next frame.
+		 * 
+		 * @param dt - Deltatime since last frame.
+		 */
+		void update(float dt);
+
+		/**
 		 * @brief Draw the board and every piece found.
 		 */
-		void draw(float dt);
+		void draw();
 	
 		/**
 		 * @brief Convert piece moves to indecies for tiles[][].
@@ -164,11 +171,6 @@ namespace game{
 		std::pair<int, int> selected;					//!< Tile for selected piece.
 	
 		modeler::Shader* shaderProgram;					//!< Shaderprogram used by board for drawing.
-	
-		//! How light decrease through a medium over distance.
-		glm::vec3 attenuation = glm::vec3(1.0f, 0.2f, 0.0f);
-		glm::vec3 lightSourcePosition = glm::vec3(1.0f, 1.0f, 1.0f);	//!< Position of the light.
-		glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);				//!< Color of the light.
 	
 		float animationTime;							//!< How long current animation has come.
 		//! Tile of the piece currently animating and where it is going. 
