@@ -19,20 +19,24 @@ file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_
 # Add all cpp files used in the Chess3D program
 add_executable("Chess3D" 
 	${PROJECT_SOURCE_DIR}/src/main.cpp 
-	${PROJECT_SOURCE_DIR}/src/errorHandler.cpp
-	${PROJECT_SOURCE_DIR}/src/glfw_setup.cpp
-	${PROJECT_SOURCE_DIR}/src/global_function.cpp
-	${PROJECT_SOURCE_DIR}/src/piece.cpp
-	${PROJECT_SOURCE_DIR}/src/board.cpp
-	${PROJECT_SOURCE_DIR}/src/camera.cpp
-	${PROJECT_SOURCE_DIR}/src/yaml_parser.cpp
-	${PROJECT_SOURCE_DIR}/src/moveParser.cpp
+
+	${PROJECT_SOURCE_DIR}/environment/Camera.cpp
+
+	${PROJECT_SOURCE_DIR}/game/Board.cpp
+	${PROJECT_SOURCE_DIR}/game/Piece.cpp
+
+	${PROJECT_SOURCE_DIR}/helpers/errorHandler.cpp
+	${PROJECT_SOURCE_DIR}/helpers/Yaml_parser.cpp
+	${PROJECT_SOURCE_DIR}/helpers/glfw_setup.cpp
+	${PROJECT_SOURCE_DIR}/helpers/global_function.cpp
+	${PROJECT_SOURCE_DIR}/helpers/moveParser.cpp
 	
-	${PROJECT_SOURCE_DIR}/class/shader.cpp
-	${PROJECT_SOURCE_DIR}/class/model.cpp
-	${PROJECT_SOURCE_DIR}/class/Mesh.cpp
-	${PROJECT_SOURCE_DIR}/class/Texture.cpp
-	${PROJECT_SOURCE_DIR}/class/ShaderManager.cpp
+	${PROJECT_SOURCE_DIR}/modeler/Mesh.cpp
+	${PROJECT_SOURCE_DIR}/modeler/Model.cpp
+	${PROJECT_SOURCE_DIR}/modeler/Shader.cpp
+	${PROJECT_SOURCE_DIR}/modeler/ShaderManager.cpp
+	${PROJECT_SOURCE_DIR}/modeler/Texture.cpp
+	${PROJECT_SOURCE_DIR}/modeler/ShaderManager.cpp
 )
 
 # Find packages for linking
@@ -68,7 +72,9 @@ if(DOXYGEN_FOUND)
 	set(DOXYGEN_OUT ${PROJECT_BINARY_DIR}/Doxyfile)
 
 	# Setting folders to generate documentation for
-	set(DOXYGEN_INPUT "${PROJECT_SOURCE_DIR}/class ${PROJECT_SOURCE_DIR}/header ${PROJECT_SOURCE_DIR}/src")
+	set(DOXYGEN_INPUT 
+		"${PROJECT_SOURCE_DIR}/environment ${PROJECT_SOURCE_DIR}/game ${PROJECT_SOURCE_DIR}/header ${PROJECT_SOURCE_DIR}/helpers ${PROJECT_SOURCE_DIR}/modeler"
+	)
 	set(DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/doc)
 
 	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
