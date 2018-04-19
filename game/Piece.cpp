@@ -91,7 +91,7 @@ void game::Piece::draw(){
 		glm::vec3 color(0.0f, 1.0f, 0.0f);
 		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));
 	} else {
-		glm::vec3 color(((isWhite) ? (1.0f, 1.0f, 1.0f) : (0.4f, 0.4f, 0.4f)));
+		glm::vec3 color(((isWhite) ? (1.0f, 1.0f, 1.0f) : (0.7f, 0.7f, 0.7f)));
 		glUniform3fv(uniforms["colorID"], 1, glm::value_ptr(color));	
 	}
 	
