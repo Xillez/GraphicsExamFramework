@@ -53,4 +53,17 @@ namespace helpers{
 	 */
 	glm::vec3 convertMousePosToWorld(double xpos, double ypos);
 
+	/**
+	 * @brief Function to handle key events to window.
+	 * @details [long description]
+	 * 
+	 * @param window - pointer to window event occured in.
+	 * @param key - Key that was pressed winith event.
+	 * @param scancode - System specific scancode of key.
+	 * @param action - Action user performed on key (pressed, released)
+	 * @param mods - Bit field describing which modifier keys were held down.
+	 */
+	void OnKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+
 }

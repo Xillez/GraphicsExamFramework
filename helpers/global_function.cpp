@@ -42,6 +42,7 @@ void helpers::setup_EventHandling()
 {
 	glfwSetCursorPosCallback(window, helpers::OnMouseMove);
 	glfwSetMouseButtonCallback(window, helpers::OnMouseClick);
+	glfwSetKeyCallback(window, helpers::OnKeyPress);
 }
 
 void helpers::OnMouseMove(GLFWwindow *window, double xpos, double ypos)
@@ -94,9 +95,6 @@ void helpers::OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 			}
 			chessBoard->clearSelection();
 		}
-
-		//std::cout << (int)((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x) << " : " 
-		//	<< (int)((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y) << "\n";
 	}
 	else if (button == GLFW_MOUSE_BUTTON_3 && action == GLFW_PRESS)
 	{
@@ -122,4 +120,18 @@ glm::vec3 helpers::convertMousePosToWorld(double xpos, double ypos)
     glm::mat4 projectionMatrix = camera->getPerspectiveMatrix();
 	return glm::unProject(mousePosInViewport, viewMatrix, projectionMatrix,
 		glm::vec4(0.0f, 0.0f, wSize.x, wSize.y));
+}
+
+void helpers::OnKeyPress(GLFWwindow* window, int key, int scancode, int action, int mods){
+    if (key == GLFW_KEY_W && (action == GLFW_REPEAT || action == GLFW_PRESS)){
+    	camera->rotateBy(0.0f, 0.1f);
+    } else if (key == GLFW_KEY_S && (action == GLFW_REPEAT || action == GLFW_PRESS)){
+    	camera->rotateBy(0.0f, -0.1f);
+   
+    } else if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS)){
+    	camera->rotateBy(-0.1f, 0.0f);
+   
+    } else if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS)){
+    	camera->rotateBy(0.1f, 0.0f);
+    }
 }
