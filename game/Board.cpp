@@ -15,17 +15,13 @@ extern environment::LightSource* lightSource;
 
 game::Board::Board(std::string const &path) : Model(path){
 	// Board position
-	this->position.x = 0.0f;
-	this->position.y = 0.0f;
-	this->position.z = 0.0f; 
+	this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	// Tile size
-	this->tileSize.x = 0.50f;
-	this->tileSize.y = 0.50f;
+	this->tileSize = glm::vec2(0.50f, 0.50f);
 
 	// Edge size
-	this->edge.x = 0.25f;
-	this->edge.y = 0.25f;
+	this->edge = glm::vec2(0.25f, 0.25f);
 
 	for(int k = 0; k  < 8; k++){
 		for (int y = 0; y < 8; y++){
@@ -78,7 +74,7 @@ game::Board::Board(std::string const &path) : Model(path){
 		for(int j = 0; j < 8; j++){
 			if(tiles[i][j] != nullptr){
 				x = this->position.x + (-tileSize.x*4 + edge.x + (tileSize.x * i));
-				y = 0.0f + this->position.y;
+				y = this->position.y;
 				z = this->position.y + (-tileSize.y*4 + edge.y + (tileSize.y * j));
 
 				tiles[i][j]->place(glm::vec3(x, y, z));
@@ -143,7 +139,7 @@ void game::Board::movePiece(int indexI, int indexJ, int destinationI, int destin
 		tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
 		//delete tiles[indexI][indexJ];
 		tiles[indexI][indexJ] = nullptr;
-		this->animationTime = 0.0;
+		this->animationTime = 0.0f;
 		animationTile = nullptr;
 	}
 }
@@ -577,17 +573,23 @@ auto game::Board::getPoint(float p0, float p1, float dt) -> float{
 auto game::Board::jumpCurve(glm::vec3 a, glm::vec3 b, glm::vec3 c, float dt) -> glm::vec3{
 	glm::vec3 point1, point2, result;
 
-	point1.x = getPoint(a.x, b.x, dt);
-	point1.y = getPoint(a.y, b.y, dt);
-	point1.z = getPoint(a.z, b.z, dt);
+	point1 = glm::vec3(
+		getPoint(a.x, b.x, dt), 
+		getPoint(a.y, b.y, dt), 
+		getPoint(a.z, b.z, dt)
+	);
 
-	point2.x = getPoint(b.x, c.x, dt);
-	point2.y = getPoint(b.y, c.y, dt);
-	point2.z = getPoint(b.z, c.z, dt);
+	point2 = glm::vec3(
+		getPoint(b.x, c.x, dt), 
+		getPoint(b.y, c.y, dt), 
+		getPoint(b.z, c.z, dt)
+	);
 
-	result.x = getPoint(point1.x, point2.x, dt);
-	result.y = getPoint(point1.y, point2.y, dt);
-	result.z = getPoint(point1.z, point2.z, dt);
+	result = glm::vec3(
+		getPoint(point1.x, point2.x, dt), 
+		getPoint(point1.y, point2.y, dt), 
+		getPoint(point1.z, point2.z, dt)
+	);
 
   	return result;
 }

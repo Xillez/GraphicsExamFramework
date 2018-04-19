@@ -22,9 +22,6 @@ game::Piece::Piece(std::string const &path, std::string const &pieceName, bool i
 		printf("%s There are no moves for a piece called %s\n", TAG_WARN.c_str(),pieceName );
 	}
 	else {
-		/*for(auto v : found->second){
-			move.push_back(v);
-		}*/
 		this->move = found->second;
 	}
 	this->selected = false;
@@ -34,7 +31,7 @@ game::Piece::Piece(std::string const &path, std::string const &pieceName, bool i
 
 	this->shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
 		{GL_VERTEX_SHADER, "../shader/vertex.vert"},
-		{GL_FRAGMENT_SHADER, "../shader/fragment.frag"},
+		{GL_FRAGMENT_SHADER, "../shader/fragmentPiece.frag"},
 	});
 }
 
@@ -81,7 +78,7 @@ void game::Piece::draw(){
 	glm::mat4 modelm;
 
 	modelm = glm::translate(modelm, this->pos); 
-	modelm = glm::scale(modelm, glm::vec3(0.015f, 0.015f, 0.015f));
+	modelm = glm::scale(modelm, glm::vec3(0.02f, 0.02f, 0.02f)); //glm::vec3(0.015f, 0.015f, 0.015f));
 															
 	glUniformMatrix4fv(uniforms["modelID"], 1, GL_FALSE, glm::value_ptr(modelm));
 
