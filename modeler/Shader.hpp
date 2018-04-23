@@ -72,6 +72,6 @@ namespace modeler{
                    * @param request map of names to return as and name of uniforms as named in shader.
                    * @return map of names specified in request and uniformloaction requested.
                    */
-                  std::map<std::string, GLuint> getUniform(std::map<std::string, GLchar*> request);
+                  std::map<std::string, GLuint> getUniform(std::map<std::string, std::string> request);
       };
 }

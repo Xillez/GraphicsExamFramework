@@ -50,7 +50,7 @@ void game::Piece::draw(){
 	glm::vec3 attenuation = lightSource->getAttenuation(); 
 	glm::vec3 lightColor = lightSource->getColor();
 
-	std::map<std::string, GLuint> uniforms = shaderProgram->getUniform(	std::map<std::string, GLchar*>({
+	std::map<std::string, GLuint> uniforms = shaderProgram->getUniform(	std::map<std::string, std::string>({
 		{"viewID", "view"},
 		{"projectionID", "projection"},
 		{"modelID", "model"},

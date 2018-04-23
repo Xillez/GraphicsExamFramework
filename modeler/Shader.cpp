@@ -127,13 +127,13 @@ void modeler::Shader::read_shader_src(const std::string fname, std::vector<char>
 	}
 }
 
-std::map<std::string, GLuint> modeler::Shader::getUniform(std::map<std::string, GLchar*> request){
+std::map<std::string, GLuint> modeler::Shader::getUniform(std::map<std::string, std::string> request){
 	
 	std::map<std::string, GLuint> result;
 	
 	for (auto it = request.begin(); it != request.end(); ++it)
 	{
-		result.insert(std::pair<std::string, GLuint>(it->first, glGetUniformLocation(shaderProgram, it->second)));
+		result.insert(std::pair<std::string, GLuint>(it->first, glGetUniformLocation(shaderProgram, it->second.c_str())));
 	}
 
 	return result;
