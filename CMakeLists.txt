@@ -19,30 +19,30 @@ file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_
 # Add all cpp files used in the Chess3D program
 add_executable("Chess3D" 
 	#src
-	${PROJECT_SOURCE_DIR}/src/main.cpp 
+	${PROJECT_SOURCE_DIR}/source/src/main.cpp 
 
 	#environment
-	${PROJECT_SOURCE_DIR}/environment/Camera.cpp
-	${PROJECT_SOURCE_DIR}/environment/LightSource.cpp
+	${PROJECT_SOURCE_DIR}/source/environment/Camera.cpp
+	${PROJECT_SOURCE_DIR}/source/environment/LightSource.cpp
 
 	#game
-	${PROJECT_SOURCE_DIR}/game/Board.cpp
-	${PROJECT_SOURCE_DIR}/game/Piece.cpp
+	${PROJECT_SOURCE_DIR}/source/game/Board.cpp
+	${PROJECT_SOURCE_DIR}/source/game/Piece.cpp
 
 	#helpers
-	${PROJECT_SOURCE_DIR}/helpers/errorHandler.cpp
-	${PROJECT_SOURCE_DIR}/helpers/Yaml_parser.cpp
-	${PROJECT_SOURCE_DIR}/helpers/glfw_setup.cpp
-	${PROJECT_SOURCE_DIR}/helpers/global_function.cpp
-	${PROJECT_SOURCE_DIR}/helpers/moveParser.cpp
+	${PROJECT_SOURCE_DIR}/source/helpers/errorHandler.cpp
+	${PROJECT_SOURCE_DIR}/source/helpers/Yaml_parser.cpp
+	${PROJECT_SOURCE_DIR}/source/helpers/glfw_setup.cpp
+	${PROJECT_SOURCE_DIR}/source/helpers/global_function.cpp
+	${PROJECT_SOURCE_DIR}/source/helpers/moveParser.cpp
 	
 	#modeler
-	${PROJECT_SOURCE_DIR}/modeler/Mesh.cpp
-	${PROJECT_SOURCE_DIR}/modeler/Model.cpp
-	${PROJECT_SOURCE_DIR}/modeler/Shader.cpp
-	${PROJECT_SOURCE_DIR}/modeler/ShaderManager.cpp
-	${PROJECT_SOURCE_DIR}/modeler/Texture.cpp
-	${PROJECT_SOURCE_DIR}/modeler/ShaderManager.cpp
+	${PROJECT_SOURCE_DIR}/source/modeler/Mesh.cpp
+	${PROJECT_SOURCE_DIR}/source/modeler/Model.cpp
+	${PROJECT_SOURCE_DIR}/source/modeler/Shader.cpp
+	${PROJECT_SOURCE_DIR}/source/modeler/ShaderManager.cpp
+	${PROJECT_SOURCE_DIR}/source/modeler/Texture.cpp
+	${PROJECT_SOURCE_DIR}/source/modeler/ShaderManager.cpp
 )
 
 # Find packages for linking
@@ -79,7 +79,7 @@ if(DOXYGEN_FOUND)
 
 	# Setting folders to generate documentation for
 	set(DOXYGEN_INPUT 
-		"${PROJECT_SOURCE_DIR}/environment ${PROJECT_SOURCE_DIR}/game ${PROJECT_SOURCE_DIR}/header ${PROJECT_SOURCE_DIR}/helpers ${PROJECT_SOURCE_DIR}/modeler ${PROJECT_SOURCE_DIR}/doc"
+		"${PROJECT_SOURCE_DIR}/source ${PROJECT_SOURCE_DIR}/doc"
 	)
 	set(DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/doc)
 	set(DOXYGEN_INCLUDE_GRAPH YES)
@@ -95,6 +95,7 @@ if(DOXYGEN_FOUND)
 	set(DOXYGEN_DOT_NUM_THREADS 4)
 	set(DOXYGEN_CALL_GRAPH  YES)
 	set(DOXYGEN_CALLER_GRAPH YES)
+	set(DOXYGEN_RECURSIVE YES)
 
 	configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
 
