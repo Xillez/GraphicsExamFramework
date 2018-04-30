@@ -16,7 +16,7 @@ helpers::YamlParser::YamlParser(const std::string path) {
 		file.close();
 	}
 	else {
-		printf("%s Cannot open the file in path: %s\n", TAG_WARN.c_str(), path);
+		printf("%s Cannot open the file in path: %s\n", TAG_WARN.c_str(), path.c_str());
 	}
 };
 

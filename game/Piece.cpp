@@ -19,7 +19,7 @@ game::Piece::Piece(std::string const &path, std::string const &pieceName, bool i
 	std::unordered_map<std::string, std::vector<std::string>>::iterator found = moves.find(pieceName);
 
 	if(found == moves.end()){
-		printf("%s There are no moves for a piece called %s\n", TAG_WARN.c_str(),pieceName );
+		printf("%s There are no moves for a piece called %s\n", TAG_WARN.c_str(), pieceName.c_str());
 	}
 	else {
 		this->move = found->second;
