@@ -159,7 +159,6 @@ namespace game{
 		 */
 		bool diffColor(int currentX, int currentY, int targetX, int targetY);
 	
-	
 	private:
 	
 		Piece* tiles[8][8];								//!< Locations on the board.
@@ -178,5 +177,7 @@ namespace game{
 	
 		//! Converter for chessboard notation of character row to board array x index.
 		enum{A = 0, B, C, D, E, F, G, H};
+
+		bool isWhiteTurn = true; 						//!< Indicates whos turn it is to move.
 	};
 }

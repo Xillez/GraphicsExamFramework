@@ -135,6 +135,8 @@ void game::Board::movePiece(int indexI, int indexJ, int destinationI, int destin
 
 	if(this->animationTime >= 1.0f){
 		clearSelection();
+		isWhiteTurn = !isWhiteTurn;
+		std::cout << isWhiteTurn << '\n';
 		tiles[indexI][indexJ]->setFirstMove(false);
 		tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
 		//delete tiles[indexI][indexJ];
@@ -631,10 +633,12 @@ int game::Board::pieceColorAt(int x, int y)
 
 void game::Board::setSelection(std::pair<int, int> selection)
 {
-	this->selected = selection;
-	
-	if(tiles[this->selected.first][this->selected.second] != nullptr)
-		tiles[this->selected.first][this->selected.second]->setSelected(true);
+	if(isWhiteTurn == tiles[selection.first][selection.second]->isWhiteTeam()){
+		this->selected = selection;
+		
+		if(tiles[this->selected.first][this->selected.second] != nullptr)
+			tiles[this->selected.first][this->selected.second]->setSelected(true);
+	}
 }
 
 void game::Board::clearSelection()
