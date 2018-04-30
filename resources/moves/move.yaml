@@ -1,9 +1,10 @@
 pieceCount: 6
 pieces:
 - piece: Pawn
-  moveCount: 1
+  moveCount: 2
   moves:
   - F
+  - (FR)$X(FR)
  - piece: Rook
   moveCount: 4
   moves:

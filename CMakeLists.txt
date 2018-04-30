@@ -18,20 +18,25 @@ file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_
 
 # Add all cpp files used in the Chess3D program
 add_executable("Chess3D" 
+	#src
 	${PROJECT_SOURCE_DIR}/src/main.cpp 
 
+	#environment
 	${PROJECT_SOURCE_DIR}/environment/Camera.cpp
 	${PROJECT_SOURCE_DIR}/environment/LightSource.cpp
 
+	#game
 	${PROJECT_SOURCE_DIR}/game/Board.cpp
 	${PROJECT_SOURCE_DIR}/game/Piece.cpp
 
+	#helpers
 	${PROJECT_SOURCE_DIR}/helpers/errorHandler.cpp
 	${PROJECT_SOURCE_DIR}/helpers/Yaml_parser.cpp
 	${PROJECT_SOURCE_DIR}/helpers/glfw_setup.cpp
 	${PROJECT_SOURCE_DIR}/helpers/global_function.cpp
 	${PROJECT_SOURCE_DIR}/helpers/moveParser.cpp
 	
+	#modeler
 	${PROJECT_SOURCE_DIR}/modeler/Mesh.cpp
 	${PROJECT_SOURCE_DIR}/modeler/Model.cpp
 	${PROJECT_SOURCE_DIR}/modeler/Shader.cpp
