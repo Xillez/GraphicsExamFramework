@@ -74,7 +74,7 @@ if(DOXYGEN_FOUND)
 
 	# Setting folders to generate documentation for
 	set(DOXYGEN_INPUT 
-		"${PROJECT_SOURCE_DIR}/environment ${PROJECT_SOURCE_DIR}/game ${PROJECT_SOURCE_DIR}/header ${PROJECT_SOURCE_DIR}/helpers ${PROJECT_SOURCE_DIR}/modeler"
+		"${PROJECT_SOURCE_DIR}/environment ${PROJECT_SOURCE_DIR}/game ${PROJECT_SOURCE_DIR}/header ${PROJECT_SOURCE_DIR}/helpers ${PROJECT_SOURCE_DIR}/modeler ${PROJECT_SOURCE_DIR}/doc"
 	)
 	set(DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/doc)
 
