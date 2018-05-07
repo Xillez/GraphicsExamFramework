@@ -28,7 +28,6 @@ vec3 doColor(){
 	float ambientStrength = 0.9;
     vec3 ambient = ambientStrength * lightColor;
 
-	 // diffuse 
     //vec3 norm = normalize(aNormal);
 	vec3 norm  = normalize( normalMatrix * normalize(aNormal) );
 	vec3 FragPos = vec3(model * vec4(aPos, 1.0));

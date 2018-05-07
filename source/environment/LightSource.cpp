@@ -5,7 +5,7 @@
 environment::LightSource::LightSource(){
 	this->position = {10.0f, 10.0f, 10.0f};
 	this->lightColor = {1.0f, 1.0f, 1.0f};
-	this->attenuation = {0.1f, 0.1f, 0.1f};
+	this->attenuation = {1.0f, 1.0f, 1.0f};
 }
 
 environment::LightSource::LightSource(glm::vec3 position, glm::vec3 lightColor, glm::vec3 attenuation){

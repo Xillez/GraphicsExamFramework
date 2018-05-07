@@ -28,7 +28,7 @@ namespace modeler{
                    * @param path_vert_shader - File path to the vertex shader.
                    * @param path_frag_shader - File path to the frag shader.
                    */
-                  Shader(const std::string path_vert_shader, const char *path_frag_shader);
+                  Shader(const std::string path_vert_shader, const std::string path_frag_shader);
                   /**
                    * @brief Create a shaderprogram based on pairs of shadertype and filepath 
                    * @details The shaders in the vector should be ordered like the glpipeline
