@@ -27,8 +27,13 @@ vec3 doColor(){
 	//Ambient 
 	float ambientStrength = 0.9;
     vec3 ambient = ambientStrength * lightColor;
-
+/*
 	 // diffuse 
+    vec3 light_direction = lightSourcePosition - aPos;
+    vec3 to_light_source = vec3(model * vec4(aPos, 1.0f));
+    float diffuseFactor = max(dot(aNormal, to_light_source), 0.0f);
+    diffuse = texture(texture_diffuse1, aTexCoords) * vec4(lightColor, 1.0f) * vec4(attenuationA, attenuationB, attenuationC, 0.0f) * diffuseFactor;
+*/
     //vec3 norm = normalize(aNormal);
 	vec3 norm  = normalize( normalMatrix * normalize(aNormal) );
 	vec3 FragPos = vec3(model * vec4(aPos, 1.0));

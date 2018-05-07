@@ -10,7 +10,7 @@
 
 extern GLFWwindow* window;
 extern environment::Camera* camera;
-extern game::Board* chessBoard;
+//extern game::Board* chessBoard;
 bool middleMousePressed = false;
 
 std::unordered_map<std::string, std::vector<std::string>> moves;
@@ -41,7 +41,7 @@ void helpers::getMoves()
 void helpers::setup_EventHandling()
 {
 	glfwSetCursorPosCallback(window, helpers::OnMouseMove);
-	glfwSetMouseButtonCallback(window, helpers::OnMouseClick);
+	//glfwSetMouseButtonCallback(window, helpers::OnMouseClick);
 	glfwSetKeyCallback(window, helpers::OnKeyPress);
 }
 
@@ -58,7 +58,7 @@ void helpers::OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 	// Rotate camera around both rotational axes
 	camera->rotateBy(deltaPos.x / 100.0f, (deltaPos.y * -1) / 100.f);
 }
-
+/*
 void helpers::OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
@@ -105,7 +105,7 @@ void helpers::OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 		middleMousePressed = false;
 	}
 }
-
+*/
 glm::vec3 helpers::convertMousePosToWorld(double xpos, double ypos)
 {
 	glm::vec2 wSize = environment::Camera::windowSize();

@@ -25,6 +25,7 @@ add_executable("Chess3D"
 
 	${PROJECT_SOURCE_DIR}/game/Board.cpp
 	${PROJECT_SOURCE_DIR}/game/Piece.cpp
+	${PROJECT_SOURCE_DIR}/game/Cube.cpp
 
 	${PROJECT_SOURCE_DIR}/helpers/errorHandler.cpp
 	${PROJECT_SOURCE_DIR}/helpers/Yaml_parser.cpp
