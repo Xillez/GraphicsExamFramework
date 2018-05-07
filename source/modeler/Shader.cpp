@@ -9,7 +9,7 @@
  GLuint modeler::Shader::id() const {
  	return shaderProgram; 
  }
-modeler::Shader::Shader(const std::string path_vert_shader, const char *path_frag_shader){
+modeler::Shader::Shader(const std::string path_vert_shader, const std::string path_frag_shader){
 
     /*-----------------------------------------------------------------------------
      *  CREATE THE SHADER

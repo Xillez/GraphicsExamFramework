@@ -136,7 +136,6 @@ void game::Board::movePiece(int indexI, int indexJ, int destinationI, int destin
 	if(this->animationTime >= 1.0f){
 		clearSelection();
 		isWhiteTurn = !isWhiteTurn;
-		std::cout << isWhiteTurn << '\n';
 		tiles[indexI][indexJ]->setFirstMove(false);
 		tiles[destinationI][destinationJ] = tiles[indexI][indexJ];
 		//delete tiles[indexI][indexJ];

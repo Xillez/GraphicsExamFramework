@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
 	
 	// Make chessboard
 	printf("%s Creating board\n", TAG_INFO.c_str());
-	cube = new game::Cube ("../asset/Crate/Crate1.obj");
+	cube = new game::Cube ("../asset/basic_cube.obj");
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());
@@ -64,7 +64,7 @@ int main(int argc, char const *argv[])
 		lastTime = currentTime;
 
 		cube->draw();
-		camera->rotateBy(1.0f * dt, 1.0f * dt);
+		camera->rotateBy(1.0f * dt, 0.0f * dt);
 		//chessBoard->update(dt);
 
 		glfwSwapBuffers(window);    // SWAP BUFFERS
