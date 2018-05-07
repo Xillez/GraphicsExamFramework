@@ -1,6 +1,6 @@
 #include "../helpers/glfw_setup.hpp"
 #include "../helpers/global_function.hpp"
-#include "../game/Cube.hpp"
+#include "../game/Object.hpp"
 #include "../environment/Camera.hpp"
 #include "../environment/LightSource.hpp"
 #include "../header/globalVar.hpp"
@@ -13,7 +13,7 @@
 environment::Camera* camera;
 environment::LightSource* lightSource;
 GLFWwindow* window;
-game::Cube* cube;
+game::Object* cube;
 modeler::ShaderManager* shaderManager;
 
 int main(int argc, char const *argv[])
@@ -40,7 +40,7 @@ int main(int argc, char const *argv[])
 	
 	// Make chessboard
 	printf("%s Creating board\n", TAG_INFO.c_str());
-	cube = new game::Cube ("../asset/basic_cube.obj");
+	cube = new game::Object("../asset/basic_cube.obj");
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());

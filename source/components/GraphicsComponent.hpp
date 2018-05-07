@@ -12,12 +12,11 @@ namespace components
 	/**
 	 * @brief Interface class for components.
 	 */
-	class GraphicsComponent : public components::IComponent
+	class GraphicsComponent : public IComponent
 	{	
 		protected: 
-			modeler::Model model;
+			modeler::Model* model = nullptr;
 
-		
 		public:
 			/**
 			 * @brief Interface component class constructor.
@@ -34,5 +33,7 @@ namespace components
 			 * @param shader A shader program for GL pipeline.
 			 */
 			virtual auto draw(modeler::Shader shader) -> void;
+
+			virtual auto getType() -> int;
 	};
 }

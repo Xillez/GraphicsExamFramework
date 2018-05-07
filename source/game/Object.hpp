@@ -1,14 +1,24 @@
 #pragma once
-#include "Piece.hpp"
+
+#include "../modeler/Shader.hpp"
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <string>
+#include <vector>
+
+// Boilder plate code needed for circular inclusion with IComponent
+namespace components
+{
+	class IComponent;
+}
 
 /**
  * @brief Container for content specific to chess game.
  */
-namespace game{
+namespace game
+{
 	/**
-	 * @brief 8x8 chessboard managing pieces.
+	 * @brief General Object with components.
 	 */
 	class Object
 	{
@@ -17,8 +27,13 @@ namespace game{
 		/**
 		 * @brief Board constructor.
 		 */
-		Object();
-		
+		Object(std::string const &modelPath);
+
+		/**
+		 * @brief 
+		 */
+		~Object();
+
 		/**
 		 * @brief updates state for next frame.
 		 * 
@@ -53,6 +68,8 @@ namespace game{
 		//auto lerp(glm::vec3 a, glm::vec3 b, float dt) -> glm::vec3;
 				
 	private:
+
+		std::vector<components::IComponent*> componentList;
 	
 		glm::vec3 position;								//!< Origin of board.
 		glm::vec3 velocity;

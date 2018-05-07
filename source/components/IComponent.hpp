@@ -1,7 +1,15 @@
 #pragma once
 
 #include "../modeler/Shader.hpp"
-#include "../game/Object.hpp"
+//#include "../game/Object.hpp"
+
+#define GRAPHICS_COMPONENT 1
+
+// Boilder plate code needed for circular inclusion with Object.
+namespace game
+{
+	class Object;
+}
 
 /**
  * @brief Container for classes and structures associated with components. 
@@ -14,7 +22,7 @@ namespace components
 	class IComponent
 	{	
 		protected:
-			game::Object* parent;		//!< Parent object I exists inside.
+			game::Object* parent = nullptr;		//!< Parent object I exists inside.
 
 		public:
 			/**
@@ -39,5 +47,7 @@ namespace components
 			 * @param shader A shader program for GL pipeline.
 			 */
 			virtual auto draw(modeler::Shader shader) -> void = 0;
+
+			virtual auto getType() -> int = 0;
 	};
 }
