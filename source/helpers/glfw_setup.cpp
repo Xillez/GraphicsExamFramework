@@ -6,13 +6,6 @@
 
 #include <stdio.h>
 
-static void helpers::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    }
-}
-
 GLFWwindow* helpers::glfw_setup() {
 
 	//tries to initialize glfw. NOTE: should be changed to cause fatal error.
@@ -39,7 +32,6 @@ GLFWwindow* helpers::glfw_setup() {
 	// create window
 	glm::vec2 wSize = environment::Camera::windowSize();
 	GLFWwindow* window = glfwCreateWindow(wSize.x, wSize.y, "Chess-3D", nullptr, nullptr);
-	glfwSetKeyCallback(window, key_callback);	
 	// set window as active
 	glfwMakeContextCurrent(window);
 
@@ -47,6 +39,7 @@ GLFWwindow* helpers::glfw_setup() {
 	glfwSwapInterval(1);
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);	
 
 	glewExperimental = GL_TRUE;
     // Initialize GLEW QUESTION: should this be moved to other file?

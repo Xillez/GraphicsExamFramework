@@ -18,7 +18,7 @@ glm::vec2 prevMousePos(0.0f, 0.0f);
 void helpers::setup_EventHandling()
 {
 	glfwSetCursorPosCallback(window, helpers::OnMouseMove);
-	//glfwSetMouseButtonCallback(window, helpers::OnMouseClick);
+	glfwSetMouseButtonCallback(window, helpers::OnMouseClick);
 	glfwSetKeyCallback(window, helpers::OnKeyPress);
 }
 
@@ -28,10 +28,10 @@ void helpers::OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 	// and update last pos to be current
 	glm::vec2 deltaPos(xpos - prevMousePos.x, ypos - prevMousePos.y);
 	prevMousePos = {xpos,ypos};
-/*
+
 	if (!middleMousePressed)
 		return;
-	*/
+	
 	// Rotate camera around both rotational axes
 	camera->rotateBy(deltaPos.x / 100.0f, (deltaPos.y * -1) / 100.f);
 }
@@ -88,10 +88,10 @@ void helpers::OnKeyPress(GLFWwindow* window, int key, int scancode, int action, 
    
     } else if (key == GLFW_KEY_A && (action == GLFW_REPEAT || action == GLFW_PRESS)){
     	//camera->rotateBy(-0.1f, 0.0f);
-    	camera->translateBy(glm::cross(camera->getDir(), camera->getUp()));
+    	camera->translateBy(glm::cross(camera->getUp(), camera->getDir()));
    
     } else if (key == GLFW_KEY_D && (action == GLFW_REPEAT || action == GLFW_PRESS)){
     	//camera->rotateBy(0.1f, 0.0f);
-    	camera->translateBy(glm::cross(camera->getUp(), camera->getDir()));
+    	camera->translateBy(glm::cross(camera->getDir(), camera->getUp()));
     }
 }
