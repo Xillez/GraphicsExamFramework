@@ -7,6 +7,7 @@
 extern environment::Camera* camera;
 extern modeler::ShaderManager* shaderManager;
 extern environment::LightSource* lightSource;
+float rotationTime = 0.0f;
 
 game::Object::Object(std::string const &path)
 {
@@ -29,7 +30,7 @@ auto game::Object::update(float dt) -> void
 	
 }
 
-auto game::Object::draw() -> void
+auto game::Object::draw(float dt) -> void
 {
 	this->shaderProgram->bind();
 
@@ -40,6 +41,8 @@ auto game::Object::draw() -> void
 	glm::vec3 lightPosition = lightSource->getPosition();
 	glm::vec3 attenuation = lightSource->getAttenuation(); 
 	glm::vec3 lightColor = lightSource->getColor();
+	float ambientCoefficient = lightSource->getAmbientCoefficient();
+	int specularExponent = lightSource->getSpecularExponent();
 
 	std::map<std::string, GLuint> uniforms = shaderProgram->getUniform(	std::map<std::string, std::string>({
 		{"viewID", "view"},
@@ -51,12 +54,16 @@ auto game::Object::draw() -> void
 		{"attenuationAID", "attenuationA"},
 		{"attenuationBID", "attenuationB"},
 		{"attenuationCID", "attenuationC"},
+		{"ambientCoefficientID", "ambientCoefficient"},
+		{"specularExponentID", "specularExponent"},
 		{"lightColorID", "lightColor"}
 	}));
 
 	glUniform1f(uniforms["attenuationAID"], attenuation.x);
 	glUniform1f(uniforms["attenuationBID"], attenuation.y);
 	glUniform1f(uniforms["attenuationCID"], attenuation.z);
+	glUniform1f(uniforms["ambientCoefficientID"], ambientCoefficient);
+	glUniform1i(uniforms["specularExponentID"], specularExponent);
 	glUniform3fv(uniforms["lightColorID"], 1, value_ptr(lightColor));
 	glUniform3fv(uniforms["lightSourcePositionID"], 1, value_ptr(lightPosition));
 
@@ -66,10 +73,11 @@ auto game::Object::draw() -> void
 	glUniformMatrix4fv(uniforms["projectionID"], 1, GL_FALSE, glm::value_ptr(projection));
 
 	glm::mat4 modelm;
-
+	rotationTime += dt;
 	modelm = glm::translate(modelm, this->position); // Translate it down so it's at the center of the scene.
+	//printf("%f, %f, %f\n",position.x, position.y, position.z );
 	modelm = glm::scale(modelm, glm::vec3(0.9f, 0.9f, 0.9f));	
-
+	//modelm = glm::rotate(glm::mat4(), rotationTime, glm::vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(uniforms["modelID"], 1, GL_FALSE, glm::value_ptr(modelm));
 	
 	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*modelm)));
@@ -79,4 +87,8 @@ auto game::Object::draw() -> void
 	this->componentList.at(0)->draw(*shaderProgram);
 
 	shaderProgram->unbind();
+}
+
+auto game::Object::setPos(glm::vec3 newPos) -> void {
+	this->position = newPos;
 }

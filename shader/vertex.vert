@@ -12,49 +12,57 @@ uniform float attenuationA;
 uniform float attenuationB;
 uniform float attenuationC;
 
+uniform float ambientCoefficient;
+uniform int specularExponent;
+
 uniform vec3 lightColor;
 uniform vec3 lightSourcePosition;
 uniform vec3 CamPos;
 
-out vec3 diffuse;        
+out vec3 ambient;
+out vec3 diffuse;
+out vec3 specular;
 out vec2 TexCoords;
 
 
 
-  //the simplest function to calculate lighting 
-vec3 doColor(){
+// this function specifies spreading of light. 
+vec3 diffuseComponent(){
 	
-	//Ambient 
-	float ambientStrength = 0.9;
-    vec3 ambient = ambientStrength * lightColor;
+    // diffuse
+    vec3 normal = normalize(normalMatrix * normalize(aNormal)); // calculate normals in eye space.
+    vec3 surfacePos = vec3(model * vec4(aPos, 1)); // Get the vertex position according model of the world.
+    vec3 surfaceToLight = normalize(lightSourcePosition - aPos);    // distance between surface to lightsource.
 
-    //vec3 norm = normalize(aNormal);
-	vec3 norm  = normalize( normalMatrix * normalize(aNormal) );
-	vec3 FragPos = vec3(model * vec4(aPos, 1.0));
-    vec3 lightDirection = normalize(lightSourcePosition-FragPos);
-    vec3 diffuse = max(dot(norm, lightDirection), 0.0) * lightColor;
+    float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight)); // brightness.
+    vec3 diff = diffuseCoefficient * vec3(attenuationA, attenuationB, attenuationC); 
 
-	    // specular
-    float specularStrength = 0.9;
-    vec3 viewDir = normalize(CamPos - FragPos);
-    vec3 reflectDir = reflect(-lightDirection, norm);  
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    vec3 specular = specularStrength * spec * lightColor; 
+    return diff;
+}
 
+// this function specifies minimum brightness
+vec3 ambientComponent(){
+    return ambientCoefficient * vec3(attenuationA, attenuationB, attenuationC);
+}
 
-	float dist = distance(lightSourcePosition, (normalMatrix*aPos));
-	float attenuation = 1.0f / (attenuationA + (attenuationB * dist) + (attenuationC * dist * dist));
-    
-	vec3 Resultant=(ambient+diffuse*(attenuation+specular));
+// this function specifies shininess.
+vec3 specularComponent(){
 
+    vec3 incidenceVector = normalize(aPos - lightSourcePosition);
+    vec3 reflectionVector = reflect(incidenceVector, aNormal);
+    vec3 surfaceToCamera = normalize(CamPos - aPos);
+    float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
+    float specularCoefficient = pow(cosAngle, specularExponent);
 
+    vec3 specularComponent = specularCoefficient * lightColor * vec3(attenuationA, attenuationB, attenuationC);
+    return specularComponent;
+}
 
-    return Resultant;
-  }
-  
 void main()
-{
-     diffuse = doColor();
-	TexCoords = aTexCoords;    
+{   
+    ambient = ambientComponent();
+    diffuse = diffuseComponent();
+    specular = specularComponent();
+	TexCoords = aTexCoords;
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

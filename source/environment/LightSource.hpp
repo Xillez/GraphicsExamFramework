@@ -24,7 +24,7 @@ namespace environment{
 			 * @param lightColor - Light color from the light
 			 * @param attenuation - Fall off of the light through a medium.
 			 */
-			LightSource(glm::vec3 position, glm::vec3 lightColor, glm::vec3 attenuation);
+			LightSource(glm::vec3 position, glm::vec3 lightColor, glm::vec3 attenuation, float ambientCoefficient = 0.5f, int specualarExponent = 2);
 
 			/**
 			 * @brief Deconstructer for light.
@@ -56,6 +56,13 @@ namespace environment{
 			glm::vec3 getPosition();
 
 			/**
+			 * @brief Getter for ambient coefficient.
+			 * @return coefficient.
+			 */
+			auto getAmbientCoefficient() -> float;
+
+			auto getSpecularExponent() -> int;
+			/**
 			 * @brief Setter for lightsource position.
 			 * 
 			 * @param position - New world position of lightsource.
@@ -67,6 +74,7 @@ namespace environment{
 			glm::vec3 position;			//!< Position of the lightSource.
 			glm::vec3 lightColor;		//!< A color that is added to the vertex color hit by the light.
 			glm::vec3 attenuation;		//!< How light decrease through a medium over distance.
-
+			float ambientCoefficient; 	//!< Minimum light.
+			int specualarExponent;		//!< Shininess.
 	};
 }

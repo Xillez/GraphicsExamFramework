@@ -44,7 +44,7 @@ namespace game
 		/**
 		 * @brief Draw the board and every piece found.
 		 */
-		void draw();
+		void draw(float dt);
 	
 		/**
 		 * @brief Uses bezeir curve to interpolate between three control points. 
@@ -66,6 +66,8 @@ namespace game
 		 * @return Interpolated vector between 2 points.
 		 */
 		//auto lerp(glm::vec3 a, glm::vec3 b, float dt) -> glm::vec3;
+
+		auto setPos(glm::vec3 newPos) -> void;
 				
 	private:
 

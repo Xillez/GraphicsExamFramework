@@ -14,13 +14,14 @@ environment::Camera* camera;
 environment::LightSource* lightSource;
 GLFWwindow* window;
 game::Object* cube;
+game::Object* cube2;
 modeler::ShaderManager* shaderManager;
 
 int main(int argc, char const *argv[])
 {	
 	// Ready moves for pieces
 	printf("%s Getting moves\n",TAG_INFO.c_str());
-	helpers::getMoves();
+	//helpers::getMoves();
 
 	// Create camera
 	printf("%s Setting up camera\n",TAG_INFO.c_str());
@@ -41,6 +42,8 @@ int main(int argc, char const *argv[])
 	// Make chessboard
 	printf("%s Creating board\n", TAG_INFO.c_str());
 	cube = new game::Object("../asset/basic_cube.obj");
+	cube2 = new game::Object("../asset/basic_cube.obj");
+	cube2->setPos(glm::vec3(2.0f, 0.0f, 2.0f));
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());
@@ -63,7 +66,8 @@ int main(int argc, char const *argv[])
 		dt = currentTime - lastTime;
 		lastTime = currentTime;
 
-		cube->draw();
+		cube->draw(dt);
+		cube2->draw(dt);
 		camera->rotateBy(1.0f * dt, 0.0f * dt);
 		//chessBoard->update(dt);
 
