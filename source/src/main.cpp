@@ -17,11 +17,7 @@ game::Object* cube;
 modeler::ShaderManager* shaderManager;
 
 int main(int argc, char const *argv[])
-{	
-	// Ready moves for pieces
-	printf("%s Getting moves\n",TAG_INFO.c_str());
-	helpers::getMoves();
-
+{
 	// Create camera
 	printf("%s Setting up camera\n",TAG_INFO.c_str());
 	camera = new environment::Camera(glm::vec3(0, 4, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
@@ -38,7 +34,7 @@ int main(int argc, char const *argv[])
 	printf("%s Creating window\n", TAG_INFO.c_str());
 	window = helpers::glfw_setup();
 	
-	// Make chessboard
+	// Make cube
 	printf("%s Creating board\n", TAG_INFO.c_str());
 	cube = new game::Object("../asset/basic_cube.obj");
 
