@@ -3,11 +3,11 @@
 #include <GLFW/glfw3.h>
 
 environment::LightSource::LightSource(){
-	this->position = {10.0f, 10.0f, 10.0f};
+	this->position = {0.0f, 0.0f, 5.0f};
 	this->lightColor = {1.0f, 1.0f, 1.0f};
 	this->attenuation = {1.0f, 1.0f, 1.0f};
 	this->ambientCoefficient = 0.1f;
-	this->specualarExponent = 1.0f;
+	this->specualarExponent = 32.0f;
 }
 
 environment::LightSource::LightSource(glm::vec3 position, glm::vec3 lightColor, glm::vec3 attenuation, float ambientCoefficient, int specualarExponent){
@@ -21,12 +21,12 @@ environment::LightSource::LightSource(glm::vec3 position, glm::vec3 lightColor, 
 environment::LightSource::~LightSource(){
 
 }
-
+/*
 void environment::LightSource::update(float dt){
 	// Rotate light for effect
 	this->position = this->position * (glm::mat3)glm::rotate(glm::mat4(), dt, glm::vec3(0.0f, 1.0f, 0.0f));
 }
-
+*/
 auto environment::LightSource::getAttenuation() -> glm::vec3{
 	return this->attenuation;
 }

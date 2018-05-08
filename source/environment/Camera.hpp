@@ -76,6 +76,14 @@ namespace environment{
 		 * @param angleY - value in degree to rotate camera around "horizontally rotated vertical rotation axis"
 		 */
 		void rotateBy(float angleX, float angleY);
+
+		/**
+		 * @brief [brief description]
+		 * @details [long description]
+		 * 
+		 * @param translate [description]
+		 */
+		void translateBy(glm::vec3 translate);
 	
 	private:
 		glm::vec3 pos;											//!< Position of the camera.

@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
 
 	// Create camera
 	printf("%s Setting up camera\n",TAG_INFO.c_str());
-	camera = new environment::Camera(glm::vec3(0, 4, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	camera = new environment::Camera(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
 
 	// Setting up light
 	printf("%s Setting up LightSource\n",TAG_INFO.c_str());
@@ -41,9 +41,8 @@ int main(int argc, char const *argv[])
 	
 	// Make chessboard
 	printf("%s Creating board\n", TAG_INFO.c_str());
-	cube = new game::Object("../asset/basic_cube.obj");
-	cube2 = new game::Object("../asset/basic_cube.obj");
-	cube2->setPos(glm::vec3(2.0f, 0.0f, 2.0f));
+	cube = new game::Object("../asset/basic_sphere.obj");
+	cube2 = new game::Object("../asset/basic_sphere.obj");
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());
@@ -55,6 +54,9 @@ int main(int argc, char const *argv[])
 	
 	// Run until close event is given to the window
 	printf("%s Starting gameloop\n", TAG_INFO.c_str());
+	
+	cube2->setPos(glm::vec3(2.0f, 0.0f, -2.0f));
+	
 	while(!glfwWindowShouldClose(window))
 	{
 		// Clearing screen for next draw
@@ -68,9 +70,8 @@ int main(int argc, char const *argv[])
 
 		cube->draw(dt);
 		cube2->draw(dt);
-		camera->rotateBy(1.0f * dt, 0.0f * dt);
+		//camera->rotateBy(1.0f * dt, 0.0f * dt);
 		//chessBoard->update(dt);
-
 		glfwSwapBuffers(window);    // SWAP BUFFERS
         glfwPollEvents();           // LISTEN FOR WINDOW EVENTS
 

@@ -41,7 +41,7 @@ glm::vec3 environment::Camera::getUp(){
 }
 
 glm::mat4 environment::Camera::getViewMatrix(){
-	return glm::lookAt(this->pos, this->target, this->up);
+	return glm::lookAt(this->pos, this->pos + this->target, this->up);
 }
 
 glm::mat4 environment::Camera::getPerspectiveMatrix(){
@@ -53,12 +53,12 @@ void environment::Camera::rotateBy(float angleX, float angleY){
 	glm::mat4 rotationHorMatrix = glm::rotate(glm::mat4(), angleX, horRotAxis);
 
 	// Rotate camera's current position with rotation around horizontal rotation axis (0, 1, 0).
-	this->pos = (glm::vec3) (rotationHorMatrix * glm::vec4(pos, 0));
+	this->target = (glm::vec3) (rotationHorMatrix * glm::vec4(this->target, 0));
 
 	// Rotate vertical rotation axis with same rotation matrix to 
 	// accomodate for horizontal rotation (around (0, 1, 0)). 
-	this->vertRotAxis = (glm::vec3) (rotationHorMatrix * glm::vec4(vertRotAxis, 0));
-
+	//this->vertRotAxis = (glm::vec3) (rotationHorMatrix * glm::vec4(vertRotAxis, 0));
+/*
 	// Get rotation matrix for "angle" amount, around vertical rotation axis ("vertRotAxis").
 	glm::mat4 rotationVertMatrix = glm::rotate(glm::mat4(), angleY, vertRotAxis);
 
@@ -66,11 +66,17 @@ void environment::Camera::rotateBy(float angleX, float angleY){
 	this->pos = (glm::vec3) (rotationVertMatrix * glm::vec4(pos, 0));
 
 	// Update cameras up with all rotations
-	this->up = (glm::vec3) ((rotationHorMatrix * rotationVertMatrix) * glm::vec4(this->up, 0));
+	this->up = (glm::vec3) ((rotationHorMatrix * rotationVertMatrix) * glm::vec4(this->up, 0)); */
 
 	//TODO:
 	//  - Add rotation on "z"-axis dependent on horizontal rotation.
 	//  - Calculate cross("camera direction", "horizontal rotation axis") to get vertical z rotation axis
 	//  - Use above caluclation to calc cross("horizontal rotation axis", "vertical z rotation axis") to get vertical x rotation axis.
 	//  - Implement axis selection on which axis ot affect with mouse. Use dot product and most negative isn't affected.
+}
+
+void environment::Camera::translateBy(glm::vec3 translate){
+	//glm::mat4 translationMatrix = glm::translate(glm::mat4(), translate);
+	//this->pos = (glm::vec3) (translationMatrix * glm::vec4(pos, 0));
+	this->pos += translate;
 }

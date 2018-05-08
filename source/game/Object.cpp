@@ -15,7 +15,7 @@ game::Object::Object(std::string const &path)
 	component->init(this);
 	this->componentList.push_back(component);
 
-	this->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	this->position = glm::vec3(2.0f, 0.0f, 0.0f);
 	this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	this->acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -76,8 +76,8 @@ auto game::Object::draw(float dt) -> void
 	rotationTime += dt;
 	modelm = glm::translate(modelm, this->position); // Translate it down so it's at the center of the scene.
 	//printf("%f, %f, %f\n",position.x, position.y, position.z );
-	modelm = glm::scale(modelm, glm::vec3(0.9f, 0.9f, 0.9f));	
-	//modelm = glm::rotate(glm::mat4(), rotationTime, glm::vec3(0.0f, 1.0f, 0.0f));
+	modelm = glm::scale(modelm, glm::vec3(1.1f, 1.1f, 1.1f));	
+	modelm = glm::rotate(modelm, rotationTime, glm::vec3(1.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(uniforms["modelID"], 1, GL_FALSE, glm::value_ptr(modelm));
 	
 	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*modelm)));

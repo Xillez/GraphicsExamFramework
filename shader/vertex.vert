@@ -3,6 +3,9 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aNormal;
 layout (location = 2) in vec2 aTexCoords;
 
+out vec3 aPos0;
+out vec3 aNormal0;
+
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
@@ -31,8 +34,8 @@ vec3 diffuseComponent(){
 	
     // diffuse
     vec3 normal = normalize(normalMatrix * normalize(aNormal)); // calculate normals in eye space.
-    vec3 surfacePos = vec3(model * vec4(aPos, 1)); // Get the vertex position according model of the world.
-    vec3 surfaceToLight = normalize(lightSourcePosition - aPos);    // distance between surface to lightsource.
+    vec3 surfacePos = vec3(model * vec4(aPos0, 1)); // Get the vertex position according model of the world.
+    vec3 surfaceToLight = normalize(lightSourcePosition - aPos0);    // distance between surface to lightsource.
 
     float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight)); // brightness.
     vec3 diff = diffuseCoefficient * vec3(attenuationA, attenuationB, attenuationC); 
@@ -48,9 +51,9 @@ vec3 ambientComponent(){
 // this function specifies shininess.
 vec3 specularComponent(){
 
-    vec3 incidenceVector = normalize(aPos - lightSourcePosition);
-    vec3 reflectionVector = reflect(incidenceVector, aNormal);
-    vec3 surfaceToCamera = normalize(CamPos - aPos);
+    vec3 incidenceVector = normalize(aPos0 - lightSourcePosition);
+    vec3 reflectionVector = reflect(incidenceVector, aNormal0);
+    vec3 surfaceToCamera = normalize(CamPos - aPos0);
     float cosAngle = max(0.0, dot(surfaceToCamera, reflectionVector));
     float specularCoefficient = pow(cosAngle, specularExponent);
 
@@ -60,6 +63,8 @@ vec3 specularComponent(){
 
 void main()
 {   
+    aPos0 = vec3((model * inverse(view) * vec4(aPos, 0.0f)));
+    aNormal0 = vec3((model * vec4(aNormal,0.0f)));
     ambient = ambientComponent();
     diffuse = diffuseComponent();
     specular = specularComponent();
