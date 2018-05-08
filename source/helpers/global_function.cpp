@@ -10,33 +10,10 @@
 
 extern GLFWwindow* window;
 extern environment::Camera* camera;
-//extern game::Board* chessBoard;
 bool middleMousePressed = false;
 
 std::unordered_map<std::string, std::vector<std::string>> moves;
 glm::vec2 prevMousePos(0.0f, 0.0f);
-
-void helpers::getMoves()
-{
-	YamlParser file("./resources/moves/move.yaml");
-	std::vector<std::string> temp;
-	std::pair<std::string, int> pieceCount = file.nextStringInt();
-
-	file.nextLine();
-	
-	for (int i = 0; i < pieceCount.second; i++)
-	{
-		std::pair<std::string, std::string> pieceName = file.nextStringString();
-		std::pair<std::string, int> moveCount = file.nextStringInt();
-		file.nextLine();
-		for (int j = 0; j < moveCount.second; j++)
-		{
-			temp.push_back(file.nextLine());
-		}
-		moves.insert(std::pair<std::string, std::vector<std::string>>(pieceName.second, temp));
-		temp.clear();
-	}
-}
 
 void helpers::setup_EventHandling()
 {
@@ -58,7 +35,7 @@ void helpers::OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 	// Rotate camera around both rotational axes
 	camera->rotateBy(deltaPos.x / 100.0f, (deltaPos.y * -1) / 100.f);
 }
-/*
+
 void helpers::OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 {
 	if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS)
@@ -66,58 +43,36 @@ void helpers::OnMouseClick(GLFWwindow* window, int button, int action, int mods)
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		glm::vec3 pointerPos = convertMousePosToWorld(xpos, ypos);
-
-		std::pair<int, int> indecies(
-			(int) ((-chessBoard->getPosition().x + (4 * chessBoard->getTileSize().x) + pointerPos.x) / chessBoard->getTileSize().x),
-			(int) ((-chessBoard->getPosition().z + (4 * chessBoard->getTileSize().y) + pointerPos.z) / chessBoard->getTileSize().y));
-
-		// If we are outside, ignore click!
-		if ((indecies.first < 0 || indecies.first > 7) || (indecies.second < 0 || indecies.second > 7))
-			return;
-
-		if (chessBoard->hasPieceAt(indecies.first, indecies.second) && 
-			!chessBoard->hasSelection())
-		{
-			chessBoard->setSelection(indecies);
-			printf("%s Selected: (%d, %d)\n", TAG_INFO.c_str(), indecies.first, indecies.second);
-		}
-		else if (chessBoard->hasSelection())
-		{
-			if (chessBoard->getSelected().first != indecies.first || 
-				chessBoard->getSelected().second != indecies.second)
-			{
-				printf("%s Moving piece to: (%d, %d)\n", TAG_INFO.c_str(), indecies.first, indecies.second);
-				
-				chessBoard->movePiece(
-					chessBoard->getSelected().first, chessBoard->getSelected().second, 
-					indecies.first, indecies.second
-				);
-			}
-			chessBoard->clearSelection();
-		}
 	}
-	else if (button == GLFW_MOUSE_BUTTON_3 && action == GLFW_PRESS)
+	else if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS)
 	{
 		middleMousePressed = true;
 	}
-	else if (button == GLFW_MOUSE_BUTTON_3 && action == GLFW_RELEASE)
+	else if (button == GLFW_MOUSE_BUTTON_2 && action == GLFW_RELEASE)
 	{
 		middleMousePressed = false;
 	}
 }
-*/
+
 glm::vec3 helpers::convertMousePosToWorld(double xpos, double ypos)
 {
+	// Get window size.
 	glm::vec2 wSize = environment::Camera::windowSize();
     GLfloat viewportY, z;
 
+	// Flip y axis to see where we are in viewport's y.
     viewportY = wSize.y - ypos;
 
+	// Get the z-axis value that generated this pixel.
     glReadPixels(xpos, viewportY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &z);
+	// Assemble were we were inside viewport with z depth.
     glm::vec3 mousePosInViewport = glm::vec3(xpos, viewportY, z);
 
+	// Get the view and projection matrix form camera.
     glm::mat4 viewMatrix = camera->getViewMatrix();
     glm::mat4 projectionMatrix = camera->getPerspectiveMatrix();
+
+	// Unproject the view and projection, based on the viewport and get the position within the world.
 	return glm::unProject(mousePosInViewport, viewMatrix, projectionMatrix,
 		glm::vec4(0.0f, 0.0f, wSize.x, wSize.y));
 }

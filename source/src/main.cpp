@@ -1,5 +1,6 @@
 #include "../helpers/glfw_setup.hpp"
 #include "../helpers/global_function.hpp"
+#include "../components/GraphicsComponent.hpp"
 #include "../game/Object.hpp"
 #include "../environment/Camera.hpp"
 #include "../environment/LightSource.hpp"
@@ -21,7 +22,6 @@ int main(int argc, char const *argv[])
 {	
 	// Ready moves for pieces
 	printf("%s Getting moves\n",TAG_INFO.c_str());
-	//helpers::getMoves();
 
 	// Create camera
 	printf("%s Setting up camera\n",TAG_INFO.c_str());
@@ -39,10 +39,18 @@ int main(int argc, char const *argv[])
 	printf("%s Creating window\n", TAG_INFO.c_str());
 	window = helpers::glfw_setup();
 	
-	// Make chessboard
+	// Make graphics component for "cube
+	components::GraphicsComponent* component = new components::GraphicsComponent("../asset/basic_sphere.obj");
+	components::GraphicsComponent* component2 = new components::GraphicsComponent("../asset/basic_sphere.obj");
+
+	// Make cube
 	printf("%s Creating board\n", TAG_INFO.c_str());
-	cube = new game::Object("../asset/basic_sphere.obj");
-	cube2 = new game::Object("../asset/basic_sphere.obj");
+	cube = new game::Object();
+	cube2 = new game::Object();
+	cube->registerComponent(component);
+	cube2->registerComponent(component2);
+	component = nullptr;
+	component2 = nullptr;
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());
