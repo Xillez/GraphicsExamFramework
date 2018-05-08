@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-// Boilder plate code needed for circular inclusion with IComponent
+// Boilder plate code needed to avoid circular inclusion with IComponent
 namespace components
 {
 	class IComponent;
@@ -27,7 +27,7 @@ namespace game
 		/**
 		 * @brief Board constructor.
 		 */
-		Object(std::string const &modelPath);
+		Object();
 
 		/**
 		 * @brief 
@@ -35,16 +35,23 @@ namespace game
 		~Object();
 
 		/**
+		 * @brief 
+		 * 
+		 * @param component - component added to current obect.
+		 */
+		auto registerComponent(components::IComponent* component) -> bool;
+
+		/**
 		 * @brief updates state for next frame.
 		 * 
 		 * @param dt - Deltatime since last frame.
 		 */
-		void update(float dt);
+		auto update(float dt) -> void;
 
 		/**
 		 * @brief Draw the board and every piece found.
 		 */
-		void draw();
+		auto draw() -> void;
 	
 		/**
 		 * @brief Uses bezeir curve to interpolate between three control points. 

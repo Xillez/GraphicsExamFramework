@@ -1,5 +1,6 @@
 #include "../helpers/glfw_setup.hpp"
 #include "../helpers/global_function.hpp"
+#include "../components/GraphicsComponent.hpp"
 #include "../game/Object.hpp"
 #include "../environment/Camera.hpp"
 #include "../environment/LightSource.hpp"
@@ -34,9 +35,14 @@ int main(int argc, char const *argv[])
 	printf("%s Creating window\n", TAG_INFO.c_str());
 	window = helpers::glfw_setup();
 	
+	// Make graphics component for "cube
+	components::GraphicsComponent* component = new components::GraphicsComponent("../asset/basic_cube.obj");
+
 	// Make cube
 	printf("%s Creating board\n", TAG_INFO.c_str());
-	cube = new game::Object("../asset/basic_cube.obj");
+	cube = new game::Object();
+	cube->registerComponent(component);
+	component = nullptr;
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());

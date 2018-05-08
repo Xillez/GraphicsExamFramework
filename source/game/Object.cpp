@@ -8,12 +8,8 @@ extern environment::Camera* camera;
 extern modeler::ShaderManager* shaderManager;
 extern environment::LightSource* lightSource;
 
-game::Object::Object(std::string const &path)
+game::Object::Object()
 {
-	components::GraphicsComponent* component = new components::GraphicsComponent(path);
-	component->init(this);
-	this->componentList.push_back(component);
-
 	this->position = glm::vec3(0.0f, 0.0f, 0.0f);
 	this->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
 	this->acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -22,6 +18,21 @@ game::Object::Object(std::string const &path)
 		{GL_VERTEX_SHADER, "../shader/vertex.vert"},
 		{GL_FRAGMENT_SHADER, "../shader/fragment.frag"},
 	});
+}
+
+auto game::Object::registerComponent(components::IComponent* component) -> bool
+{
+	// If this is a valid component
+	if (component)
+	{
+		// Add parent / initialize with current obect as parent
+		component->init(this);
+		// Add it to current objects component list
+		this->componentList.push_back(component);
+	}
+
+	// Tell whether it was added or not
+	return (component);
 }
 
 auto game::Object::update(float dt) -> void
@@ -76,7 +87,8 @@ auto game::Object::draw() -> void
 
 	glUniformMatrix3fv(uniforms["normalMatrixID"], 1, GL_FALSE, glm::value_ptr(normalMatrix));
 	
-	this->componentList.at(0)->draw(*shaderProgram);
+	if (this->componentList.at(0))
+		this->componentList.at(0)->draw(*shaderProgram);
 
 	shaderProgram->unbind();
 }
