@@ -1,6 +1,8 @@
 #pragma once
-#include "Mesh.hpp"
+//#include "Mesh.hpp"
+#include "struct.hpp"
 #include "../helpers/errorHandler.hpp"
+#include "Shader.hpp"
 
 #include <string>
 #include <vector>
@@ -9,7 +11,7 @@
 #include <assimp/postprocess.h>
 
 /**
- * @@brief Container for classes and structures associated with modeling consepts.
+ * @brief Container for classes and structures associated with modeling consepts.
  */
 namespace modeler{
     /**
@@ -31,12 +33,6 @@ namespace modeler{
              * @param gamma Optional to indicate if the gammacorrection has already been applied.
              */
             Model(std::string const &path, bool gamma = false); 
-    
-            /**
-             * @brief Draws the model to the screen.
-             * @param shader Shaderprogram for the GL pipeline
-             */
-            void Draw(Shader shader);
             
         private:
             /**
@@ -77,5 +73,19 @@ namespace modeler{
              * @return Vector of textures associated with the material.
              */
             std::vector<TextureA> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
+            
+            /**
+             * @brief Get the list of Mesh objects.
+             * 
+             * @return std::vector<Mesh>.
+             */
+            auto getMeshes() -> std::vector<Mesh>;
+        
+            /**
+             * @brief Get the list of TextureA objects.
+             * 
+             * @return std::vector<TextureA>.
+             */
+            auto getTextures() -> std::vector<TextureA>;
     };
 }

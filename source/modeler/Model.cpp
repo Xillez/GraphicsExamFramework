@@ -1,19 +1,12 @@
 #include "Model.hpp"
 #include "Texture.hpp"
 #include "../header/globalVar.hpp"
-
 #include <stdio.h>
 
 modeler::Model::Model(std::string const &path, bool gamma)
 {
 	gammaCorrection = gamma;
     loadModel(path);
-}
-
-void modeler::Model::Draw(Shader shader)
-{
-    for(unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].Draw(shader);
 }
 
 void modeler::Model::loadModel(std::string const &path)
@@ -54,7 +47,8 @@ modeler::Mesh modeler::Model::processMesh(aiMesh *mesh, const aiScene *scene)
 			tempVertex.y = mesh->mVertices[i].y;
 			tempVertex.z = mesh->mVertices[i].z;
 		}
-		else{
+		else
+		{
 			printf("%s Found no Vertex\n", TAG_WARN.c_str());
 			tempVertex = glm::vec3(0.0f, 0.0f, 0.0f);
 		}
@@ -89,28 +83,6 @@ modeler::Mesh modeler::Model::processMesh(aiMesh *mesh, const aiScene *scene)
 			printf("%s Found no textureCoords\n", TAG_WARN.c_str());
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 		}
-		// tangent and bitangent
-		if (mesh->HasTangentsAndBitangents())
-		{
-			tempVertex.x = mesh->mTangents[i].x;
-			tempVertex.y = mesh->mTangents[i].y;
-			tempVertex.z = mesh->mTangents[i].z;
-			vertex.Tangent = tempVertex;
-			
-			// bitangent
-			tempVertex.x = mesh->mBitangents[i].x;
-			tempVertex.y = mesh->mBitangents[i].y;
-			tempVertex.z = mesh->mBitangents[i].z;
-			vertex.Bitangent = tempVertex;
-
-		}
-		else{
-			printf("%s Found no tangent or bitangent\n", TAG_WARN.c_str());
-			
-			vertex.Tangent = glm::vec3(0.0f, 0.0f, 0.0f);
-			vertex.Bitangent = glm::vec3(0.0f, 0.0f, 0.0f);
-		}
-
 		vertices.push_back(vertex);
 	}
 	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -197,4 +169,14 @@ std::vector<modeler::TextureA> modeler::Model::loadMaterialTextures(aiMaterial *
         }
     }
     return textures;
+}
+
+auto modeler::Model::getMeshes() -> std::vector<Mesh>
+{
+	return this->meshes;
+}
+
+auto modeler::Model::getTextures() -> std::vector<TextureA>
+{
+	return this->textures_loaded;
 }

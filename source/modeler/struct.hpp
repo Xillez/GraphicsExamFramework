@@ -36,6 +36,20 @@ namespace modeler{
 		glm::vec3 Tangent;		//!< Information usefull for lighting.	
 		glm::vec3 Bitangent;	//!< Information usefull for defining curves.
 	};
+
+	struct Mesh
+	{
+		std::vector<Vertex> vertices;		//!< Collection of position data and optional attributes.
+		std::vector<unsigned int> indices; 	//!< Relative connection of vertices to define a face/surface.
+		std::vector<TextureA> textures;		//!< Texture information for mapping to vertices.
+
+		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<TextureA> textures)
+		{
+			this->vertices = vertices;
+			this->indices = indices;
+			this->textures = textures;
+		}
+	};
 	
 	/**
 	 * @brief texture loaded from file.
