@@ -20,7 +20,7 @@ namespace modeler{
 		GLuint ElementBuffer;	//!< Id of bound OpenGL EBO.
 		GLuint NormalBuffer;	//!< Id of bound OpenGL VBO for normal data.
 	
-		GLenum PrimitiveMode; 	//!< Information for openGL primitive to draw.
+		GLenum PrimitiveMode; 	//!< Information for OpenGL primitive to draw.
 		GLenum FillMode; 		//!< Information for coloring of shape.
 		int NumVertices;		//!< Number of verticies in the VAO.
 	};
