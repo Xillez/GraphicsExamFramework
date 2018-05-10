@@ -1,14 +1,19 @@
 /*! \mainpage Chess3d
  *	
+ *	\section authors_sec Authors for Handin 2 in IMT2531:
  *	\author Eldar Hauge Torkelsen - 473180 - eldarht@stud.ntnu.no
+ *	\author Kent Wincent Holt - 473209 - kentwh@stud.ntnu.no
+ *	\author Zohaib Butt - 473219 - zohaibb@stud.ntnu.no
+ *	
+ *	\section authors_sec Authors exam:
  *	\author Kent Wincent Holt - 473209 - kentwh@stud.ntnu.no
  *	\author Zohaib Butt - 473219 - zohaibb@stud.ntnu.no
  *	
  * \section intro_sec Introduction
  *
- * Handin for IMT2531 - Graphics programming.
+ * Based on Handin 2 for IMT2531 - Graphics programming.
  * 
- * A lightweight chess engine, using OpengGL as Graphics API.
+ * A lightweight graphics framework, using OpengGL as Graphics API and GLFW as windowing framework.
  * 
  * \section install_sec Installation
  *	1. Install linux.
@@ -19,19 +24,11 @@
  *	```
  *	4. Run the executable:
  *	``` 
- *	./bin/Chess3D.
+ *	./bin/Exam
  *	```
  * \section feature_sec Features
  *
- *	- Playable chess with 3d graphics.
- *	- Pieces can be moved using the mouse.
- *	- Rotate view with middle mouse button and WASD.
+ *	- Mouse controls first person view.
+ *	- Move view with WASD.
  *	- Lighting.
- *	
- *	\todo 
- *	- Parsing text that can create moves with functionality to validate the move based on current state of board.
- *	- Highlighting for available moves on selected piece, using move parser and geometry shader.
- *	- Terain / environment around chessboard.
- *	- New gamemode for chessboard using positions in 3d (3DChess).
- *	- Display past moves using chess notation.
  */

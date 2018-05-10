@@ -1,7 +1,5 @@
-#include "../game/Board.hpp"
 #include "global_function.hpp"
 #include "../header/globalVar.hpp"
-#include "../helpers/Yaml_parser.hpp"
 #include "../environment/Camera.hpp"	
 
 #include <unordered_map>
@@ -33,7 +31,7 @@ void helpers::OnMouseMove(GLFWwindow *window, double xpos, double ypos)
 		return;
 	
 	// Rotate camera around both rotational axes
-	camera->rotateBy(deltaPos.x / 100.0f, (deltaPos.y * -1) / 100.f);
+	camera->rotateBy(-deltaPos.x / 100.0f, (deltaPos.y * -1) / 100.f);
 }
 
 void helpers::OnMouseClick(GLFWwindow* window, int button, int action, int mods)
@@ -94,4 +92,9 @@ void helpers::OnKeyPress(GLFWwindow* window, int key, int scancode, int action, 
     	//camera->rotateBy(0.1f, 0.0f);
     	camera->translateBy(glm::cross(camera->getDir(), camera->getUp()));
     }
+
+
+    // TODO:
+
+    // UP and DOWN movement.
 }

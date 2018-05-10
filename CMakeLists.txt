@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.1)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project("Chess Project" VERSION 0.1.0 LANGUAGES CXX)
+project("Exam" VERSION 0.1.0 LANGUAGES CXX)
 
 #Set the output to the bin folder where cmake was executed
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
@@ -14,10 +14,10 @@ file(GLOB shaders ${PROJECT_SOURCE_DIR}/shader)
 file(COPY ${shaders} DESTINATION ${CMAKE_BINARY_DIR}/include)
 
 # Copy moveset file to build directory
-file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_BINARY_DIR}/resources/moves)
+#file(COPY ${PROJECT_SOURCE_DIR}/resources/moves/move.yaml DESTINATION ${PROJECT_BINARY_DIR}/resources/moves)
 
 # Add all cpp files used in the Chess3D program
-add_executable("Chess3D" 
+add_executable("Exam" 
 	#src
 	${PROJECT_SOURCE_DIR}/source/src/main.cpp 
 
@@ -26,8 +26,6 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/source/environment/LightSource.cpp
 
 	#game
-	${PROJECT_SOURCE_DIR}/source/game/Board.cpp
-	${PROJECT_SOURCE_DIR}/source/game/Piece.cpp
 	${PROJECT_SOURCE_DIR}/source/game/Object.cpp
 
 	#components
@@ -36,10 +34,8 @@ add_executable("Chess3D"
 
 	#helpers
 	${PROJECT_SOURCE_DIR}/source/helpers/errorHandler.cpp
-	${PROJECT_SOURCE_DIR}/source/helpers/Yaml_parser.cpp
 	${PROJECT_SOURCE_DIR}/source/helpers/glfw_setup.cpp
 	${PROJECT_SOURCE_DIR}/source/helpers/global_function.cpp
-	${PROJECT_SOURCE_DIR}/source/helpers/moveParser.cpp
 	
 	#modeler
 	${PROJECT_SOURCE_DIR}/source/modeler/Mesh.cpp
@@ -65,7 +61,7 @@ find_package(assimp REQUIRED)
 find_library(SOIL SOIL /usr/include/SOIL)
 
 # Link the packages
-target_link_libraries("Chess3D"
+target_link_libraries("Exam"
     PRIVATE ${OPENGL_LIBRARIES}
     PRIVATE ${GLEW_LIBRARIES}
     PRIVATE glfw

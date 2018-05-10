@@ -31,7 +31,7 @@ GLFWwindow* helpers::glfw_setup() {
 
 	// create window
 	glm::vec2 wSize = environment::Camera::windowSize();
-	GLFWwindow* window = glfwCreateWindow(wSize.x, wSize.y, "Chess-3D", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(wSize.x, wSize.y, "Exam", nullptr, nullptr);
 	// set window as active
 	glfwMakeContextCurrent(window);
 
