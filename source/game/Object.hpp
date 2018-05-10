@@ -76,8 +76,10 @@ namespace game
 		 */
 		//auto lerp(glm::vec3 a, glm::vec3 b, float dt) -> glm::vec3;
 
+		auto getModelMatrix() -> glm::mat4;
+
 		auto setPos(glm::vec3 newPos) -> void;
-				
+		
 	private:
 
 		std::vector<components::IComponent*> componentList;
@@ -85,8 +87,7 @@ namespace game
 		glm::vec3 position;								//!< Origin of board.
 		glm::vec3 velocity;
 		glm::vec3 acceleration;
-		//glm::vec3 torque;
 
-		modeler::Shader* shaderProgram;					//!< Shaderprogram used by board for drawing.
+		glm::mat4 model;
 	};
 }

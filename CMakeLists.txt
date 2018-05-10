@@ -26,8 +26,6 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/source/environment/LightSource.cpp
 
 	#game
-	${PROJECT_SOURCE_DIR}/source/game/Board.cpp
-	${PROJECT_SOURCE_DIR}/source/game/Piece.cpp
 	${PROJECT_SOURCE_DIR}/source/game/Object.cpp
 
 	#components
@@ -42,12 +40,12 @@ add_executable("Chess3D"
 	${PROJECT_SOURCE_DIR}/source/helpers/moveParser.cpp
 	
 	#modeler
-	${PROJECT_SOURCE_DIR}/source/modeler/Mesh.cpp
+	#${PROJECT_SOURCE_DIR}/source/modeler/Mesh.cpp
 	${PROJECT_SOURCE_DIR}/source/modeler/Model.cpp
 	${PROJECT_SOURCE_DIR}/source/modeler/Shader.cpp
 	${PROJECT_SOURCE_DIR}/source/modeler/ShaderManager.cpp
 	${PROJECT_SOURCE_DIR}/source/modeler/Texture.cpp
-	${PROJECT_SOURCE_DIR}/source/modeler/ShaderManager.cpp
+	${PROJECT_SOURCE_DIR}/source/modeler/Renderer.cpp
 )
 
 # Find packages for linking

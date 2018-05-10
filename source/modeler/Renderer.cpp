@@ -1,6 +1,32 @@
 #include "Renderer.hpp"
+#include "ShaderManager.hpp"
+#include "Model.hpp"
+#include "../environment/Camera.hpp"
+#include "../environment/LightSource.hpp"
+#include <algorithm>
 
-auto modeler::Renderer::registerModel(std::string path) -> std::pair<int, int>
+// Needs namespace infront because compiler wont recognize that it exists.
+extern modeler::ShaderManager* shaderManager;
+extern environment::Camera* camera;
+extern environment::LightSource* lightSource;
+
+modeler::Renderer::Renderer()
+{
+    printf("Before crash\n");
+    shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
+        {GL_VERTEX_SHADER, "../shader/vertex.vert"},
+        {GL_FRAGMENT_SHADER, "../shader/fragment.frag"},
+    });
+    printf("after crash\n");
+
+    this->shaderProgram->bind();
+}
+modeler::Renderer::~Renderer(){
+    shaderProgram->unbind();
+}
+
+
+auto modeler::Renderer::registerModel(std::string path) -> void
 {
     std::unordered_map<
         std::string,            // Key: Path to model
@@ -16,33 +42,88 @@ auto modeler::Renderer::registerModel(std::string path) -> std::pair<int, int>
     // If not found, add to map.
     if (match == map.end())
     {
+        // Saving paths for looping later.
+        modelPath.push_back(path);
+
         // If new VAO is needed, assign new.
-        if (lastVBm > 4)
+        if ((lastVBO + 2) > 16)
         {
-            lastVAm++;
-            lastVBm = 0;
+            lastVAO++;
+            lastVBO = 0;
         }
 
-        // Read anm save model.
-        //readModem(path)
-        //saveModem();
+        // Read and save model.
+        loadModel(path);
 
-        // Registem the new obect in the map.
+        createVAOVBO();
+
+        // Register the new obect in the map.
         map[path] = std::pair<int, std::pair<int, int>> (1, std::pair<int, int>(lastVAO, lastVBO));
+
+        // Start of next object in VBO. Object consists of 4 buffers (vertices, indices, textureCoords, model).
+        lastVBO += 2;
     }
     // Model exists in map.
     else
     {
         // Another object uses this model.
-        this->map[match->first]->second.first++;
+        this->map[match->first].second.first++;
     }
 
-    // 
-    return match->second.second;
+   // return match->second.second;
+
+    // TODO:
+    // Sort the map based upon object occurences and set up buffers after all objects register.
+    // Do draw instancing.
 }
 
-auto modeler::Renderer::draw(Shader shader, std::pair<int, int> vao_vbo, glm::mat4 model) -> void
+auto modeler::Renderer::draw(std::string path, game::Object* object) -> void
 {
+    glm::mat4 model = object->getModelMatrix();
+
+    glm::mat4 view = camera->getViewMatrix(); 
+    
+    glm::mat4 projection = camera->getPerspectiveMatrix();
+
+    glm::vec3 lightPosition = lightSource->getPosition();
+    glm::vec3 attenuation = lightSource->getAttenuation(); 
+    glm::vec3 lightColor = lightSource->getColor();
+    float ambientCoefficient = lightSource->getAmbientCoefficient();
+    int specularExponent = lightSource->getSpecularExponent();
+
+    std::map<std::string, GLuint> uniforms = shaderProgram->getUniform( std::map<std::string, std::string>({
+        {"viewID", "view"},
+        {"projectionID", "projection"},
+        {"modelID", "model"},
+        {"normalMatrixID", "normalMatrix"},
+        {"lightSourcePositionID","lightSourcePosition"},
+        {"camPosID", "CamPos"},
+        {"attenuationAID", "attenuationA"},
+        {"attenuationBID", "attenuationB"},
+        {"attenuationCID", "attenuationC"},
+        {"ambientCoefficientID", "ambientCoefficient"},
+        {"specularExponentID", "specularExponent"},
+        {"lightColorID", "lightColor"}
+    }));
+
+    glUniform1f(uniforms["attenuationAID"], attenuation.x);
+    glUniform1f(uniforms["attenuationBID"], attenuation.y);
+    glUniform1f(uniforms["attenuationCID"], attenuation.z);
+    glUniform1f(uniforms["ambientCoefficientID"], ambientCoefficient);
+    glUniform1i(uniforms["specularExponentID"], specularExponent);
+    glUniform3fv(uniforms["lightColorID"], 1, value_ptr(lightColor));
+    glUniform3fv(uniforms["lightSourcePositionID"], 1, value_ptr(lightPosition));
+
+    glUniform3fv(uniforms["camPosID"], 1, value_ptr(camera->getPos()));                                             //glm::mat4 model = glm::rotate(glm::mat4(), time, glm::vec3(0, 1, 0));
+
+    glUniformMatrix4fv(uniforms["viewID"], 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(uniforms["projectionID"], 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(uniforms["modelID"], 1, GL_FALSE, glm::value_ptr(model));
+
+    glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*model)));
+
+    glUniformMatrix3fv(uniforms["normalMatrixID"], 1, GL_FALSE, glm::value_ptr(normalMatrix));
+   
     for(unsigned int i = 0; i < meshes.size(); i++)
     {
         // bind appropriate textures
@@ -66,13 +147,13 @@ auto modeler::Renderer::draw(Shader shader, std::pair<int, int> vao_vbo, glm::ma
                 number = std::to_string(heightNr++); // transfer unsigned int to stream
 
             // now set the sampler to the correct texture unit
-            glUniform1i(glGetUniformLocation(shader.id(), (name + number).c_str()), i);
+            glUniform1i(glGetUniformLocation(shaderProgram->id(), (name + number).c_str()), i);
             // and finally bind the texture
             glBindTexture(GL_TEXTURE_2D, textures[i].id);
         }
 
         // draw mesh
-        glBindVertexArray(VAO);
+        glBindVertexArray(VAO[0]);
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
@@ -81,41 +162,76 @@ auto modeler::Renderer::draw(Shader shader, std::pair<int, int> vao_vbo, glm::ma
     }
 }
 
-void modeler::Mesh::createVAOVBO()
-{
-	// create buffers/arrays
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
+void modeler::Renderer::createVAOVBO()
+{   
+    GLuint tempVAO = 0; //!< Vertex array object associated with the mesh. NOTE: VAO  should be associate with multiple meshes.
+    GLuint tempVBO = 0; //!< Vertex buffer object for drawing 
+    GLuint tempIBO = 0; //!< Vertex element buffer for drawing
 
-	glBindVertexArray(VAO);
-	// load data into vertex buffers
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	// A great thing about structs is that their memory layout is sequential for all its items.
-	// The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
-	// again translates to 3/2 floats which translates to a byte array.
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+    for(auto v : modelPath){
 
-	// set the vertex attribute pointers
-	// vertex Positions
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
-	// vertex normals
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
-	// vertex texture coords
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+        // If the VAO doesnt exists.
+        if (std::find(VAO.begin(), VAO.end(), tempVAO) == VAO.end())
+        {
+            // create buffers/arrays
+            glGenVertexArrays(1, &tempVAO);
 
-	glBindVertexArray(0);
+            // Save the reference to the VAO in a list.
+            VAO.push_back(tempVAO);  
+            printf("Passed1\n");
+
+            // Bind the VAO.
+            glBindVertexArray(VAO[map[v].second.first]);
+
+            // Generate buffers.
+            glGenBuffers(1, &tempVBO);
+            BO.push_back(tempVBO);
+            glGenBuffers(1, &tempIBO);
+            BO.push_back(tempIBO);
+
+        }
+
+        // load data into vertex buffers
+        glBindBuffer(GL_ARRAY_BUFFER, BO[map[v].second.second]);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BO[map[v].second.second + 1]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+       
+        // set the vertex attribute pointers
+        // vertex Positions
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+        // vertex normals
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+        // vertex texture coords
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+        glBindVertexArray(0);
+    }
 }
 
-auto modeler::Renderer::readModel(std::string path) -> void
+auto modeler::Renderer::loadModel(std::string path) -> void
 {
-    modeler::Model model = new Model(path);
-    model.getMeshes();
+    Model model = Model(path);
+    this->meshes = model.getMeshes();
 
+    for(auto mesh : meshes)
+    {
+        for (auto vertex : mesh.vertices)
+        {
+            vertices.push_back(vertex);
+        }
+        for (auto index : mesh.indices)
+        {
+            indices.push_back(index);
+        }
+        for (auto texture : mesh.textures)
+        {
+            textures.push_back(texture);
+        }
+    }
 }

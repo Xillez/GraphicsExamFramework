@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <string>
 #include <glm/glm.hpp>
+#include <vector>
 
 /**
  * @brief Container for classes and structures associated with modeling consepts.
@@ -37,6 +38,15 @@ namespace modeler{
 		glm::vec3 Bitangent;	//!< Information usefull for defining curves.
 	};
 
+	/**
+	 * @brief texture loaded from file.
+	 */
+	struct TextureA {
+		unsigned int id;		//!< Identifier for the texture.
+		std::string type;		//!< The type of data given by the texure. (color, hight, etc)
+		std::string path;		//!< File path to the texture.
+	};
+
 	struct Mesh
 	{
 		std::vector<Vertex> vertices;		//!< Collection of position data and optional attributes.
@@ -49,14 +59,5 @@ namespace modeler{
 			this->indices = indices;
 			this->textures = textures;
 		}
-	};
-	
-	/**
-	 * @brief texture loaded from file.
-	 */
-	struct TextureA {
-		unsigned int id;		//!< Identifier for the texture.
-		std::string type;		//!< The type of data given by the texure. (color, hight, etc)
-		std::string path;		//!< File path to the texture.
 	};
 }

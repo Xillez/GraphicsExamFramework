@@ -25,16 +25,23 @@ namespace components
 			GraphicsComponent(std::string const &modelPath);
 
 			/**
+			 * @brief initialize function to give component parent object for updating and possibly drawing.
+			 * 
+			 * @param parent - Parent object I exists inside.
+			 */
+			auto init(game::Object* parent) -> void;
+
+			/**
 			 * @brief Update function for components. 
 			 */
-			virtual auto update(float dt) -> void;
+			auto update(float dt) -> void;
 	
 			/**
 			 * @brief Draw the mesh on the screen using given shader program.
 			 * @param shader A shader program for GL pipeline.
 			 */
-			virtual auto draw(modeler::Shader shader) -> void;
+			auto draw() -> void;
 
-			virtual auto getType() -> int;
+			auto getType() -> int;
 	};
 }

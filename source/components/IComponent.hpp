@@ -46,7 +46,7 @@ namespace components
 			 * @brief Draw the mesh on the screen using given shader program.
 			 * @param shader A shader program for GL pipeline.
 			 */
-			virtual auto draw(modeler::Shader shader) -> void = 0;
+			virtual auto draw() -> void = 0;
 
 			virtual auto getType() -> int = 0;
 	};

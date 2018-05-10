@@ -33,6 +33,13 @@ namespace modeler{
              * @param gamma Optional to indicate if the gammacorrection has already been applied.
              */
             Model(std::string const &path, bool gamma = false); 
+
+            /**
+             * @brief Get the list of Mesh objects.
+             * 
+             * @return std::vector<Mesh>.
+             */
+            auto getMeshes() -> std::vector<Mesh>;
             
         private:
             /**
@@ -73,13 +80,6 @@ namespace modeler{
              * @return Vector of textures associated with the material.
              */
             std::vector<TextureA> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
-            
-            /**
-             * @brief Get the list of Mesh objects.
-             * 
-             * @return std::vector<Mesh>.
-             */
-            auto getMeshes() -> std::vector<Mesh>;
         
             /**
              * @brief Get the list of TextureA objects.

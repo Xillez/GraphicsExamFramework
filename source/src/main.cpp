@@ -1,7 +1,8 @@
 #include "../helpers/glfw_setup.hpp"
 #include "../helpers/global_function.hpp"
-#include "../components/GraphicsComponent.hpp"
 #include "../game/Object.hpp"
+#include "../modeler/Renderer.hpp"
+#include "../components/GraphicsComponent.hpp"
 #include "../environment/Camera.hpp"
 #include "../environment/LightSource.hpp"
 #include "../header/globalVar.hpp"
@@ -11,13 +12,12 @@
 #include <stdio.h>
 #include <iostream>
 
+modeler::ShaderManager* shaderManager;
+modeler::Renderer* render;
 environment::Camera* camera;
 environment::LightSource* lightSource;
 GLFWwindow* window;
-game::Object* cube;
-game::Object* cube2;
-game::Object* sphereArr[100];
-modeler::ShaderManager* shaderManager;
+game::Object* cube[2];
 
 int main(int argc, char const *argv[])
 {	
@@ -39,27 +39,21 @@ int main(int argc, char const *argv[])
 	// OpenGL setup
 	printf("%s Creating window\n", TAG_INFO.c_str());
 	window = helpers::glfw_setup();
+
+		// Create renderer.
+	printf("%s Creating renderer\n", TAG_INFO.c_str());
+	render = new modeler::Renderer();
 	
 	// Make graphics component for "cube
 	components::GraphicsComponent* component = new components::GraphicsComponent("../asset/basic_sphere.obj");
-	components::GraphicsComponent* component2 = new components::GraphicsComponent("../asset/basic_sphere.obj");
 
 	// Make cube
 	printf("%s Creating board\n", TAG_INFO.c_str());
-	cube = new game::Object();
-	cube2 = new game::Object();
-	cube->registerComponent(component);
-	cube2->registerComponent(component2);
+	cube[0] = new game::Object();
+	cube[1] = new game::Object();
+	cube[0]->registerComponent(component);
+	cube[1]->registerComponent(component);
 	component = nullptr;
-	component2 = nullptr;
-
-	for (int i = 0; i < 100; ++i)
-	{/*
-		sphereArr[i] = new game::Object(cube);
-		sphereArr[i]->registerComponent(component2);
-		cube->setPos(glm::vec3(i*(-4)+i, 0.0f, -2.0f));*/
-
-	}
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());
@@ -72,8 +66,6 @@ int main(int argc, char const *argv[])
 	// Run until close event is given to the window
 	printf("%s Starting gameloop\n", TAG_INFO.c_str());
 	
-	cube2->setPos(glm::vec3(4.0f, 0.0f, -2.0f));
-	
 	while(!glfwWindowShouldClose(window))
 	{
 		// Clearing screen for next draw
@@ -85,16 +77,9 @@ int main(int argc, char const *argv[])
 		dt = currentTime - lastTime;
 		lastTime = currentTime;
 
-		cube->draw(dt);
-		cube2->draw(dt);
-
-		for (int i = 0; i < 0; ++i)
-		{
-			cube->setPos(glm::vec3(i*(-4)+i, 0.0f, -2.0f));
-			cube->draw(dt);
-		}
-		//camera->rotateBy(1.0f * dt, 0.0f * dt);
-		//chessBoard->update(dt);
+		cube[0]->draw(dt);
+		cube[1]->draw(dt);
+	
 		glfwSwapBuffers(window);    // SWAP BUFFERS
         glfwPollEvents();           // LISTEN FOR WINDOW EVENTS
 
