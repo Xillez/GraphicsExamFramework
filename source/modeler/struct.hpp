@@ -20,7 +20,7 @@ namespace modeler{
 		GLuint ElementBuffer;	//!< Id of bound OpenGL EBO.
 		GLuint NormalBuffer;	//!< Id of bound OpenGL VBO for normal data.
 	
-		GLenum PrimitiveMode; 	//!< Information for openGL primitive to draw.
+		GLenum PrimitiveMode; 	//!< Information for OpenGL primitive to draw.
 		GLenum FillMode; 		//!< Information for coloring of shape.
 		int NumVertices;		//!< Number of verticies in the VAO.
 	};
@@ -35,6 +35,20 @@ namespace modeler{
 		glm::vec2 TexCoords;	//!< Where the vertex is mapped to the texture.
 		glm::vec3 Tangent;		//!< Information usefull for lighting.	
 		glm::vec3 Bitangent;	//!< Information usefull for defining curves.
+	};
+
+	struct Mesh
+	{
+		std::vector<Vertex> vertices;		//!< Collection of position data and optional attributes.
+		std::vector<unsigned int> indices; 	//!< Relative connection of vertices to define a face/surface.
+		std::vector<TextureA> textures;		//!< Texture information for mapping to vertices.
+
+		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<TextureA> textures)
+		{
+			this->vertices = vertices;
+			this->indices = indices;
+			this->textures = textures;
+		}
 	};
 	
 	/**
