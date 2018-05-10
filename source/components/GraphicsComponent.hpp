@@ -16,7 +16,8 @@ namespace components
 	{	
 		protected: 
 			modeler::Model* model = nullptr;
-
+			std::string path;
+			
 		public:
 			/**
 			 * @brief Interface component class constructor.

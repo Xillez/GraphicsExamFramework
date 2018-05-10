@@ -7,7 +7,7 @@ environment::LightSource::LightSource(){
 	this->lightColor = {1.0f, 1.0f, 1.0f};
 	this->attenuation = {1.0f, 1.0f, 1.0f};
 	this->ambientCoefficient = 0.1f;
-	this->specualarExponent = 32.0f;
+	this->specualarExponent = 2.0f;
 }
 
 environment::LightSource::LightSource(glm::vec3 position, glm::vec3 lightColor, glm::vec3 attenuation, float ambientCoefficient, int specualarExponent){

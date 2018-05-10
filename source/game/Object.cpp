@@ -86,11 +86,11 @@ auto game::Object::draw(float dt) -> void
 	glUniformMatrix4fv(uniforms["projectionID"], 1, GL_FALSE, glm::value_ptr(projection));
 
 	glm::mat4 modelm;
-	rotationTime += dt;
+	rotationTime += dt / 10.0f;
 	modelm = glm::translate(modelm, this->position); // Translate it down so it's at the center of the scene.
 	//printf("%f, %f, %f\n",position.x, position.y, position.z );
 	modelm = glm::scale(modelm, glm::vec3(1.1f, 1.1f, 1.1f));	
-	modelm = glm::rotate(modelm, rotationTime, glm::vec3(1.0f, 1.0f, 0.0f));
+	modelm = glm::rotate(modelm, rotationTime, glm::vec3(0.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(uniforms["modelID"], 1, GL_FALSE, glm::value_ptr(modelm));
 	
 	glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*modelm)));

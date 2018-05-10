@@ -16,6 +16,7 @@ environment::LightSource* lightSource;
 GLFWwindow* window;
 game::Object* cube;
 game::Object* cube2;
+game::Object* sphereArr[100];
 modeler::ShaderManager* shaderManager;
 
 int main(int argc, char const *argv[])
@@ -52,6 +53,14 @@ int main(int argc, char const *argv[])
 	component = nullptr;
 	component2 = nullptr;
 
+	for (int i = 0; i < 100; ++i)
+	{/*
+		sphereArr[i] = new game::Object(cube);
+		sphereArr[i]->registerComponent(component2);
+		cube->setPos(glm::vec3(i*(-4)+i, 0.0f, -2.0f));*/
+
+	}
+
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());
 	helpers::setup_EventHandling();
@@ -63,7 +72,7 @@ int main(int argc, char const *argv[])
 	// Run until close event is given to the window
 	printf("%s Starting gameloop\n", TAG_INFO.c_str());
 	
-	cube2->setPos(glm::vec3(2.0f, 0.0f, -2.0f));
+	cube2->setPos(glm::vec3(4.0f, 0.0f, -2.0f));
 	
 	while(!glfwWindowShouldClose(window))
 	{
@@ -78,6 +87,12 @@ int main(int argc, char const *argv[])
 
 		cube->draw(dt);
 		cube2->draw(dt);
+
+		for (int i = 0; i < 0; ++i)
+		{
+			cube->setPos(glm::vec3(i*(-4)+i, 0.0f, -2.0f));
+			cube->draw(dt);
+		}
 		//camera->rotateBy(1.0f * dt, 0.0f * dt);
 		//chessBoard->update(dt);
 		glfwSwapBuffers(window);    // SWAP BUFFERS
