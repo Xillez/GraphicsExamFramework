@@ -12,6 +12,8 @@ extern environment::LightSource* lightSource;
 
 modeler::Renderer::Renderer()
 {
+   // glGenVertexArrays(1, &drawVAO);
+
     printf("Before crash\n");
     shaderProgram = shaderManager->getShader(std::vector<std::pair<GLenum, std::string>>{
         {GL_VERTEX_SHADER, "../shader/vertex.vert"},
@@ -55,7 +57,6 @@ auto modeler::Renderer::registerModel(std::string path) -> void
         // Read and save model.
         loadModel(path);
 
-        createVAOVBO();
 
         // Register the new obect in the map.
         map[path] = std::pair<int, std::pair<int, int>> (1, std::pair<int, int>(lastVAO, lastVBO));
@@ -123,9 +124,12 @@ auto modeler::Renderer::draw(std::string path, game::Object* object) -> void
     glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(view*model)));
 
     glUniformMatrix3fv(uniforms["normalMatrixID"], 1, GL_FALSE, glm::value_ptr(normalMatrix));
-   
+    
+    // TODO: May redraw the same over and over, meshes is a list of all submeshes og objs file. and we draw the entire obj file. 
     for(unsigned int i = 0; i < meshes.size(); i++)
     {
+        printf("hfdhjtjdkdkdkdd\n");
+
         // bind appropriate textures
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
@@ -154,7 +158,23 @@ auto modeler::Renderer::draw(std::string path, game::Object* object) -> void
 
         // draw mesh
         glBindVertexArray(VAO[0]);
+        glBindBuffer(GL_ARRAY_BUFFER, BO[map[path].second.second]);
+
+        // set the vertex attribute pointers
+        // vertex Positions
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+        // vertex normals
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+        // vertex texture coords
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BO[map[path].second.second + 1]);
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
         // always good practice to set everything back to defaults once configured.
@@ -170,6 +190,9 @@ void modeler::Renderer::createVAOVBO()
 
 
     for(auto v : modelPath){
+        printf("Map first: %d\n", map[v].second.first);
+        printf("Map second: %d\n", map[v].second.second);
+        printf("Size: %d\n", modelPath.size());
 
         // If the VAO doesnt exists.
         if (std::find(VAO.begin(), VAO.end(), tempVAO) == VAO.end())
@@ -179,18 +202,17 @@ void modeler::Renderer::createVAOVBO()
 
             // Save the reference to the VAO in a list.
             VAO.push_back(tempVAO);  
-            printf("Passed1\n");
 
             // Bind the VAO.
             glBindVertexArray(VAO[map[v].second.first]);
 
-            // Generate buffers.
-            glGenBuffers(1, &tempVBO);
-            BO.push_back(tempVBO);
-            glGenBuffers(1, &tempIBO);
-            BO.push_back(tempIBO);
 
         }
+        // Generate buffers.
+        glGenBuffers(1, &tempVBO);
+        BO.push_back(tempVBO);
+        glGenBuffers(1, &tempIBO);
+        BO.push_back(tempIBO);
 
         // load data into vertex buffers
         glBindBuffer(GL_ARRAY_BUFFER, BO[map[v].second.second]);

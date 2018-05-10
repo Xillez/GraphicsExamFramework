@@ -18,7 +18,10 @@ namespace modeler
         	~Renderer();
             auto registerModel(std::string path) -> void;
             auto draw(std::string path, game::Object* object) -> void;
-
+			/**
+			 * @brief Creates VAO, VBO and EBO for the given mesh.
+			 */
+			void createVAOVBO();
         protected:
             auto loadModel(std::string path) -> void;
 
@@ -28,6 +31,7 @@ namespace modeler
             int lastVAO = 0;
             int lastVBO = 0;
 
+            GLuint drawVAO;
             std::vector<GLuint> VAO;
             std::vector<GLuint> BO;
 
@@ -39,9 +43,6 @@ namespace modeler
 			std::vector<unsigned int> indices; 	//!< Relative connection of vertices to define a face/surface.
 			std::vector<TextureA> textures;		//!< Texture information for mapping to vertices.
 	
-			/**
-			 * @brief Creates VAO, VBO and EBO for the given mesh.
-			 */
-			void createVAOVBO();
+		
     };
 }

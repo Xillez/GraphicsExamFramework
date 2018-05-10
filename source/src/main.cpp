@@ -45,15 +45,18 @@ int main(int argc, char const *argv[])
 	render = new modeler::Renderer();
 	
 	// Make graphics component for "cube
-	components::GraphicsComponent* component = new components::GraphicsComponent("../asset/basic_sphere.obj");
+	components::GraphicsComponent* component = new components::GraphicsComponent("../asset/resources/nanosuit.obj");
+	components::GraphicsComponent* component2 = new components::GraphicsComponent("../asset/basic_cube.obj");
 
 	// Make cube
 	printf("%s Creating board\n", TAG_INFO.c_str());
 	cube[0] = new game::Object();
 	cube[1] = new game::Object();
 	cube[0]->registerComponent(component);
-	cube[1]->registerComponent(component);
+	cube[1]->registerComponent(component2);
 	component = nullptr;
+
+	render->createVAOVBO();
 
 	// setup event handler
 	printf("%s Setting up event handler\n", TAG_INFO.c_str());
@@ -78,7 +81,10 @@ int main(int argc, char const *argv[])
 		lastTime = currentTime;
 
 		cube[0]->draw(dt);
+		cube[1]->setPos(glm::vec3(.0f, 0.0f, 0.0f));
 		cube[1]->draw(dt);
+
+        printf("\n\n\n\n");
 	
 		glfwSwapBuffers(window);    // SWAP BUFFERS
         glfwPollEvents();           // LISTEN FOR WINDOW EVENTS

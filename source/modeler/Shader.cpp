@@ -39,10 +39,8 @@ modeler::Shader::Shader(const std::string path_vert_shader, const std::string pa
 modeler::Shader::Shader(std::vector<std::pair<GLenum, std::string>> shaders){
 	// shaderTypes that can be attatched
 	std::vector<GLenum> available = {GL_VERTEX_SHADER, GL_TESS_CONTROL_SHADER, GL_TESS_EVALUATION_SHADER, GL_GEOMETRY_SHADER, GL_FRAGMENT_SHADER};
-	printf("VertexShader: \n");
 
 	shaderProgram = glCreateProgram();
-	printf("VertexShader: \n");
 
 	// goes through the arguments and add each shader to the program.
 	// exits if not a shader or shader is earlier in the pipeline than previosuly read.
