@@ -22,8 +22,10 @@ namespace modeler
 			 * @brief Creates VAO, VBO and EBO for the given mesh.
 			 */
 			void createVAOVBO();
+
         protected:
             auto loadModel(std::string path) -> void;
+            auto getIndexFromVector(std::string item) -> int;
 
             Shader* shaderProgram;					//!< Shaderprogram used by board for drawing.
 
@@ -35,13 +37,12 @@ namespace modeler
             std::vector<GLuint> VAO;
             std::vector<GLuint> BO;
 
-			
 
 			std::vector<std::string> modelPath;
 			std::vector<Mesh> meshes;		//!< Collection of position data and optional attributes.
-			std::vector<Vertex> vertices;		//!< Collection of position data and optional attributes.
-			std::vector<unsigned int> indices; 	//!< Relative connection of vertices to define a face/surface.
-			std::vector<TextureA> textures;		//!< Texture information for mapping to vertices.
+			std::vector<std::vector<Vertex>> vertices;		//!< Collection of position data and optional attributes.
+			std::vector<std::vector<unsigned int>> indices; 	//!< Relative connection of vertices to define a face/surface.
+			std::vector<std::vector<TextureA>> textures;		//!< Texture information for mapping to vertices.
 	
 		
     };
